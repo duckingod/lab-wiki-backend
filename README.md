@@ -6,6 +6,10 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
     
     npm install
 
+## Usage
+    node backend.js
+and open browser with url: `http://localhost:3000`
+
 ## Note
 
 ### JWT
