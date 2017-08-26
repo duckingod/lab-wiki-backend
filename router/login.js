@@ -52,6 +52,12 @@ module.exports = {
           <input type="text" name="date" placeholder="Date"/>
           <input type="submit"/>
         </form>
+        <form action="/seminar/2" method="POST">
+          <input type="text" name="title" placeholder="Title"/>
+          <input type="text" name="presenter" placeholder="Presenter"/>
+          <input type="text" name="date" placeholder="Date"/>
+          <input type="submit" value='update 2'/>
+        </form>
       </body>
       `
       },

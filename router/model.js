@@ -23,12 +23,13 @@ module.exports = {
   },
   update: (model) => {
     return function(req, res) {
-      model.findById(req.param.id).then(obj => {
+      console.log(req.params);
+      model.findById(req.params.id).then(obj => {
         obj.updateAttributes(req.body)
-          .on('success', id=>{
+          .then(id=>{
             res.send('ok');
           })
-          .on('failure', error=>{
+          .catch(error=>{
             res.status(401).send(JSON.stringify(error));
           });
       });
