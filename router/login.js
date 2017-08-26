@@ -2,9 +2,9 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var crypto = require('crypto');
 var GoogleAuth = require('google-auth-library');
-var clientId = require('../config').googleOauthClientId;
-var loginPeriod = require('../config').loginExpirePeriod;
-var loginDomain = require('../config').validEmailDomain;
+var clientId = require('./config.json').googleOauthClientId;
+var loginPeriod = require('./config.json').loginExpirePeriod;
+var loginDomain = require('./config.json').validEmailDomain;
 
 jwt_key = crypto.randomBytes(256);
 function cookieJwt(credential) {
@@ -35,17 +35,23 @@ module.exports = {
       <body>
         `+user_msg+`
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <a href='#' on-click='logout'>Logout?</a>
         <script>
         function onSignIn(user) {
           $.post( 'login', { id_token: user.getAuthResponse().id_token }, 
               (data, stat) => { alert('success'); } );
           }; 
+        function logout(){
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then( function() { alert('logout'); });
+          };
         </script>
       </body>
       `
       },
     googleIdTokenLogin: function(req, res) {  
         var token = req.body.id_token;
+        console.log(token);
         googleOauthClient.verifyIdToken(
             token,
             clientId,
@@ -53,12 +59,12 @@ module.exports = {
               var clientToken;
               if (login!=null) {
                 var payload = login.getPayload();
-                if (payload['email'].endsWith(loginDomain)) {
+                if (payload.email.endsWith(loginDomain)) {
                   // login successful
                   var userData = {
-                    name: payload['name'],
-                    email: payload['email'],
-                    account: payload['email'].split("@")[0]
+                    name: payload.name,
+                    email: payload.email,
+                    account: payload.email.split("@")[0]
                   };
                   var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod});
                   res.cookie('token', clientToken).send("ok");
@@ -67,7 +73,7 @@ module.exports = {
                   e = 'Wrong email server.';
                 }
               }
-              res.send(401, JSON.stringify(e));
+              res.status(401).send(JSON.stringify(e));
             });
         },
     unloginError: function (err, req, res, next) {
