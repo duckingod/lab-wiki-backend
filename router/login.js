@@ -2,9 +2,9 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var crypto = require('crypto');
 var GoogleAuth = require('google-auth-library');
-var clientId = require('./config.json').googleOauthClientId;
-var loginPeriod = require('./config.json').loginExpirePeriod;
-var loginDomain = require('./config.json').validEmailDomain;
+var clientId = require('./config').googleOauthClientId;
+var loginPeriod = require('./config').loginExpirePeriod;
+var loginDomain = require('./config').validEmailDomain;
 
 jwt_key = crypto.randomBytes(256);
 function cookieJwt(credential) {
@@ -20,7 +20,7 @@ var googleOauthClient = new auth.OAuth2(clientId, '', '');
 
 module.exports = {
     checkUser: cookieJwt(false),
-    forceCheckUser: cookieJwt(true),
+    forceUser: cookieJwt(true),
     simpleLoginWeb: function (user) {
       if (user!=null)
         user_msg = 'Welcome, '+user.name+' ('+user.email+')';
@@ -46,12 +46,17 @@ module.exports = {
             auth2.signOut().then( function() { alert('logout'); });
           };
         </script>
+        <form action="/seminar" method="POST">
+          <input type="text" name="title" placeholder="Title"/>
+          <input type="text" name="presenter" placeholder="Presenter"/>
+          <input type="text" name="date" placeholder="Date"/>
+          <input type="submit"/>
+        </form>
       </body>
       `
       },
     googleIdTokenLogin: function(req, res) {  
         var token = req.body.id_token;
-        console.log(token);
         googleOauthClient.verifyIdToken(
             token,
             clientId,
