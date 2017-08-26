@@ -14,8 +14,8 @@ function cookieJwt(credential) {
     getToken: req => { return req.cookies.token; }
   });
 }
-checkJwt = cookieJwt(false);
-forceJwt = cookieJwt(true);
+var checkJwt = cookieJwt(false);
+//var forceJwt = cookieJwt(true);
 
 var auth = new GoogleAuth;
 var googleOauthClient = new auth.OAuth2(clientId, '', '');
@@ -27,6 +27,7 @@ module.exports = function(app) {
         token,
         clientId,
         function(e, login) {
+          console.log('hi');
           var clientToken;
           if (login!=null) {
             var payload = login.getPayload();
@@ -48,7 +49,7 @@ module.exports = function(app) {
         });
   });  
 
-  app.get('/', forceJwt, function(req, res) {  
+  app.get('/', checkJwt, function(req, res) {  
     s = `
       <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -70,7 +71,7 @@ module.exports = function(app) {
 
   app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-      res.status(401).send('You should login first');
+      res.status(401).clearCookie('token').send('You should login first'+JSON.stringify(err));
     }
   });
 };
