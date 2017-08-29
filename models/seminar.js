@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
     var Seminar = sequelize.define("Seminar", {
           presenter: DataTypes.STRING,
           date: DataTypes.DATE,
-          title: DataTypes.STRING
+          topic: DataTypes.STRING,
+          slides: DataTypes.STRING
         });
 
     Seminar.associate = function(models) {
