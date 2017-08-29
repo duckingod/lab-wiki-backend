@@ -21,17 +21,21 @@ To put data into database
 View `http://localhost:3000/` for example`
 
 - Get all seminar
+
     GET  http://localhost:3000/seminar
 
 - Create new seminar
+
     POST http://localhost:3000/seminar
-    // POST with seminar data
+    // POST with seminar data : { topic: '...', ... }
 
 - Update seminar (id=10)
+
     POST http://localhost:3000/seminar/10
-    // POST with seminar data 
+    // POST with seminar data : { topic: '...', ... }
 
 - Delete seminar (id=3)
+
     DELETE http://localhost:3000/seminar/3
 
 It's same for all data
