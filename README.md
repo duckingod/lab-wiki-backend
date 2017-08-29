@@ -41,8 +41,9 @@ It's same for all data
 
 
 ## TODO
+- more data
 - Session security
 - httpOnly
-- delete 權限
+- delete 權限 (admin only)
 - https
 
