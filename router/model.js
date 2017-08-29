@@ -18,6 +18,9 @@ module.exports = {
     return function(req, res) {
       model.create(req.body).then(obj => {
         res.send('ok');
+      })
+      .catch(error=>{
+        res.status(401).send(JSON.stringify(error));
       });
     }
   },
@@ -32,6 +35,16 @@ module.exports = {
           .catch(error=>{
             res.status(401).send(JSON.stringify(error));
           });
+      });
+    }
+  },
+  delete: (model) => {
+    return function(req, res) {
+      model.destroy({where: {id: req.params.id}}).then(obj => {
+        res.send('ok: '+String(req.params.id));
+      })
+      .catch(error=>{
+        res.status(401).send(JSON.stringify(error));
       });
     }
   },

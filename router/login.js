@@ -58,37 +58,45 @@ module.exports = {
           <input type="text" name="date" placeholder="Date"/>
           <input type="submit" value='update 2'/>
         </form>
+        <form action="/seminar/3" method="POST">
+          <input type="submit" value="delete 3"/>
+          <input type="hidden" name="_method" value="delete" />
+        </form>
+
       </body>
       `
       },
     googleIdTokenLogin: function(req, res) {  
-        var token = req.body.id_token;
-        googleOauthClient.verifyIdToken(
-            token,
-            clientId,
-            function(e, login) {
-              var clientToken;
-              if (login!=null) {
-                var payload = login.getPayload();
-                if (payload.email.endsWith(loginDomain)) {
-                  // login successful
-                  var userData = {
-                    name: payload.name,
-                    email: payload.email,
-                    account: payload.email.split("@")[0]
-                  };
-                  var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod});
-                  res.cookie('token', clientToken).send("ok");
-                  return;
-                } else {
-                  e = 'Wrong email server.';
-                }
+      var token = req.body.id_token;
+      console.log("try to login");
+      googleOauthClient.verifyIdToken(
+          token,
+          clientId,
+          function(e, login) {
+            var clientToken;
+            if (login!=null) {
+              var payload = login.getPayload();
+              if (payload.email.endsWith(loginDomain)) {
+                // login successful
+                var userData = {
+                  name: payload.name,
+                  email: payload.email,
+                  account: payload.email.split("@")[0]
+                };
+                var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod});
+                res.cookie('token', clientToken).send("ok");
+                console.log("login ok, cookie set ok!");
+                return;
+              } else {
+                e = 'Wrong email server.';
               }
-              res.status(401).send(JSON.stringify(e));
-            });
-        },
+            }
+            res.status(401).send(JSON.stringify(e));
+          });
+      },
     unloginError: function (err, req, res, next) {
         if (err.name === 'UnauthorizedError') {
+          console.log("UnauthorizedError happends");
           res.status(401).clearCookie('token').redirect('/');
            // .send('Please login<BR>'+JSON.stringify(err));
         }

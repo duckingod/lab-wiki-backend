@@ -19,12 +19,12 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
     "google-auth-library": "^0.10.0",
     "jsonwebtoken": "^7.4.3",
     "sequelize": "^4.7.5",
-    "sequelize-cli": "^2.8.0",
     "sqlite3": "^3.1.9"
   }
 }
