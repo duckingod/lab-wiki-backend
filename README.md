@@ -12,7 +12,7 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
 
 To put data into database
 
-    node data-parser.js ../lab-wiki/data/seminar.json Seminar
+    node data-parser.js ../lab-wiki/fakeAPI/data/seminar.json Seminar
 
 
 
