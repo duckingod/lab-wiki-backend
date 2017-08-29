@@ -7,8 +7,12 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
     npm install
 
 ## Usage
+
     node backend.js
-and open browser with url: `http://localhost:3000`
+
+To put data into database
+    node data-parser.js ../lab-wiki/data/seminar.json Seminar
+
 
 
 ## API
