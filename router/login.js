@@ -47,15 +47,17 @@ module.exports = {
           };
         </script>
         <form action="/seminar" method="POST">
-          <input type="text" name="title" placeholder="Title"/>
+          <input type="text" name="topic" placeholder="Title"/>
           <input type="text" name="presenter" placeholder="Presenter"/>
           <input type="text" name="date" placeholder="Date"/>
+          <input type="text" name="slides" placeholder="slides url"/>
           <input type="submit"/>
         </form>
         <form action="/seminar/2" method="POST">
-          <input type="text" name="title" placeholder="Title"/>
+          <input type="text" name="topic" placeholder="Title"/>
           <input type="text" name="presenter" placeholder="Presenter"/>
           <input type="text" name="date" placeholder="Date"/>
+          <input type="text" name="slides" placeholder="slides url"/>
           <input type="submit" value='update 2'/>
         </form>
           <a href='#' onclick='go_delete(3)'> delete 3</a>
