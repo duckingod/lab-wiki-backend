@@ -26,7 +26,6 @@ module.exports = {
   },
   update: (model) => {
     return function(req, res) {
-      console.log(req.params);
       model.findById(req.params.id).then(obj => {
         obj.updateAttributes(req.body)
           .then(id=>{
@@ -40,7 +39,7 @@ module.exports = {
   },
   delete: (model) => {
     return function(req, res) {
-      model.destroy({where: {id: req.params.id}}).then(obj => {
+      model.destroy({where: {id: Number(req.params.id)}}).then(obj => {
         res.send('ok: '+String(req.params.id));
       })
       .catch(error=>{

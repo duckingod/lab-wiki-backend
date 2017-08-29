@@ -58,10 +58,17 @@ module.exports = {
           <input type="text" name="date" placeholder="Date"/>
           <input type="submit" value='update 2'/>
         </form>
-        <form action="/seminar/3" method="POST">
-          <input type="submit" value="delete 3"/>
-          <input type="hidden" name="_method" value="delete" />
-        </form>
+          <a href='#' onclick='go_delete(3)'> delete 3</a>
+        <script>
+          function go_delete(n){
+            alert("go del");
+            $.ajax({
+                url: 'seminar/3',
+                type: 'UPDATE',
+                success: function(res) { }
+              })
+          }
+        </script>
 
       </body>
       `

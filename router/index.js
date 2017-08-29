@@ -27,9 +27,9 @@ module.exports = function(app) {
   app.get('/', login.checkUser, (req, res) => { res.send(login.simpleLoginWeb(req.user)); });
   models = [models.Seminar, models.News, models.Slide];
   for (m of models) {
-      app.delete(model.idRoute(m), login.forceUser, model.update(m));
       app.get(model.route(m), login.forceUser, model.get(m));
       app.post(model.route(m), login.forceUser, model.new(m));
+      app.delete(model.idRoute(m), login.forceUser, model.delete(m));
       app.post(model.idRoute(m), login.forceUser, model.update(m));
   }
   app.use(login.unloginError);
