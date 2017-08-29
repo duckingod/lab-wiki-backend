@@ -11,6 +11,7 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
     node backend.js
 
 To put data into database
+
     node data-parser.js ../lab-wiki/data/seminar.json Seminar
 
 
