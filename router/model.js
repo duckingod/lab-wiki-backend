@@ -20,7 +20,7 @@ module.exports = {
         res.send('ok');
       })
       .catch(error=>{
-        res.status(401).send(JSON.stringify(error));
+        res.status(503).send(JSON.stringify(error));
       });
     }
   },
@@ -32,7 +32,7 @@ module.exports = {
             res.send('ok');
           })
           .catch(error=>{
-            res.status(401).send(JSON.stringify(error));
+            res.status(503).send(JSON.stringify(error));
           });
       });
     }
@@ -43,7 +43,7 @@ module.exports = {
         res.send('ok: '+String(req.params.id));
       })
       .catch(error=>{
-        res.status(401).send(JSON.stringify(error));
+        res.status(503).send(JSON.stringify(error));
       });
     }
   },
