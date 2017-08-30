@@ -27,10 +27,10 @@ module.exports = function(app) {
   app.get('/loginfail', login.forceLogin);
   models = [models.Seminar, models.News, models.Slide];
   for (m of models) {
-      app.get(     model.route(m), login.forceLogin, login.emailDomain, model.get(m));
-      app.post(    model.route(m), login.forceLogin, login.emailDomain, model.new(m));
+      app.get(   model.route(m),   login.forceLogin, login.emailDomain, model.get(m));
+      app.post(  model.route(m),   login.forceLogin, login.emailDomain, model.new(m));
       app.delete(model.idRoute(m), login.forceLogin, login.emailDomain, model.delete(m));
       app.post(  model.idRoute(m), login.forceLogin, login.emailDomain, model.update(m));
   }
-  app.use(login.unloginError);
+  app.use(login.unauthorizedError);
 };
