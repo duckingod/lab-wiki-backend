@@ -1,58 +1,65 @@
 var models = require('../models');
+var admins = require('./config').admins;
 
-module.exports = {
-  get: (model) => {
-    return function(req, res) {
-      if (req.body.id) {
-        model.findById(req.body.id).then(obj => {
-          res.send(JSON.stringify(obj));
-        })
+json = JSON.stringify
+module.exports = function(model) {
+  return {
+    record: (req, res, next) => {
+      model.findById(req.params.id).then(obj => {
+        req.record = obj
+        next()
+      })
         .catch(error=>{
-          res.status(503).send(JSON.stringify(error));
+          res.status(503).send(json(error));
         });
-      } else {
-        model.all().then(objs => {
-          res.send(JSON.stringify(objs));
-        })
+    },
+    owner: (req, res, next) => {
+      email = req.user.email
+      obj = req.record
+      if (obj.owner && obj.owner.split(" ").indexOf(email)>=0
+        || (admins && admins.indexOf(email)>=0) )
+        next()
+      else
+        res.status(403).send("AuthenticationError: Not owner or admin")
+    },
+    index: (req, res) => {
+      model.all().then(objs => {
+        res.send(json(objs));
+      })
         .catch(error=>{
-          res.status(503).send(JSON.stringify(error));
+          res.status(503).send(json(error));
         });
-      }
-    }
-  },
-  new: (model) => {
-    return function(req, res) {
+    },
+    get: (req, res)  => {
+      res.send(json(req.record))
+    },
+    new: (req, res) => {
+      req.body.owner = req.user.email
       model.create(req.body).then(obj => {
         res.send('ok');
       })
-      .catch(error=>{
-        res.status(503).send(JSON.stringify(error));
-      });
-    }
-  },
-  update: (model) => {
-    return function(req, res) {
-      model.findById(req.params.id).then(obj => {
-        obj.updateAttributes(req.body)
-          .then(id=>{
-            res.send('ok');
-          })
-          .catch(error=>{
-            res.status(503).send(JSON.stringify(error));
-          });
-      });
-    }
-  },
-  delete: (model) => {
-    return function(req, res) {
-      model.destroy({where: {id: Number(req.params.id)}}).then(obj => {
-        res.send('ok: '+String(req.params.id));
+        .catch(error=>{
+          res.status(503).send(json(error));
+        });
+    },
+    update: (req, res) => {
+      req.record.updateAttributes(req.body)
+        .then(id=>{
+          res.send('ok')
+        })
+        .catch(error=>{
+          res.status(503).send(json(error))
+        });
+    },
+    delete: (req, res) => {
+      model.destroy({where: {id: Number(req.record.id)}}).then(obj => {
+        res.send('ok');
       })
-      .catch(error=>{
-        res.status(503).send(JSON.stringify(error));
-      });
-    }
-  },
-  route: (model) => { return '/'+model.name.toLowerCase(); },
-  idRoute: (model) => { return '/'+model.name.toLowerCase()+"/:id"; }
+        .catch(error=>{
+          res.status(503).send(json(error));
+        });
+    },
+    route:   '/'+model.name.toLowerCase(),
+    idRoute: '/'+model.name.toLowerCase()+"/:id"
+  }
 };
