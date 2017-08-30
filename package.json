@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node backend.js",
     "build": "cross-env NODE_ENV=production node backend.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend.js"
   },
   "repository": {
     "type": "git",
