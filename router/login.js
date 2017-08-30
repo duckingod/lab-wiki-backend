@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var GoogleAuth = require('google-auth-library');
 var clientId = require('./config').googleOauthClientId;
 var loginPeriod = require('./config').loginExpirePeriod;
-var loginDomain = require('./config').validEmailDomain;
+var emailDomain = require('./config').validEmailDomain;
 
 jwt_key = crypto.randomBytes(256);
 function cookieJwt(credential) {
@@ -19,8 +19,13 @@ var auth = new GoogleAuth;
 var googleOauthClient = new auth.OAuth2(clientId, '', '');
 
 module.exports = {
-    checkUser: cookieJwt(false),
-    forceUser: cookieJwt(true),
+    checkLogin: cookieJwt(false),
+    forceLogin: cookieJwt(true),
+    emailDomain: (req, res, next) => {
+        if (req.user.email.endsWith(emailDomain))
+            next()
+        res.status(403).send(JSON.stringify({name: "forbidden"}))
+    },
     simpleLoginWeb: function (user) {
       if (user!=null)
         user_msg = 'Welcome, '+user.name+' ('+user.email+')';
@@ -85,20 +90,16 @@ module.exports = {
             var clientToken;
             if (login!=null) {
               var payload = login.getPayload();
-              if (payload.email.endsWith(loginDomain)) {
-                // login successful
-                var userData = {
-                  name: payload.name,
-                  email: payload.email,
-                  account: payload.email.split("@")[0]
-                };
-                var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod});
-                res.cookie('token', clientToken).send("ok");
-                console.log("login ok, cookie set ok!");
-                return;
-              } else {
-                e = 'Wrong email server.';
-              }
+              // login successful
+              var userData = {
+                name: payload.name,
+                email: payload.email,
+                account: payload.email.split("@")[0]
+              };
+              var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod});
+              res.cookie('token', clientToken).send("ok");
+              console.log(payload.name+"@"+payload.email+" login ok");
+              return;
             }
             res.status(401).send(JSON.stringify(e));
           });
@@ -106,8 +107,8 @@ module.exports = {
     unloginError: function (err, req, res, next) {
         if (err.name === 'UnauthorizedError') {
           console.log("UnauthorizedError happends");
-          res.status(401).clearCookie('token').redirect('/');
+          res.status(401).clearCookie('token').send(JSON.stringify(err));
            // .send('Please login<BR>'+JSON.stringify(err));
         }
-      } 
+      },
 }

@@ -22,15 +22,15 @@ corsOptionDelegate = (req, callback) => {
 
 module.exports = function(app) {
   app.use(cors(corsOptionDelegate))
-  app.get('/login', (req, res) => { console.log("get login.."); res.send('123');});
-  app.post('/login', login.googleIdTokenLogin);  
-  app.get('/', login.checkUser, (req, res) => { res.send(login.simpleLoginWeb(req.user)); });
+  app.post('/login', login.googleIdTokenLogin);
+  app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)); });
+  app.get('/loginfail', login.forceLogin);
   models = [models.Seminar, models.News, models.Slide];
   for (m of models) {
-      app.get(model.route(m), login.forceUser, model.get(m));
-      app.post(model.route(m), login.forceUser, model.new(m));
-      app.delete(model.idRoute(m), login.forceUser, model.delete(m));
-      app.post(model.idRoute(m), login.forceUser, model.update(m));
+      app.get(     model.route(m), login.forceLogin, login.emailDomain, model.get(m));
+      app.post(    model.route(m), login.forceLogin, login.emailDomain, model.new(m));
+      app.delete(model.idRoute(m), login.forceLogin, login.emailDomain, model.delete(m));
+      app.post(  model.idRoute(m), login.forceLogin, login.emailDomain, model.update(m));
   }
   app.use(login.unloginError);
 };
