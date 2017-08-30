@@ -6,10 +6,16 @@ module.exports = {
       if (req.body.id) {
         model.findById(req.body.id).then(obj => {
           res.send(JSON.stringify(obj));
+        })
+        .catch(error=>{
+          res.status(503).send(JSON.stringify(error));
         });
       } else {
         model.all().then(objs => {
           res.send(JSON.stringify(objs));
+        })
+        .catch(error=>{
+          res.status(503).send(JSON.stringify(error));
         });
       }
     }
