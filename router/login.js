@@ -24,7 +24,8 @@ module.exports = {
     emailDomain: (req, res, next) => {
         if (req.user.email.endsWith(emailDomain))
             next()
-        res.status(403).send(JSON.stringify({name: "forbidden"}))
+        else
+            res.status(403).send(JSON.stringify({name: "forbidden"}))
     },
     simpleLoginWeb: function (user) {
       if (user!=null)
