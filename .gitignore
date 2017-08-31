@@ -1,3 +1,6 @@
+.idea
+db.development.*
+
 # Logs
 logs
 *.log
