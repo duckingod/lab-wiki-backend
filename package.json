@@ -4,6 +4,8 @@
   "description": "NTU NLP lab wiki backend",
   "main": "index.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development node backend.js",
+    "build": "cross-env NODE_ENV=production node backend.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +22,7 @@
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
+    "cross-env": "^5.0.5",
     "express": "^4.15.4",
     "express-jwt": "^5.3.0",
     "google-auth-library": "^0.10.0",

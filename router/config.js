@@ -1,4 +1,4 @@
-env = "development";
+var env = process.env.NODE_ENV || 'development';
 config = {
   "development": {
     "googleOauthClientId": "904848968355-qqd08ni3a2pjgfe5hoc53tslnam7t12j.apps.googleusercontent.com",

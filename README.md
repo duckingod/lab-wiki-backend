@@ -8,7 +8,7 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
 
 ## Usage
 
-    node backend.js
+    npm run dev
 
 To put data into database
 
@@ -42,13 +42,14 @@ DELETE http://localhost:3000/seminar/3
 It's same for all data
 
 - Get all news
+
     GET  http://localhost:3000/news
 
 
 ## TODO
-- more data
-- Session security
-- httpOnly
-- delete 權限 (admin only)
-- https
+- [ ] more data
+- [ ] Session security
+- [ ] httpOnly
+- [x] delete 權限 (admin only)
+- [ ] https
 
