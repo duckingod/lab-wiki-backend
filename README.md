@@ -53,7 +53,9 @@ GET  http://localhost:3000/news
 - [ ] more data
 - [ ] file server
 - [ ] Session security
-- [ ] httpOnly
+  - [ ] production: store in mongo
+  - [x] httpOnly
+- [x] httpOnly
 - [x] delete 權限 (admin only)
 - [ ] https
 
