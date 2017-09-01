@@ -25,7 +25,7 @@ module.exports = function(app) {
   app.post('/login', login.googleIdTokenLogin);
   app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)); });
   app.get('/loginfail', login.forceLogin);
-  models = [models.Seminar, models.News, models.Slide];
+  models = [models.Seminar, models.News, models.Slide, models.ContactList];
   emailLogin = [login.forceLogin, login.emailDomain]
   for (m of models) {
     m = model(m)
