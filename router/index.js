@@ -6,7 +6,7 @@ var models = require('../models');
 module.exports = function(app) {
   app.use(require('./settings/cors'))
   app.use(require('./settings/session'))
-  app.use(require('helmet'))
+  //app.use(require('helmet'))
 
   app.post('/login', login.googleIdTokenLogin)
   app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
