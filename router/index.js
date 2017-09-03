@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.post('/login', login.googleIdTokenLogin)
   app.post('/logout', emailLogin, login.logout)
   app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
-  models = [models.Seminar, models.News, models.Slide]
+  models = [models.Seminar, models.News, models.Slide, models.ContactList]
   for (m of models) {
     m = model(m)
     app.get(    m.route,   emailLogin, m.index)
