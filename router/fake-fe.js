@@ -13,16 +13,14 @@ module.exports = (clientId, user) => {
       <body>
         `+user_msg+`
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <a href='#' on-click='logout'>Logout?</a>
+        <form action="/logout" method="POST">
+          <input type="submit" value="logout"/>
+        </form>
         <script>
         function onSignIn(user) {
           $.post( 'login', { id_token: user.getAuthResponse().id_token }, 
               (data, stat) => { alert('success'); } );
           }; 
-        function logout(){
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then( function() { alert('logout'); });
-          };
         </script>
         <form action="/seminar" method="POST">
           <input type="text" name="topic" placeholder="Title"/>

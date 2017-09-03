@@ -20,6 +20,21 @@ To put data into database
 
 View `http://localhost:3000/` for example`
 
+### Login/logout
+
+- login
+```
+POST http://localhost:3000/login
+// POST with {id_token: google_auth2_user_id_token}
+```
+
+- logout
+```
+POST http://localhost:3000/logout
+```
+
+### CRUD
+
 - Get all seminar
 ```
 GET  http://localhost:3000/seminar
@@ -56,6 +71,6 @@ GET  http://localhost:3000/news
   - [ ] production: store in mongo
   - [x] httpOnly
 - [x] httpOnly
-- [x] delete 權限 (admin only)
+- [x] delete 權限 (admin/owner only)
 - [ ] https
 

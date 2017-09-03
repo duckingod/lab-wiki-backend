@@ -55,7 +55,8 @@ module.exports = {
           });
     },
     logout: function(req, res) {
-      res.clearCookie('token').send('')
+      console.log(req.user.name +" logout")
+      res.clearCookie('token').send('ok')
     },
     unauthorizedError: function (err, req, res, next) {
       if (err.name === 'UnauthorizedError') {

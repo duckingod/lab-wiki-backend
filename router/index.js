@@ -8,10 +8,11 @@ module.exports = function(app) {
   app.use(require('./settings/session'))
   //app.use(require('helmet'))
 
+  emailLogin = [login.forceLogin, login.emailDomain]
   app.post('/login', login.googleIdTokenLogin)
+  app.post('/logout', emailLogin, login.logout)
   app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
   models = [models.Seminar, models.News, models.Slide]
-  emailLogin = [login.forceLogin, login.emailDomain]
   for (m of models) {
     m = model(m)
     app.get(    m.route,   emailLogin, m.index)
