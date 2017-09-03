@@ -1,10 +1,30 @@
-var models = require('./models');
+const path = require('path')
+const models = require('./models')
+const fs = require('fs')
 
-data = require('./'+process.argv[2]);
-model = models[process.argv[3]]
+let dataList = {}
+let filePath = './' + process.argv[2]
 
-models.sequelize.sync().then(function() {
-  data.forEach( d => {
-    model.create(d)
+if(path.extname(filePath) !== ''){
+  let name = process.argv[3]
+  dataList[name] = require(filePath)
+}
+else{
+  for(let name of Object.keys(models)){
+    if(name === 'sequelize'
+      || name === 'Sequelize') continue
+    let fileName = name.charAt(0).toLowerCase() + name.slice(1) + '.json'
+    let fullPath = path.resolve(filePath, fileName)
+    if(fs.existsSync(fullPath)){
+      dataList[name] = require(fullPath)
+    }
+  }
+}
+
+models.sequelize.sync().then(() => {
+  Object.keys(dataList).forEach(name => {
+    dataList[name].forEach(d => {
+      models[name].create(d)
+    })
   })
 })
