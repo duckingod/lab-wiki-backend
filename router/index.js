@@ -1,6 +1,7 @@
-var login = require('./login');
-var model = require('./model');
-var models = require('../models');
+var login = require('./login')
+var model = require('./model')
+var models = require('../models')
+var gpuUsage = require('./gpu-usage')
 
 
 module.exports = function(app) {
@@ -12,6 +13,7 @@ module.exports = function(app) {
   app.post('/login', login.googleIdTokenLogin)
   app.post('/logout', emailLogin, login.logout)
   app.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
+
   models = [models.Seminar, models.News, models.Slide, models.ContactList]
   for (m of models) {
     m = model(m)
@@ -20,5 +22,7 @@ module.exports = function(app) {
     app.delete( m.idRoute, emailLogin, m.record, m.owner, m.delete)
     app.post(   m.idRoute, emailLogin, m.record, m.owner, m.update)
   }
+  app.get('/gpuUsage', emailLogin, gpuUsage)
+
   app.use(login.unauthorizedError)
 };

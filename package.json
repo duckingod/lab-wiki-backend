@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node backend.js",
-    "build": "cross-env NODE_ENV=production node backend.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend.js"
+    "start": "cross-env NODE_ENV=production node backend.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -31,6 +30,7 @@
     "google-auth-library": "^0.10.0",
     "helmet": "^3.8.1",
     "jsonwebtoken": "^7.4.3",
+    "request": "^2.81.0",
     "sequelize": "^4.7.5",
     "sqlite3": "^3.1.9"
   }

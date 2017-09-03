@@ -7,8 +7,14 @@ Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manage
     npm install
 
 ## Usage
+Development:
 
     npm run dev
+
+Production:
+
+    npm run start
+
 
 To put data into database
 
@@ -57,11 +63,13 @@ POST http://localhost:3000/seminar/10
 DELETE http://localhost:3000/seminar/3
 ```
 
-It's same for all data
+It's same for all data (`seminar`, `news`, `contactList`)
 
-- Get all news
+### Others
+
+- GPU (ensure pchuang's Gpu monitor is on first)
 ```
-GET  http://localhost:3000/news
+GET  http://localhost:3000/gpuUsage
 ```
 
 ## TODO
