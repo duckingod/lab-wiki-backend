@@ -13,23 +13,23 @@ module.exports = (clientId, user) => {
       <body>
         `+user_msg+`
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <form action="/logout" method="POST">
+        <form action="/api/logout" method="POST">
           <input type="submit" value="logout"/>
         </form>
         <script>
         function onSignIn(user) {
-          $.post( 'login', { id_token: user.getAuthResponse().id_token }, 
+          $.post( '/api/login', { id_token: user.getAuthResponse().id_token }, 
               (data, stat) => { alert('success'); } );
           }; 
         </script>
-        <form action="/seminar" method="POST">
+        <form action="/api/seminar" method="POST">
           <input type="text" name="topic" placeholder="Title"/>
           <input type="text" name="presenter" placeholder="Presenter"/>
           <input type="text" name="date" placeholder="Date"/>
           <input type="text" name="slides" placeholder="slides url"/>
           <input type="submit"/>
         </form>
-        <form action="/seminar/2" method="POST">
+        <form action="/api/seminar/2" method="POST">
           <input type="text" name="topic" placeholder="Title"/>
           <input type="text" name="presenter" placeholder="Presenter"/>
           <input type="text" name="date" placeholder="Date"/>
@@ -41,7 +41,7 @@ module.exports = (clientId, user) => {
           function go_delete(n){
             alert("go del");
             $.ajax({
-                url: 'seminar/3',
+                url: '/api/seminar/3',
                 type: 'UPDATE',
                 success: function(res) { }
               })
