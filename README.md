@@ -1,78 +1,72 @@
-# lab-wiki-backend
-NTU NLP lab wiki backend
+# Lab Wiki Backend
+NTU NLP lab wiki backend by [express](http://expressjs.com)
 
-## Install
+
+## Getting Start
+### Install
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
     
-    npm install
+    npm install
 
-## Usage
-
-Development:
+### Usage
+To open a development webserver in `localhost`:
 
     npm run data-init-dev
     npm run dev
 
-Production:
+To depoly a production webserver in server:
 
     npm run data-init
     npm run start
 
-## API
+## APIs
 
 ```
-url = localhost:3000        (development)
-    = nlg17.csie.ntu.edu.tw (production)
+url = localhost:3000             (development)
+    = nlg17.csie.ntu.edu.tw:3000 (production)
 ```
 
-View `http://url/api` for example
+View `http://url/api/` for example
 
 ### Login Logout
-
-```
-// login
-POST http://url/api/login
-// POST with {id_token: google_auth2_user_id_token}
-
-//logout
-POST http://url/api/logout
-```
+| Method | URL                        | Description                  | Parameter                |
+|:-------|:---------------------------|:-----------------------------|:------------------------:|
+| POST   | http://url/api/login       | Login with [id_token](https://developers.google.com/identity/sign-in/web/backend-auth#send-the-id-token-to-your-server)        | `{id_token: '...', ...}` |
+| POST   | http://url/api/logout      | Logout                       |                          |
 
 ### CRUD
+| Method | URL                        | Description                  | Parameter           |
+|:-------|:---------------------------|:-----------------------------|:-------------------:|
+| GET    | http://url/api/seminar     | Get all seminar              |                     |
+| POST   | http://url/api/seminar     | Create new seminar           |`{topic: '...', ...}`|
+| POST   | http://url/api/seminar/:id | Update seminar with id=`:id` |`{topic: '...', ...}`|
+| DELETE | http://url/api/seminar/:id | Delete seminar with id=`:id` |                     |
 
-- Get all seminar
-```
-    GET  http://url/api/seminar
-```
-
-- Create new seminar (POST with seminar data : { topic: '...', ... })
-```
-    POST http://url/api/seminar
-```
-
-- Update seminar (id=10) (POST with seminar data : { topic: '...', ... })
-```
-    POST http://url/api/seminar/10
-```
-
-- Delete seminar (id=3)
-```
-    DELETE http://url/api/seminar/3
-```
-
-It's same for all data (`seminar`, `news`, `contactList`)
+It's same for all data (`seminar`, `news`, `contactList`, ...)
 
 ### Others
+| Method | URL                        | Description                  | Parameter           |
+|:-------|:---------------------------|:-----------------------------|:-------------------:|
+| GET    | http://url/api/gpuUsage    | Get all gpu/cpu usage        |                     |
+| GET    | http://url/api/user        | Get current user info        |                     |
 
-- GPU (ensure pchuang's Gpu monitor is on first)
+## Structure
 ```
-    GET  http://localhost:3000/gpuUsage
+- backend.js      Main Code
+- data-parser.js
+- package.json
+- models          Models scheme
+- router          Route defination
+    - settings         Settings for express
+    - config.js        Backend config
+    - index.js         Route defination
 ```
 
 ## TODO
 - Data
   - [ ] More data
-  - [ ] Record validation
+  - [ ] Record validation
+- [ ] User role
 - [ ] File server
 - Security
   - [ ] Session: store session in mongo (production)
@@ -81,4 +75,3 @@ It's same for all data (`seminar`, `news`, `contactList`)
 - [x] delete 權限 (admin/owner only)
 - [x] API route
 - [x] dev/product environment
-
