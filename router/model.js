@@ -34,7 +34,8 @@ module.exports = function(model) {
       res.send(json(req.record))
     },
     new: (req, res) => {
-      req.body.owner = req.user.email
+      if (req.body.owner==null)
+        req.body.owner = req.user.email
       model.create(req.body).then(obj => {
         res.send('ok');
       })
