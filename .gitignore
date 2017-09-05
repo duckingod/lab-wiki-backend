@@ -1,5 +1,6 @@
 .idea
 db.development.*
+package-lock.json
 
 # Logs
 logs
