@@ -11,6 +11,10 @@ config = {
       "timeout": 30000
     },
     'garbageGenesis': '2017-09-04',
+    "gApiConfig": {
+      "clientSecret": "client_secret.json",
+      "scope": ["https://mail.google.com/"]
+    }
   },
   "production": {
     "googleOauthClientId": "128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com",
@@ -22,7 +26,7 @@ config = {
       "url": "http://localhost:13579",
       "timeout": 30000
     },
-    'garbageGenesis': '2017-09-04',    
+    'garbageGenesis': '2017-09-04',
   }
 }
 module.exports = config[env]
