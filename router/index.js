@@ -2,6 +2,7 @@ const login = require('./login')
 const model = require('./model')
 const models = require('../models')
 const gpuUsage = require('./gpu-usage')
+const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
 
 function apiRoute() {
@@ -21,6 +22,7 @@ function apiRoute() {
     api.post(   m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
   api.get('/gpuUsage', emailLogin, gpuUsage)
+  api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/user', login.checkLogin, login.userInfo)
   return api
 }
