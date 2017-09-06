@@ -5,10 +5,19 @@ NTU NLP lab wiki backend by [express](http://expressjs.com)
 ## Getting Start
 ### Install
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
-    
-    npm install
+```    
+npm install
+```
 
 ### Usage
+
+First put the [front-end repo](https://github.com/vickyliin/lab-wiki) like
+```
+- lab-wiki/
+- lab-wiki-backend/
+```
+then inside `lab-wiki-backend`:
+
 To open a development webserver in `localhost`:
 
     npm run data-init-dev
