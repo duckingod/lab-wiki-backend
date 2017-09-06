@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node backend.js",
     "start": "cross-env NODE_ENV=production node backend.js",
+    "data-init": "cross-env NODE_ENV=production node data-parser.js ../lab-wiki/fakeAPI/data/",
+    "data-init-dev": "cross-env NODE_ENV=development node data-parser.js ../lab-wiki/fakeAPI/data/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

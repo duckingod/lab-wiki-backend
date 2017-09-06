@@ -1,84 +1,88 @@
-# lab-wiki-backend
-NTU NLP lab wiki backend
+# Lab Wiki Backend
+NTU NLP lab wiki backend by [express](http://expressjs.com)
 
-## Install
+
+## Getting Start
+### Install
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
     
-    npm install
+    npm install
 
-## Usage
-Development:
+### Usage
+To open a development webserver in `localhost`:
 
+    npm run data-init-dev
     npm run dev
 
-Production:
+To depoly a production webserver in server:
 
+    npm run data-init
     npm run start
 
+## APIs
 
-To put data into database
-
-    node data-parser.js ../lab-wiki/fakeAPI/data/seminar.json Seminar
-
-
-
-## API
-
-View `http://localhost:3000/` for example`
-
-### Login/logout
-
-- login
 ```
-POST http://localhost:3000/login
-// POST with {id_token: google_auth2_user_id_token}
+url = localhost:3000             (development)
+    = nlg17.csie.ntu.edu.tw:3000 (production)
 ```
 
-- logout
-```
-POST http://localhost:3000/logout
-```
+View `http://url/api/` for example
+
+### Login Logout
+| Method | URL                        | Description                  | Parameter                |
+|:-------|:---------------------------|:-----------------------------|:------------------------:|
+| POST   | http://url/api/login       | Login with [id_token](https://developers.google.com/identity/sign-in/web/backend-auth#send-the-id-token-to-your-server)        | `{id\_token: '...', ...}` |
+| POST   | http://url/api/logout      | Logout                       |                          |
 
 ### CRUD
+| Method | URL                        | Description                  | Parameter           |
+|:-------|:---------------------------|:-----------------------------|:-------------------:|
+| GET    | http://url/api/seminar     | Get all seminar              |                     |
+| POST   | http://url/api/seminar     | Create new seminar           |`{topic: '...', ...}`|
+| POST   | http://url/api/seminar/:id | Update seminar with id=`:id` |`{topic: '...', ...}`|
+| DELETE | http://url/api/seminar/:id | Delete seminar with id=`:id` |                     |
 
-- Get all seminar
-```
-GET  http://localhost:3000/seminar
-```
-
-- Create new seminar
-```
-POST http://localhost:3000/seminar
-// POST with seminar data : { topic: '...', ... }
-```
-
-- Update seminar (id=10)
-```
-POST http://localhost:3000/seminar/10
-// POST with seminar data : { topic: '...', ... }
-```
-
-- Delete seminar (id=3)
-```
-DELETE http://localhost:3000/seminar/3
-```
-
-It's same for all data (`seminar`, `news`, `contactList`)
+It's same for all data (`seminar`, `news`, `contactList`, ...)
 
 ### Others
+| Method | URL                        | Description                  | Parameter           |
+|:-------|:---------------------------|:-----------------------------|:-------------------:|
+| GET    | http://url/api/gpuUsage    | Get all gpu/cpu usage        |                     |
+| GET    | http://url/api/user        | Get current user info        |                     |
 
-- GPU (ensure pchuang's Gpu monitor is on first)
+## Structure
 ```
-GET  http://localhost:3000/gpuUsage
+- backend.js      Main Code
+- data-parser.js
+- package.json
+- models          Models scheme
+    - ContactList.js
+    - News.js
+    - Seminar.js
+    - Slide.js
+- router          Route defination
+    - index.js         Route defination
+    - config.js        Backend config
+    - settings         Settings for express
+    - model.js         Function: DB/model relative things
+    - login.js         Function: login/user/google-login relative things
+    - gpuUsage.js      Function: get gpu usage
+    - fake-fe.js       Function: Fake front end for testing
+- migrations      DB things
+- seeders         DB things
+- config          DB things: Database config
 ```
 
 ## TODO
-- [ ] more data
-- [ ] file server
-- [ ] Session security
-  - [ ] production: store in mongo
-  - [x] httpOnly
-- [x] httpOnly
+- Data
+  - [ ] More data
+  - [ ] Record validation
+- [x] User role
+- [ ] File server
+- Security
+  - [ ] Session: store session in mongo (production)
+  - [x] Session: httpOnly
+  - [ ] https
 - [x] delete 權限 (admin/owner only)
-- [ ] https
-
+- [x] API route
+- [x] dev/product environment
