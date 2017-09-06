@@ -76,13 +76,14 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 ## TODO
 - Data
   - [ ] More data
-  - [ ] Record validation
+  - [ ] Record validation
 - [x] User role
 - [ ] File server
 - Security
   - [ ] Session: store session in mongo (production)
   - [x] Session: httpOnly
   - [ ] https
+  - [ ] random jwt key (in 'router/login.js')
 - [x] delete 權限 (admin/owner only)
 - [x] API route
 - [x] dev/product environment

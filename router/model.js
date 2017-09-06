@@ -6,7 +6,7 @@ json = JSON.stringify
 
 const permission = {
   admin:   user       => admins && user && admins.includes(user.email),
-  owner:  (user, obj) => obj && obj.owner && user && obj.owner.split(" ").indexOf(email)>=0,
+  owner:  (user, obj) => obj && obj.owner && user && obj.owner.split(" ").indexOf(user.email)>=0,
   role:     (user, obj) => {
     if (permission.admin(user))
         return 'admin'

@@ -8,7 +8,8 @@ const emailDomain = require('./config').validEmailDomain
 const Model = require("../models").News
 const role = require('./model')(Model).role
 
-jwt_key = crypto.randomBytes(256)
+// jwt_key = crypto.randomBytes(256)
+jwt_key = 'the secret is vicky soooo god'
 function cookieJwt(credential) {
   return expressJwt({
     secret: jwt_key,
