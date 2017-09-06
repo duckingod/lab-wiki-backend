@@ -4,7 +4,7 @@ var readline = require("readline")
 var google = require("googleapis")
 var googleAuth = require("google-auth-library")
 var quotedPrintable = require("quoted-printable")
-var config = require("./router/config").gApiConfig
+var config = require("../config").gApiConfig
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/lab-wiki.json
 var SCOPES = config.scope

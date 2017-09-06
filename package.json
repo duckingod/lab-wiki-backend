@@ -37,6 +37,7 @@
     "quoted-printable": "^1.0.1",
     "request": "^2.81.0",
     "sequelize": "^4.7.5",
-    "sqlite3": "^3.1.9"
+    "sqlite3": "^3.1.9",
+    "utf8": "^2.1.2"
   }
 }

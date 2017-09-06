@@ -17,7 +17,11 @@ config = {
     },
     "mailService": {
       "refreshTime": 30000
-    }
+    },
+    "database": {
+      "dialect": "sqlite",
+      "storage": "./db.development.sqlite"
+    },
   },
   "production": {
     "googleOauthClientId": "128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com",
@@ -36,7 +40,18 @@ config = {
     },
     "mailService": {
       "refreshTime": 30000
-    }
+    },
+    "database": {
+      "dialect": "sqlite",
+      "storage": "./db.sqlite"
+    },
+  },
+  "test": {
+    "database": {
+      "dialect": "sqlite",
+      "storage": ":memory:"
+    },
+  
   }
 }
 module.exports = config[env]

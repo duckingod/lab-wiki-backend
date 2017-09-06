@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-require('./router')(app);
+require('./routers')(app);
 
 models.sequelize.sync().then(function() {
   /**

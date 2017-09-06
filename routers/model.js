@@ -1,6 +1,6 @@
 const models = require('../models')
-const admins = require('./config').admins
-const emailDomain = require('./config').validEmailDomain
+const admins = require('../config').admins
+const emailDomain = require('../config').validEmailDomain
 
 json = JSON.stringify
 

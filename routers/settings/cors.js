@@ -1,5 +1,5 @@
 var cors = require('cors')
-var appUrl = require('../config').appUrl
+var appUrl = require('../../config').appUrl
 
 corsOptionDelegate = (req, callback) => {
   var corsOptions;

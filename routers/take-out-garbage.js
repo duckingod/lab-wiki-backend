@@ -1,5 +1,5 @@
 const ContactList = require("../models").ContactList
-const garbageGenesis = require("./config").garbageGenesis
+const garbageGenesis = require("../config").garbageGenesis
 
 module.exports = (req, res) => {
   ContactList.all()

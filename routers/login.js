@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const crypto = require('crypto')
 const GoogleAuth = require('google-auth-library')
-const clientId = require('./config').googleOauthClientId
-const loginPeriod = require('./config').loginExpirePeriod
-const emailDomain = require('./config').validEmailDomain
+const clientId = require('../config').googleOauthClientId
+const loginPeriod = require('../config').loginExpirePeriod
+const emailDomain = require('../config').validEmailDomain
 const Model = require("../models").News
 const role = require('./model')(Model).role
 
