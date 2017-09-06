@@ -113,23 +113,26 @@ ${body}`
     .toString("base64")
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
-
-  gmail.users.messages.send(
-    {
-      auth: auth,
-      userId: "me",
-      resource: {
-        raw: base64EncodedEmail
+  return new Promise((resolve, reject) => {
+    gmail.users.messages.send(
+      {
+        auth: auth,
+        userId: "me",
+        resource: {
+          raw: base64EncodedEmail
+        }
+      },
+      (err, response) => {
+        if (err) {
+          console.log("The API returned an error: " + err)
+          reject(err)
+        } else {
+          console.log("send mail success", response)
+          resolve(response)
+        }
       }
-    },
-    (err, response) => {
-      if (err) {
-        console.log("The API returned an error: " + err)
-      } else {
-        console.log("send mail success", response)
-      }
-    }
-  )
+    )
+  })
 }
 
 var getAuth = function() {

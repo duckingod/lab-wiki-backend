@@ -14,6 +14,9 @@ config = {
     "gApiConfig": {
       "clientSecret": "client_secret.json",
       "scope": ["https://mail.google.com/"]
+    },
+    "mailService": {
+      "refreshTime": 30000
     }
   },
   "production": {
@@ -30,6 +33,9 @@ config = {
     "gApiConfig": {
       "clientSecret": "client_secret.json",
       "scope": ["https://mail.google.com/"]
+    },
+    "mailService": {
+      "refreshTime": 30000
     }
   }
 }
