@@ -1,7 +1,7 @@
 const EMail = require("./models").EMail
 const getAuth = require("./google-api").getAuth
 const sendMessage = require("./google-api").sendMessage
-const refreshTime = require("./router/config").mailService.refreshTime
+const refreshTime = require("../config").mailService.refreshTime
 
 let name = "大神"
 let subject = `Keep our lab clean (${name})`

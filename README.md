@@ -53,24 +53,26 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 ## Structure
 ```
 - backend.js      Main Code
-- data-parser.js
 - package.json
-- models          Models scheme
+- config.js       Backend config
+- models/         Models scheme
     - ContactList.js
     - News.js
     - Seminar.js
     - Slide.js
-- router          Route defination
+- routers/         Route defination
     - index.js         Route defination
-    - config.js        Backend config
-    - settings         Settings for express
+    - settings/        Settings for express
     - model.js         Function: DB/model relative things
     - login.js         Function: login/user/google-login relative things
     - gpuUsage.js      Function: get gpu usage
     - fake-fe.js       Function: Fake front end for testing
-- migrations      DB things
-- seeders         DB things
-- config          DB things: Database config
+- services/
+    - mail-service.js  Mail service
+    - google-api.js    Function: google api things, like getting token in backend
+    - gapi-tset.hs     Function: Kanna tell you taking out the garbage
+- tools/           Tools
+    - data-parser.js   Parse json data into DB
 ```
 
 ## TODO

@@ -1,5 +1,5 @@
 const request = require('request')
-const gpu = require('./config').gpuUsage
+const gpu = require('../config').gpuUsage
 
 module.exports = (req, res) => {
   request.get(gpu.url, {timeout: gpu.timeout}, function(err, _res, body) {
