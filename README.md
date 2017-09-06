@@ -31,7 +31,7 @@ View `http://url/api/` for example
 ### Login Logout
 | Method | URL                        | Description                  | Parameter                |
 |:-------|:---------------------------|:-----------------------------|:------------------------:|
-| POST   | http://url/api/login       | Login with [id_token](https://developers.google.com/identity/sign-in/web/backend-auth#send-the-id-token-to-your-server)        | `{id_token: '...', ...}` |
+| POST   | http://url/api/login       | Login with [id_token](https://developers.google.com/identity/sign-in/web/backend-auth#send-the-id-token-to-your-server)        | `{id\_token: '...', ...}` |
 | POST   | http://url/api/logout      | Logout                       |                          |
 
 ### CRUD

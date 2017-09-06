@@ -17,10 +17,11 @@ function apiRoute() {
     m = model(m)
     api.get(    m.route,   emailLogin, m.index)
     api.post(   m.route,   emailLogin, m.new)
-    api.delete( m.idRoute, emailLogin, m.record, m.owner, m.delete)
-    api.post(   m.idRoute, emailLogin, m.record, m.owner, m.update)
+    api.delete( m.idRoute, emailLogin, m.record, m.editable, m.delete)
+    api.post(   m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
   api.get('/gpuUsage', emailLogin, gpuUsage)
+  api.get('/user', login.checkLogin, login.userInfo)
   return api
 }
 
