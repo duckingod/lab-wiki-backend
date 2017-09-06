@@ -2,6 +2,9 @@
 db.development.*
 package-lock.json
 
+# Secret
+client_secret.json
+
 # Logs
 logs
 *.log
