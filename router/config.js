@@ -9,7 +9,8 @@ config = {
     "gpuUsage": {
       "url": "http://nlg17.csie.ntu.edu.tw:5566/",
       "timeout": 30000
-    }
+    },
+    'garbageGenesis': '2017-09-04',
   },
   "production": {
     "googleOauthClientId": "128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com",
@@ -20,7 +21,8 @@ config = {
     "gpuUsage": {
       "url": "http://localhost:13579",
       "timeout": 30000
-    }
+    },
+    'garbageGenesis': '2017-09-04',    
   }
 }
 module.exports = config[env]
