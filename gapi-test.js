@@ -14,5 +14,5 @@ Kanna<br>
 `
 
 getAuth().then(auth => {
-  sendMessage(auth, "thyang@nlg.csie.ntu.edu.tw", subject, body)
+  sendMessage(auth, "wrlin@nlg.csie.ntu.edu.tw", subject, body)
 })

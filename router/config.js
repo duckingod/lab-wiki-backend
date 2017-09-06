@@ -27,6 +27,10 @@ config = {
       "timeout": 30000
     },
     'garbageGenesis': '2017-09-04',
+    "gApiConfig": {
+      "clientSecret": "client_secret.json",
+      "scope": ["https://mail.google.com/"]
+    }
   }
 }
 module.exports = config[env]
