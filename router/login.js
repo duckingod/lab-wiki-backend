@@ -1,10 +1,12 @@
-var jwt = require('jsonwebtoken')
-var expressJwt = require('express-jwt')
-var crypto = require('crypto')
-var GoogleAuth = require('google-auth-library')
-var clientId = require('./config').googleOauthClientId
-var loginPeriod = require('./config').loginExpirePeriod
-var emailDomain = require('./config').validEmailDomain
+const jwt = require('jsonwebtoken')
+const expressJwt = require('express-jwt')
+const crypto = require('crypto')
+const GoogleAuth = require('google-auth-library')
+const clientId = require('./config').googleOauthClientId
+const loginPeriod = require('./config').loginExpirePeriod
+const emailDomain = require('./config').validEmailDomain
+const Model = require("../models").News
+const role = require('./model')(Model).role
 
 jwt_key = crypto.randomBytes(256)
 function cookieJwt(credential) {
@@ -35,28 +37,40 @@ module.exports = {
     googleIdTokenLogin: function(req, res) {  
       var token = req.body.id_token
       googleOauthClient.verifyIdToken(
-          token,
-          clientId,
-          function(e, login) {
-            if (login!=null) {
-              var payload = login.getPayload()
-              var userData = {
-                name: payload.name,
-                email: payload.email,
-                account: payload.email[0]
-              };
-              var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod})
-              res.cookie('token', clientToken).send("ok")
-              console.log(payload.name+" ("+payload.email+") logined")
-              return
+        token,
+        clientId,
+        function(e, login) {
+          if (login!=null) {
+            var payload = login.getPayload()
+            var userData = {
+              name: payload.name,
+              email: payload.email,
             }
-            console.log("login failed")
-            res.status(401).send(JSON.stringify(e))
-          });
+            var clientToken = jwt.sign(userData, jwt_key, {expiresIn: 60*60*loginPeriod})
+            res.cookie('token', clientToken).send("ok")
+            console.log(payload.name+" ("+payload.email+") logined")
+            return
+          }
+          console.log("login failed")
+          res.status(401).send(JSON.stringify(e))
+        }
+     )
     },
     logout: function(req, res) {
       console.log(req.user.name +" logout")
       res.clearCookie('token').send('ok')
+    },
+    userInfo: (req, res) => {
+      if (req.user)
+        res.status(200).send({
+          name: req.user.name,
+          email: req.user.email,
+          role: role(req.user, null)
+        })
+      else
+        res.status(200).send({
+          role: role(req.user, null)
+        })
     },
     unauthorizedError: function (err, req, res, next) {
       if (err.name === 'UnauthorizedError') {
