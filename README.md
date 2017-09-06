@@ -56,17 +56,28 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 - data-parser.js
 - package.json
 - models          Models scheme
+    - ContactList.js
+    - News.js
+    - Seminar.js
+    - Slide.js
 - router          Route defination
-    - settings         Settings for express
-    - config.js        Backend config
     - index.js         Route defination
+    - config.js        Backend config
+    - settings         Settings for express
+    - model.js         Function: DB/model relative things
+    - login.js         Function: login/user/google-login relative things
+    - gpuUsage.js      Function: get gpu usage
+    - fake-fe.js       Function: Fake front end for testing
+- migrations      DB things
+- seeders         DB things
+- config          DB things: Database config
 ```
 
 ## TODO
 - Data
   - [ ] More data
   - [ ] Record validation
-- [ ] User role
+- [x] User role
 - [ ] File server
 - Security
   - [ ] Session: store session in mongo (production)
