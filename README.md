@@ -5,10 +5,19 @@ NTU NLP lab wiki backend by [express](http://expressjs.com)
 ## Getting Start
 ### Install
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
-    
-    npm install
+```    
+npm install
+```
 
 ### Usage
+
+First put the [front-end repo](https://github.com/vickyliin/lab-wiki) like
+```
+- lab-wiki/
+- lab-wiki-backend/
+```
+then inside `lab-wiki-backend`:
+
 To open a development webserver in `localhost`:
 
     npm run data-init-dev
@@ -65,12 +74,13 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
     - settings/        Settings for express
     - model.js         Function: DB/model relative things
     - login.js         Function: login/user/google-login relative things
-    - gpuUsage.js      Function: get gpu usage
-    - fake-fe.js       Function: Fake front end for testing
+    - gpu-usage.js     Function: get workstation gpu/cpu usage
+    - take-out-garbage.js ction: godlike auto take out the garbage by ContactList
+    - fake-fe.js       Function: fake front-end for testing
 - services/
     - mail-service.js  Mail service
+    - gapi-test.js     Kanna tell you taking out the garbage
     - google-api.js    Function: google api things, like getting token in backend
-    - gapi-tset.hs     Function: Kanna tell you taking out the garbage
 - tools/           Tools
     - data-parser.js   Parse json data into DB
 ```
@@ -89,3 +99,4 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 - [x] delete 權限 (admin/owner only)
 - [x] API route
 - [x] dev/product environment
+- [x] static folder for front-end
