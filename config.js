@@ -50,16 +50,12 @@ function completeConfig(env) {
   let _config = config.development
   function set_dict(c, config, e) {
     for (let k in c)
-      if (
-        !config[k] // 防呆
-      )
+      if ( !config[k] ) // 防呆
         throw 'The ' + e + ' config sets more than original config: ' + k
-      else if (
-        typeof c[k] == 'object' &&
-        !Array.isArray(c[k]) // both are dict
-      )
+      else if ( typeof c[k] == 'object' && !Array.isArray(c[k]) ) // both are dict
         set_dict(c[k], config[k], e)
-      else config[k] = c[k]
+      else
+        config[k] = c[k]
   }
   for (let e of env) set_dict(config[e], _config, e)
   return _config
