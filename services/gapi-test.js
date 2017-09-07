@@ -1,4 +1,4 @@
-const EMail = require("./models").EMail
+const EMail = require("../models").EMail
 const getAuth = require("./google-api").getAuth
 const sendMessage = require("./google-api").sendMessage
 const refreshTime = require("../config").mailService.refreshTime

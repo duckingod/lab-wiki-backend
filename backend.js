@@ -1,8 +1,9 @@
-var express = require('express');  
-var app = express();  
+var express = require('express');
+var app = express();
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var models = require('./models');
+require('./services/mail-service')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

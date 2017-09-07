@@ -13,7 +13,7 @@ function apiRoute() {
   api.post('/logout', emailLogin, login.logout)
   api.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
 
-  _models = [models.Seminar, models.News, models.Slide, models.ContactList]
+  _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference]
   for (m of _models) {
     m = model(m)
     api.get(    m.route,   emailLogin, m.index)
@@ -38,7 +38,7 @@ module.exports = function(app) {
   app.use(require('./settings/cors'))
   app.use(require('./settings/session'))
   //app.use(require('helmet'))
-  
+
   app.use(frontEndRoute())
   app.use('/api', apiRoute())
 
