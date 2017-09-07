@@ -3,7 +3,7 @@ var app = express();
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var models = require('./models');
-require('./services/mail-service')
+require('./services')
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
