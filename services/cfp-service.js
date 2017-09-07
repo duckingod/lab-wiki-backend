@@ -44,7 +44,6 @@ xray(
 setInterval(() => {
   Conference.findAll({}).then(confs => {
     for (let conf of confs) {
-      console.log(conf.name, conf.start, conf.end)
       xray(conf.url, '.gglu tr', [
         {
           attr: 'th',
