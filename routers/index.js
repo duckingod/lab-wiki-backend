@@ -2,6 +2,7 @@ const login = require('./login')
 const model = require('./model')
 const models = require('../models')
 const gpuUsage = require('./gpu-usage')
+const cfpSearch = require('./cfp-search')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
 
@@ -24,6 +25,7 @@ function apiRoute() {
   api.get('/gpuUsage', emailLogin, gpuUsage)
   api.get('/workstations', emailLogin, gpuUsage)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
+  api.get('/cfpSearch', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
   return api
 }

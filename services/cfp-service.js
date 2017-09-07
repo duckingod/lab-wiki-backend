@@ -21,26 +21,6 @@ const attr2field = {
   }
 }
 
-/*
-xray(
-  'http://www.wikicfp.com/cfp/servlet/tool.search?q=nlp&year=2018',
-  '.contsec table table td',
-  [
-    {
-      name: 'a',
-      url: 'a@href'
-    }
-  ]
-)((err, confs) => {
-  console.log(confs)
-  for (conf of confs) {
-    Conference.create(conf).then((res, err) => {
-      console.log(res, err)
-    })
-  }
-})
-*/
-
 setInterval(() => {
   Conference.findAll({}).then(confs => {
     for (let conf of confs) {
