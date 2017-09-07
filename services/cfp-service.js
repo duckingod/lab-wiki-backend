@@ -16,8 +16,8 @@ const attr2field = {
     trim: x => x.trim()
   },
   'Submission Deadline': {
-    field: 'deadline',
-    trim: trimDate
+    field: 'deadlineDisplay',
+    trim: x => x.trim()
   }
 }
 
@@ -57,7 +57,8 @@ setInterval(() => {
           let attr = attr2field[r.attr]
           if (attr) obj[attr.field] = attr.trim(r.val)
         }
-
+        if ('deadlineDisplay' in obj)
+          obj.deadline = trimDate(obj.deadlineDisplay)
         if ('when' in obj && obj.when.split('-').length == 2) {
           let [start, end] = obj.when.split('-')
           obj.start = trimDate(start)

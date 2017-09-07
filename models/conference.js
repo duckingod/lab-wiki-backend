@@ -13,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     start: DataTypes.DATE,
     end: DataTypes.DATE,
     deadline: DataTypes.DATE,
+    deadlineDisplay: DataTypes.STRING,
   })
 
   return Conference
