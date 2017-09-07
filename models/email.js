@@ -2,21 +2,47 @@
 
 module.exports = function(sequelize, DataTypes) {
   var EMail = sequelize.define("EMail", {
-    mailto: DataTypes.STRING,
-    subject: DataTypes.STRING,
-    body: DataTypes.STRING,
+    mailto: {
+		type: DataTypes.STRING,
+		validate: {
+			notEmpty: true,
+			isEmail: true
+		}
+	},
+    subject: {
+		type: DataTypes.STRING,
+		validate: {
+		}
+	},
+    body: {
+		type: DataTypes.STRING,
+	},
     execTime: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
+		type: DataTypes.DATE,
+		defaultValue: DataTypes.NOW,
+		validate: {
+			notEmpty: true,
+			isDate: true
+		}
     },
-    sentDate: DataTypes.DATE,
+    sentDate: {
+		type: DataTypes.DATE,
+		validate: {
+			isDate: true
+		}
+	},
     isSent: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
+		type: DataTypes.BOOLEAN,
+		defaultValue: false,
+		validate: {
+			notEmpty: true
+		}
     },
     key: {
-      type: DataTypes.STRING,
-      unique: true
+		type: DataTypes.STRING,
+		unique: true,
+		validate: {
+		}
     }
   })
 
