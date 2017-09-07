@@ -22,9 +22,16 @@ function apiRoute() {
     api.post(   m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
   api.get('/gpuUsage', emailLogin, gpuUsage)
+  api.get('/workstations', emailLogin, gpuUsage)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/user', login.checkLogin, login.userInfo)
   return api
+}
+
+function frontEndRoute() {
+  let fe = express.Router()
+  fe.use(express.static('static'))
+  return fe
 }
 
 module.exports = function(app) {
@@ -32,6 +39,7 @@ module.exports = function(app) {
   app.use(require('./settings/session'))
   //app.use(require('helmet'))
   
+  app.use(frontEndRoute())
   app.use('/api', apiRoute())
 
   app.use(login.unauthorizedError)
