@@ -18,10 +18,10 @@ let config = {
       scope: ['https://mail.google.com/']
     },
     mailService: {
-      refreshTime: 3000
+      refreshTime: 30000
     },
     cfpService: {
-      refreshTime: 3000
+      refreshTime: 3000000
     },
     database: {
       dialect: 'sqlite',
@@ -38,10 +38,10 @@ let config = {
       storage: './db.sqlite'
     },
     mailService: {
-      refreshTime: 30000
+      refreshTime: 3000000
     },
     cfpService: {
-      refreshTime: 30000
+      refreshTime: 3000000
     },
     jwtKey: crypto.randomBytes(256)
   },
