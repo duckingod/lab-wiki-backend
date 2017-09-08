@@ -1,0 +1,21 @@
+language: node_js
+
+# test on two node.js versions: 0.8
+node_js:
+  - 0.8
+
+install:
+  - npm install
+
+script:
+  - jshint . --exclude .\node_modules\
+  - npm run data-init-dev
+
+# configure notifications (email, IRC, campfire etc)
+# please update this section to your needs!
+notifications:
+  email:
+    recipients:
+      - henryyang42@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always
