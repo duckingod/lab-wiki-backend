@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/henryyang42/lab-wiki-backend.svg?branch=master)](https://travis-ci.com/henryyang42/lab-wiki-backend)
 # Lab Wiki Backend
 NTU NLP lab wiki backend by [express](http://expressjs.com)
 
