@@ -1,17 +1,14 @@
 module.exports = (clientId, user) => {
-
-      if (user!=null)
-        user_msg = 'Welcome, '+user.name+' ('+user.email+')';
-      else
-        user_msg = 'Welcome, guest';
-      return `
+  let userMsg
+  if (user != null) { userMsg = 'Welcome, ' + user.name + ' (' + user.email + ')' } else { userMsg = 'Welcome, guest' }
+  return `
       <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <meta name="google-signin-client_id" content="`+clientId+`">
+        <meta name="google-signin-client_id" content="` + clientId + `">
       </head>
       <body>
-        `+user_msg+`
+        ` + userMsg + `
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <form action="/api/logout" method="POST">
           <input type="submit" value="logout"/>
@@ -50,5 +47,4 @@ module.exports = (clientId, user) => {
 
       </body>
       `
-
 }

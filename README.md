@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/henryyang42/lab-wiki-backend.svg?token=cfxmcASvfuGT6z5rsGuQ&branch=master)](https://travis-ci.com/henryyang42/lab-wiki-backend)
 # Lab Wiki Backend
 NTU NLP lab wiki backend by [express](http://expressjs.com)
 
@@ -5,7 +6,7 @@ NTU NLP lab wiki backend by [express](http://expressjs.com)
 ## Getting Start
 ### Install
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
-```    
+```
 npm install
 ```
 

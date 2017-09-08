@@ -1,7 +1,7 @@
-"use strict"
+'use strict'
 
-module.exports = function(sequelize, DataTypes) {
-  var Conference = sequelize.define("Conference", {
+module.exports = function (sequelize, DataTypes) {
+  var Conference = sequelize.define('Conference', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     start: DataTypes.DATE,
     end: DataTypes.DATE,
     deadline: DataTypes.DATE,
-    deadlineDisplay: DataTypes.STRING,
+    deadlineDisplay: DataTypes.STRING
   })
 
   return Conference
