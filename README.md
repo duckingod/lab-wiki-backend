@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/henryyang42/lab-wiki-backend.svg?token=cfxmcASvfuGT6z5rsGuQ&branch=master)](https://travis-ci.com/henryyang42/lab-wiki-backend)
+[![Build Status](https://travis-ci.com/duckingod/lab-wiki-backend#)](https://travis-ci.com/duckingod/lab-wiki-backend)
 # Lab Wiki Backend
 NTU NLP lab wiki backend by [express](http://expressjs.com)
 
@@ -11,13 +11,6 @@ npm install
 ```
 
 ### Usage
-
-First put the [front-end repo](https://github.com/vickyliin/lab-wiki) like
-```
-- lab-wiki/
-- lab-wiki-backend/
-```
-then inside `lab-wiki-backend`:
 
 To open a development webserver in `localhost`:
 

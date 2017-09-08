@@ -18,6 +18,6 @@ script:
 notifications:
   email:
     recipients:
-      - henryyang42@gmail.com
+      - labwiki@nlg.csie.ntu.edu.tw
     on_success: never # default: change
     on_failure: always # default: always
