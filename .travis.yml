@@ -2,7 +2,9 @@ language: node_js
 
 # test on two node.js versions: 0.8
 node_js:
-  - 0.8
+  - 8.4.0
+
+before_install: if [[ `npm -v` != 5* ]]; then npm i -g npm@5; fi
 
 install:
   - npm install
