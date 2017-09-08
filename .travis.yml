@@ -12,6 +12,7 @@ install:
 script:
   - standard
   - npm run data-init-dev
+  - npm test
 
 # configure notifications (email, IRC, campfire etc)
 # please update this section to your needs!
