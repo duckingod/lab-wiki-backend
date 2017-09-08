@@ -97,6 +97,9 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
   - [x] Session: httpOnly
   - [ ] https
   - [ ] random jwt key (in 'router/login.js')
+- Service
+  - [x] Mail service
+  - [x] Call for paper service
 - [x] delete 權限 (admin/owner only)
 - [x] API route
 - [x] dev/product environment
