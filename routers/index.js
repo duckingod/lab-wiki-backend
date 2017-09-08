@@ -14,9 +14,14 @@ function apiRoute () {
   api.post('/logout', emailLogin, login.logout)
   api.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
 
-  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference]
+  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
   for (let m of _models) {
     m = model(m)
+
+    if (m.route === '/email') {
+      m.route = '/emailSchedule'
+      m.idRoute = '/emailSchedule/:id'
+    }
     api.get(m.route, emailLogin, m.index)
     api.post(m.route, emailLogin, m.new)
     api.delete(m.idRoute, emailLogin, m.record, m.editable, m.delete)

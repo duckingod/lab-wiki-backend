@@ -10,6 +10,7 @@ module.exports = function (sequelize, DataTypes) {
     when: DataTypes.STRING,
     where: DataTypes.STRING,
     url: DataTypes.STRING,
+    cfpUrl: DataTypes.STRING,
     start: DataTypes.DATE,
     end: DataTypes.DATE,
     deadline: DataTypes.DATE,
