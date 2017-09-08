@@ -18,7 +18,7 @@ function apiRoute () {
   for (let m of _models) {
     m = model(m)
 
-    if(m.route === '/email') {
+    if (m.route === '/email') {
       m.route = '/emailSchedule'
       m.idRoute = '/emailSchedule/:id'
     }
