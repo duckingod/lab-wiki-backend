@@ -21,7 +21,7 @@ let config = {
       refreshTime: 30000
     },
     cfpService: {
-      refreshTime: 3000000
+      refreshTime: 30000
     },
     database: {
       dialect: 'sqlite',

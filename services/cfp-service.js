@@ -24,7 +24,7 @@ const attr2field = {
 setInterval(() => {
   Conference.findAll({}).then(confs => {
     for (let conf of confs) {
-      xray(conf.url, '.gglu tr', [
+      xray(conf.cfpUrl, '.gglu tr', [
         {
           attr: 'th',
           val: 'td'
@@ -46,9 +46,14 @@ setInterval(() => {
           obj.start = trimDate(start)
           obj.end = trimDate(end)
         }
-        console.log(obj)
         conf.update(obj).then()
-        console.log('========')
+      })
+      xray(conf.cfpUrl, 'a[target=_newtab]@href')((err, url) => {
+        if (err) {
+          console.log(err)
+          return
+        }
+        conf.update({url: url}).then()
       })
     }
   })

@@ -7,7 +7,7 @@ module.exports = (req, res) => {
     [
       {
         name: 'a',
-        url: 'a@href'
+        cfpUrl: 'a@href'
       }
     ]
   )((err, confs) => {
