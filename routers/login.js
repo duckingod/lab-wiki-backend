@@ -18,7 +18,7 @@ function cookieJwt(credential) {
   })
 }
 
-var auth = new GoogleAuth
+var auth = new GoogleAuth()
 var googleOauthClient = new auth.OAuth2(clientId, '', '')
 
 module.exports = {

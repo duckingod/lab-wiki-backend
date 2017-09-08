@@ -11,8 +11,7 @@ if(path.extname(filePath) !== ''){
 }
 else{
   for(let name of Object.keys(models)){
-    if(name === 'sequelize'
-      || name === 'Sequelize') continue
+    if(name === 'sequelize' || name === 'Sequelize') continue
     let fileName = name.charAt(0).toLowerCase() + name.slice(1) + '.json'
     let fullPath = path.resolve(filePath, fileName)
     if(fs.existsSync(fullPath)){

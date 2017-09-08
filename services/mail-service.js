@@ -6,7 +6,7 @@ const refreshTime = require("../config").mailService.refreshTime
 setInterval(() => {
   getAuth().then(auth => {
     EMail.findAll({ where: { isSent: false, execTime: {$lte: new Date()} } }).then(emails => {
-      for (email of emails) {
+      for (let email of emails) {
         sendMessage(
           auth,
           email.mailto,

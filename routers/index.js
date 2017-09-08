@@ -15,7 +15,7 @@ function apiRoute() {
   api.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
 
   _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference]
-  for (m of _models) {
+  for (let m of _models) {
     m = model(m)
     api.get(    m.route,   emailLogin, m.index)
     api.post(   m.route,   emailLogin, m.new)
