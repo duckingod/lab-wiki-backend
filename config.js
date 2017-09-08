@@ -1,3 +1,4 @@
+let crypto = require('crypto')
 let env = process.env.NODE_ENV || 'development'
 let config = {
   development: {
@@ -25,7 +26,8 @@ let config = {
     database: {
       dialect: 'sqlite',
       storage: './db.development.sqlite'
-    }
+    },
+    jwtKey: 'vicky_is_sooooo_god'
   },
   production: {
     appUrl: 'http://nlg17.csie.ntu.edu.tw',
@@ -40,11 +42,16 @@ let config = {
     },
     cfpService: {
       refreshTime: 30000
-    }
+    },
+    jwtKey: crypto.randomBytes(256),
+  },
+  test: {
+    jwtKey: "vicky_godlike",
   }
 }
 
 if (env === 'production') env = ['production']
+if (env === 'test') env = ['test']
 
 function completeConfig (env) {
   let _config = config.development

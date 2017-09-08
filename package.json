@@ -8,7 +8,7 @@
     "start": "cross-env NODE_ENV=production nodemon backend.js",
     "data-init": "cross-env NODE_ENV=production node tools/data-parser.js ./data/",
     "data-init-dev": "cross-env NODE_ENV=development node tools/data-parser.js ./data/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha ./test"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,9 @@
     "loopfunc": true
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0",
+    "standard": "^10.0.3",
+    "supertest": "^3.0.0"
   }
 }

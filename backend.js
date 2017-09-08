@@ -10,12 +10,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 require('./routers')(app)
+var server
 
-models.sequelize.sync().then(function () {
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
-  // models.Seminar.create({title: 'Hi!', presenter:'DaiShen', date:new Date()});
-  console.log('Express server listening on port 3000')
-  app.listen(3000)
-})
+models.sequelize.sync().then()
+
+console.log('Express server listening on port 3000')
+server = app.listen(3000)
+
+module.exports = server
+
