@@ -1,5 +1,5 @@
-var env = process.env.NODE_ENV || 'development'
-config = {
+let env = process.env.NODE_ENV || 'development'
+let config = {
   development: {
     googleOauthClientId:
       '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
@@ -40,24 +40,24 @@ config = {
     },
     cfpService: {
       refreshTime: 30000
-    },
+    }
   }
 }
 
-if (env == 'production') env = ['production']
+if (env === 'production') env = ['production']
 
-function completeConfig(env) {
+function completeConfig (env) {
   let _config = config.development
-  function set_dict(c, config, e) {
-    for (let k in c)
-      if ( !config[k] ) // 防呆
-        throw 'The ' + e + ' config sets more than original config: ' + k
-      else if ( typeof c[k] == 'object' && !Array.isArray(c[k]) ) // both are dict
-        set_dict(c[k], config[k], e)
-      else
-        config[k] = c[k]
+  function setDict (c, config, e) {
+    for (let k in c) {
+      if (!config[k]) {
+        throw new Error('The ' + e + ' config sets more than original config: ' + k)
+      } else if (typeof c[k] === 'object' && !Array.isArray(c[k])) {
+        setDict(c[k], config[k], e)
+      } else { config[k] = c[k] }
+    }
   }
-  for (let e of env) set_dict(config[e], _config, e)
+  for (let e of env) setDict(config[e], _config, e)
   return _config
 }
 

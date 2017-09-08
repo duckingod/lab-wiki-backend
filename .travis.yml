@@ -8,7 +8,7 @@ install:
   - npm install
 
 script:
-  - jshint . --exclude .\node_modules\
+  - standard
   - npm run data-init-dev
 
 # configure notifications (email, IRC, campfire etc)

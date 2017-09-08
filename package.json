@@ -43,9 +43,12 @@
     "x-ray": "^2.3.2"
   },
   "jshintConfig": {
-    "asi" : true,
+    "asi": true,
     "esversion": 6,
     "node": true,
-    "loopfunc": true 
+    "loopfunc": true
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
   }
 }

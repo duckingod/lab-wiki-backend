@@ -1,4 +1,3 @@
-const Conference = require("../models").Conference
 const xray = require('x-ray')()
 
 module.exports = (req, res) => {
@@ -12,7 +11,12 @@ module.exports = (req, res) => {
       }
     ]
   )((err, confs) => {
-    console.log(confs)
-    res.send(confs)
+    if (err) {
+      console.log(err)
+      res.send([])
+    } else {
+      console.log(confs)
+      res.send(confs)
+    }
   })
 }

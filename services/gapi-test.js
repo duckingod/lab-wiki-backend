@@ -1,9 +1,9 @@
-const EMail = require("../models").EMail
-const getAuth = require("./google-api").getAuth
-const sendMessage = require("./google-api").sendMessage
-const refreshTime = require("../config").mailService.refreshTime
+const EMail = require('../models').EMail
+const getAuth = require('./google-api').getAuth
+const sendMessage = require('./google-api').sendMessage
+const refreshTime = require('../config').mailService.refreshTime
 
-let name = "大神"
+let name = '大神'
 let subject = `Keep our lab clean (${name})`
 let body = `Dear lab members,<br>
 <br>
@@ -17,16 +17,15 @@ Kanna<br>
 
 let key = Math.random()
 
-mail = {
+let mail = {
   subject: subject,
   body: body,
-  mailto: "thyang@nlg.csie.ntu.edu.tw",
+  mailto: 'thyang@nlg.csie.ntu.edu.tw',
   isSent: false,
   key: key
 }
 
 EMail.create(mail).then()
-
 
 setInterval(() => {
   getAuth().then(auth => {
@@ -38,10 +37,9 @@ setInterval(() => {
           email.subject,
           email.body
         ).then(resp => {
-          if (resp.labelIds.indexOf("SENT") !== -1)
-            email.update({ isSent: true, sentDate: new Date() }).then()
+          if (resp.labelIds.indexOf('SENT') !== -1) { email.update({ isSent: true, sentDate: new Date() }).then() }
         })
       }
     })
   })
-}, 3000)
+}, refreshTime)
