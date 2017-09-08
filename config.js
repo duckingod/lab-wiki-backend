@@ -43,10 +43,10 @@ let config = {
     cfpService: {
       refreshTime: 30000
     },
-    jwtKey: crypto.randomBytes(256),
+    jwtKey: crypto.randomBytes(256)
   },
   test: {
-    jwtKey: "vicky_godlike",
+    jwtKey: 'vicky_godlike'
   }
 }
 

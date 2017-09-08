@@ -18,4 +18,3 @@ console.log('Express server listening on port 3000')
 server = app.listen(3000)
 
 module.exports = server
-

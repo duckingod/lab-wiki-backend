@@ -25,7 +25,7 @@ describe('Test Call for Paper', function() {
       .end((err, res) => {
         res.status.should.equal(200)
         expect(res.body).length.to.be.greaterThan(0)
-        expect(res.body[0]).to.have.property('name');
+        expect(res.body[0]).to.have.property('name')
         expect(res.body[0].name).to.have.string('COLING')
         done()
       })
