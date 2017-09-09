@@ -21,7 +21,8 @@ let config = {
       refreshTime: 30000
     },
     cfpService: {
-      refreshTime: 30000
+      refreshTime: 3000,
+      reupdateTime: 10000,
     },
     database: {
       dialect: 'sqlite',
@@ -41,9 +42,10 @@ let config = {
       refreshTime: 3000000
     },
     cfpService: {
-      refreshTime: 3000000
+      refreshTime: 10000,
+      reupdateTime: 1000*60*60*24*10, // 10 days
     },
-    jwtKey: crypto.randomBytes(256)
+    jwtKey: crypto.randomBytes(256).toString('hex')
   },
   test: {
     jwtKey: 'vicky_godlike'
