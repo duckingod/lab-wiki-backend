@@ -23,7 +23,7 @@ function apiRoute () {
       m.idRoute = '/emailSchedule/:id'
     }
     api.get(m.route, emailLogin, m.index)
-    api.post(m.route, emailLogin, m.new)
+    api.post(m.route, emailLogin, m.creatable, m.new)
     api.delete(m.idRoute, emailLogin, m.record, m.editable, m.delete)
     api.post(m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
