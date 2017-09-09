@@ -1,11 +1,10 @@
-const Conference = require('../models').Conference
 const {refreshTime, reupdateTime} = require('../config').cfpService
 let queue = []
 module.exports = {
   start: () => {
     setInterval(() => {
-      while (queue.length>0) {
-        conf = queue.shift()
+      while (queue.length > 0) {
+        let conf = queue.shift()
         if (Date.now() - conf.updatedAt.getTime() > reupdateTime) {
           conf.updateDetail()
           return

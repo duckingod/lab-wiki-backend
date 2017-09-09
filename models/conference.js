@@ -74,13 +74,12 @@ module.exports = function (sequelize, DataTypes) {
     })
   }
 
-  Conference.afterCreate(function(conf, options) {
+  Conference.afterCreate(function (conf, options) {
     conf.updateDetail()
   })
 
-  Conference.afterFind(function(confs, options, cb) {
-    for (let conf of confs)
-      pendingUpdate(conf)
+  Conference.afterFind(function (confs, options, cb) {
+    for (let conf of confs) { pendingUpdate(conf) }
   })
 
   return Conference
