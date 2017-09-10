@@ -36,7 +36,11 @@ module.exports = function (sequelize, DataTypes) {
     start: DataTypes.DATE,
     end: DataTypes.DATE,
     deadline: DataTypes.DATE,
-    deadlineDisplay: DataTypes.STRING
+    deadlineDisplay: DataTypes.STRING,
+    updateThing: { // force update updateAt when updateAttributes
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
   })
   Conference.prototype.updateDetail = function () {
     return new Promise((resolve, reject) => {
@@ -68,14 +72,15 @@ module.exports = function (sequelize, DataTypes) {
             return
           }
           obj.url = url
-          this.update(obj).then(() => resolve())
+          obj.updateThing = this.updateThing + 1
+          this.updateAttributes(obj).then(resolve)
         })
       })
     })
   }
 
   Conference.afterCreate(function (conf, options) {
-    conf.updateDetail()
+    return conf.updateDetail()
   })
 
   Conference.afterFind(function (confs, options, cb) {

@@ -16,12 +16,11 @@ function apiRoute () {
 
   let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
   for (let m of _models) {
-    m = model(m)
+    let args = {}
+    if (m.name === 'EMail') args.route = 'emailSchedule'
 
-    if (m.route === '/email') {
-      m.route = '/emailSchedule'
-      m.idRoute = '/emailSchedule/:id'
-    }
+    m = model(m, args)
+
     api.get(m.route, emailLogin, m.index)
     api.post(m.route, emailLogin, m.creatable, m.new)
     api.delete(m.idRoute, emailLogin, m.record, m.editable, m.delete)

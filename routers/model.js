@@ -16,7 +16,8 @@ const permission = {
   editable: (user, obj) => ['admin', 'owner'].includes(permission.role(user, obj))
 }
 
-module.exports = function (model) {
+module.exports = function (model, args = {}) {
+  let route = args.route || model.name.toLowerCase()
   return {
     record: (req, res, next) => {
       model.findById(req.params.id).then(obj => {
@@ -52,7 +53,7 @@ module.exports = function (model) {
     new: (req, res) => {
       if (req.body.owner == null) { req.body.owner = req.user.email }
       model.create(req.body).then(obj => {
-        res.send('ok')
+        res.send(obj)
       })
         .catch(error => {
           res.status(503).send(json(error))
@@ -75,7 +76,7 @@ module.exports = function (model) {
           res.status(503).send(json(error))
         })
     },
-    route: '/' + model.name.toLowerCase(),
-    idRoute: '/' + model.name.toLowerCase() + '/:id'
+    route: '/' + route,
+    idRoute: '/' + route + '/:id'
   }
 }
