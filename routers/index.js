@@ -16,8 +16,8 @@ function apiRoute () {
 
   let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
   for (let m of _models) {
-    args = {}
-    if (m.name==='EMail') args.route = 'emailSchedule'
+    let args = {}
+    if (m.name === 'EMail') args.route = 'emailSchedule'
 
     m = model(m, args)
 

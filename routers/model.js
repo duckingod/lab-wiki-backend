@@ -16,8 +16,8 @@ const permission = {
   editable: (user, obj) => ['admin', 'owner'].includes(permission.role(user, obj))
 }
 
-module.exports = function (model, args={}) {
-  route = args.route || model.name.toLowerCase()
+module.exports = function (model, args = {}) {
+  let route = args.route || model.name.toLowerCase()
   return {
     record: (req, res, next) => {
       model.findById(req.params.id).then(obj => {
