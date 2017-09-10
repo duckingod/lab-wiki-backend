@@ -26,7 +26,6 @@ function apiRoute () {
     api.delete(m.idRoute, emailLogin, m.record, m.editable, m.delete)
     api.post(m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
-  api.get('/gpuUsage', emailLogin, gpuUsage)
   api.get('/workstations', emailLogin, gpuUsage)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/cfpSearch', emailLogin, cfpSearch)
