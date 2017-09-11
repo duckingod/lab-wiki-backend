@@ -84,7 +84,8 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Conference.afterFind(function (confs, options, cb) {
-    for (let conf of confs) { pendingUpdate(conf) }
+    if (Array.isArray(confs))
+      for (let conf of confs) { pendingUpdate(conf) }
   })
 
   return Conference
