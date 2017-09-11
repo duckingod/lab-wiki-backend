@@ -1,9 +1,9 @@
 'use strict'
 
 let {genesis} = require('../config')
-function weeksBetween(startDate, endDate) {
-  var millisecondsPerDay = 24 * 60 * 60 * 1000;
-  return (endDate.getTime() - startDate.getTime()) / millisecondsPerDay / 7;
+function weeksBetween (startDate, endDate) {
+  var millisecondsPerDay = 24 * 60 * 60 * 1000
+  return (endDate.getTime() - startDate.getTime()) / millisecondsPerDay / 7
 }
 
 module.exports = function (sequelize, DataTypes) {
@@ -60,7 +60,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
-  ContactList.dutyList = function(by, offset=0) {
+  ContactList.dutyList = function (by, offset = 0) {
     let System = require('../models').System
     let args = {where: {}}
     args['where'][by] = {$gte: 1}
@@ -69,14 +69,14 @@ module.exports = function (sequelize, DataTypes) {
         this.findAll(args).then(resolve).catch(reject)
       }),
       new Promise((resolve, reject) => {
-        System.load().then(r => resolve(r[by+"Offset"])).catch(reject)
+        System.load().then(r => resolve(r[by + 'Offset'])).catch(reject)
       })
     ])
     .then(data => {
       let contacts = data[0]
       let offset = data[1] + weeksBetween(new Date(genesis), new Date())
       let ord = c => (c[by] + offset - 1) % contacts.length
-      contacts.sort((a, b) => ord(a)-ord(b))
+      contacts.sort((a, b) => ord(a) - ord(b))
       return contacts
     })
   }

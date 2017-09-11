@@ -31,7 +31,7 @@ function apiRoute () {
   api.get('/cfpSearch', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
   api.get('/garbageD', (req, res) =>
-    models.ContactList.dutyList('garbageId').then(list => 
+    models.ContactList.dutyList('garbageId').then(list =>
       res.send(list)
     ).catch(res.status(503).send))
   return api

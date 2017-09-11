@@ -2,12 +2,12 @@
 
 module.exports = function (sequelize, DataTypes) {
   let offset = {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-      validate: {
-        min: 0
-      }
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    validate: {
+      min: 0
     }
+  }
 
   var System = sequelize.define('System', {
     seminarIdOffset: offset,
