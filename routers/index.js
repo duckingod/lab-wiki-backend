@@ -30,6 +30,7 @@ function apiRoute () {
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/cfpSearch', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
+  api.get('/garbageD', (req, res) => models.ContactList.garbageDuty().then(res.send))
   return api
 }
 
