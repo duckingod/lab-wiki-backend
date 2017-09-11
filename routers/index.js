@@ -28,7 +28,7 @@ function apiRoute () {
   }
   api.get('/workstations', emailLogin, gpuUsage)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
-  api.get('/cfpSearch', emailLogin, cfpSearch)
+  api.get('/conference/search', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
   return api
 }
