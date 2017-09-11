@@ -12,7 +12,7 @@ let config = {
       url: 'http://nlg17.csie.ntu.edu.tw:5566/',
       timeout: 30000
     },
-    garbageGenesis: '2017-09-04',
+    genesis: '2017-09-04',
     gApiConfig: {
       clientSecret: 'client_secret.json',
       scope: ['https://mail.google.com/']
