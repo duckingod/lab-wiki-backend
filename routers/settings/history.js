@@ -3,7 +3,7 @@
 let history = require('connect-history-api-fallback')
 let config = {
   index: 'index.html',
-  verbose: true,
+  verbose: false,
   rewrites: [
     {
       from: /^\/api(\/.*)?$/, to: c => c.parsedUrl.pathname
