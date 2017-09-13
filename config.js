@@ -2,6 +2,7 @@ let crypto = require('crypto')
 let env = process.env.NODE_ENV || 'development'
 let config = {
   development: {
+    port: 3000,
     googleOauthClientId:
       '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
     validEmailDomain: '@nlg.csie.ntu.edu.tw',
@@ -31,6 +32,7 @@ let config = {
     jwtKey: 'vicky_is_sooooo_god'
   },
   production: {
+    port: 12345,
     appUrl: 'http://nlg17.csie.ntu.edu.tw',
     gpuUsage: {
       url: 'http://localhost:13579'
