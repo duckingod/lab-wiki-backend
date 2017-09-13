@@ -5,6 +5,7 @@ const gpuUsage = require('./gpu-usage')
 const cfpSearch = require('./cfp-search')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
+const {staticWebApp} = require('../config')
 
 function apiRoute () {
   let api = express.Router()
@@ -37,20 +38,18 @@ function apiRoute () {
   return api
 }
 
-function frontEndRoute () {
-  let fe = express.Router()
-  fe.use(express.static('./static'))
-  return fe
-}
-
 module.exports = function (app) {
-  // app.use(require('./settings/cors'))
   // app.use(require('helmet'))
   app.use(require('./settings/session'))
-  app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
+
+  if (staticWebApp) {
+    app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
+    app.use(express.static('./static'))
+  } else {
+    app.use(require('./settings/cors'))
+  }
 
   app.use('/api', apiRoute())
-  app.use(frontEndRoute())
 
   app.use(login.unauthorizedError)
 }
