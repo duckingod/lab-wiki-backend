@@ -28,7 +28,7 @@ function apiRoute () {
   }
   api.get('/workstations', emailLogin, gpuUsage)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
-  api.get('/cfpSearch', emailLogin, cfpSearch)
+  api.get('/conference/search', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
   api.get('/garbageD', (req, res) =>
     models.ContactList.dutyList('garbageId').then(list =>
@@ -39,17 +39,18 @@ function apiRoute () {
 
 function frontEndRoute () {
   let fe = express.Router()
-  fe.use(express.static('static'))
+  fe.use(express.static('./static'))
   return fe
 }
 
 module.exports = function (app) {
-  app.use(require('./settings/cors'))
-  app.use(require('./settings/session'))
+  // app.use(require('./settings/cors'))
   // app.use(require('helmet'))
+  app.use(require('./settings/session'))
+  app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
 
-  app.use(frontEndRoute())
   app.use('/api', apiRoute())
+  app.use(frontEndRoute())
 
   app.use(login.unauthorizedError)
 }

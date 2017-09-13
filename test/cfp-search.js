@@ -8,9 +8,9 @@ describe('Test Call for Paper', function() {
   beforeEach(function() {
     server = require('../backend')
   })
-  it('responds to /api/cfpSearch', function testCfpSearch(done) {
+  it('responds to /api/conference/search', function testCfpSearch(done) {
     request(server)
-      .get('/api/cfpSearch')
+      .get('/api/conference/search')
       .set('Cookie', [loginCookie('labwiki', 'labwiki@nlg.csie.ntu.edu.tw')])
       .end((err, res) => {
         res.status.should.equal(200)
@@ -18,9 +18,9 @@ describe('Test Call for Paper', function() {
         done()
       })
   })
-  it('responds to /api/cfpSearch?q=coling', function testCfpSearch(done) {
+  it('responds to /api/conference/search?q=coling', function testCfpSearch(done) {
     request(server)
-      .get('/api/cfpSearch?q=coling')
+      .get('/api/conference/search?q=coling')
       .set('Cookie', [loginCookie('labwiki', 'labwiki@nlg.csie.ntu.edu.tw')])
       .end((err, res) => {
         res.status.should.equal(200)

@@ -1,8 +1,9 @@
-var express = require('express')
-var app = express()
-var cookieParser = require('cookie-parser')
-var bodyParser = require('body-parser')
-var models = require('./models')
+const express = require('express')
+const app = express()
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const models = require('./models')
+const {port} = require('./config')
 require('./services')
 
 app.use(bodyParser.json())
@@ -14,7 +15,7 @@ var server
 
 models.sequelize.sync().then()
 
-console.log('Express server listening on port 3000')
-server = app.listen(3000)
+console.log('Express server listening on port ' + String(port))
+server = app.listen(port)
 
 module.exports = server
