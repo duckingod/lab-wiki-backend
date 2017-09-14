@@ -5,6 +5,11 @@ function weeksBetween (startDate, endDate) {
   var millisecondsPerDay = 24 * 60 * 60 * 1000
   return (endDate.getTime() - startDate.getTime()) / millisecondsPerDay / 7
 }
+function daysAfter (date, n) {
+  let d = new Date(date)
+  d.setDate(date.getDate() + n)
+  return d
+}
 
 module.exports = function (sequelize, DataTypes) {
   var ContactList = sequelize.define('ContactList', {
@@ -78,6 +83,29 @@ module.exports = function (sequelize, DataTypes) {
       let ord = c => (c[by] + offset - 1) % contacts.length
       contacts.sort((a, b) => ord(a) - ord(b))
       return contacts
+    })
+  }
+
+  ContactList.dutyWithDate = (by) => {
+    return new Promise((resolve, reject) => {
+      ContactList.dutyList(by)
+        .then(contacts => {
+          let startDate = new Date(genesis)
+          let schedule = []
+          for (let round = 0; round < 2; round++) {
+            for (let contact of contacts) {
+              schedule.push({
+                startDate: new Date(startDate),
+                endDate: daysAfter(startDate, 6),
+                contact: contact
+              })
+              startDate = daysAfter(startDate, 7)
+            }
+          }
+          return schedule
+        })
+        .then(resolve)
+        .catch(reject)
     })
   }
 

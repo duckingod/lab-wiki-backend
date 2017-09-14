@@ -31,8 +31,8 @@ function apiRoute () {
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/conference/search', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
-  api.get('/garbageD', (req, res) =>
-    models.ContactList.dutyList('garbageId').then(list =>
+  api.get('/seminarDuty', (req, res) =>
+    models.ContactList.dutyList('seminarId').then(list =>
       res.send(list)
     ).catch(res.status(503).send))
   return api

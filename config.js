@@ -2,7 +2,7 @@ let crypto = require('crypto')
 let env = process.env.NODE_ENV || 'development'
 let config = {
   development: {
-    staticWebApp: true,
+    staticWebApp: false,
     port: 3000,
     googleOauthClientId:
       '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
