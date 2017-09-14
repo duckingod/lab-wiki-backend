@@ -11,7 +11,15 @@ module.exports = function (sequelize, DataTypes) {
 
   var System = sequelize.define('System', {
     seminarIdOffset: offset,
-    garbageIdOffset: offset
+    garbageIdOffset: offset,
+    seminarWeekday: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      validate: {
+        min: 0,
+        max: 6
+      }
+    }
   })
 
   System.load = () => new Promise((resolve, reject) =>

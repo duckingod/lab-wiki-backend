@@ -1,15 +1,8 @@
 'use strict'
 
 let {genesis} = require('../config')
-function weeksBetween (startDate, endDate) {
-  var millisecondsPerDay = 24 * 60 * 60 * 1000
-  return (endDate.getTime() - startDate.getTime()) / millisecondsPerDay / 7
-}
-function daysAfter (date, n) {
-  let d = new Date(date)
-  d.setDate(date.getDate() + n)
-  return d
-}
+genesis = new Date(genesis)
+const {daysAfter, weeksBetween} = require('../utils').date
 
 module.exports = function (sequelize, DataTypes) {
   var ContactList = sequelize.define('ContactList', {
@@ -70,44 +63,39 @@ module.exports = function (sequelize, DataTypes) {
     let args = {where: {}}
     args['where'][by] = {$gte: 1}
     return Promise.all([
-      new Promise((resolve, reject) => {
-        this.findAll(args).then(resolve).catch(reject)
-      }),
-      new Promise((resolve, reject) => {
-        System.load().then(r => resolve(r[by + 'Offset'])).catch(reject)
-      })
+      this.findAll(args),
+      System.load()
     ])
-    .then(data => {
-      let contacts = data[0]
-      let offset = data[1] + weeksBetween(new Date(genesis), new Date())
-      let ord = c => (c[by] + offset - 1) % contacts.length
-      contacts.sort((a, b) => ord(a) - ord(b))
-      return contacts
-    })
+      .then(data => {
+        let contacts = data[0]
+        let weeks = weeksBetween(genesis, new Date())
+        let weekSince = daysAfter(genesis, weeks * 7)
+        let offset = data[1][by + 'Offset'] + weeks
+        let ord = c => (c[by] + offset - 1) % contacts.length
+        contacts.sort((a, b) => ord(a) - ord(b))
+        return {contacts: contacts, from: weekSince}
+      })
   }
 
-  ContactList.dutyWithDate = (by) => {
-    return new Promise((resolve, reject) => {
-      ContactList.dutyList(by)
-        .then(contacts => {
-          let startDate = new Date(genesis)
-          let schedule = []
-          for (let round = 0; round < 2; round++) {
-            for (let contact of contacts) {
-              schedule.push({
-                startDate: new Date(startDate),
-                endDate: daysAfter(startDate, 6),
-                contact: contact
-              })
-              startDate = daysAfter(startDate, 7)
-            }
+  ContactList.dutyWithDate = (by, options = {}) =>
+    ContactList.dutyList(by)
+      .then(res => {
+        let {contacts, from} = res
+        let schedule = []
+        let nRound = options.nRound || 2
+        let group = options.group || 1
+        let nSchedule = options.nSchedule || contacts.length
+        for (let i = 0; i < nRound * nSchedule; i++) {
+          schedule.push({
+            date: new Date(from),
+            contact: contacts[i % nSchedule]
+          })
+          if ((i + 1) % group === 0) {
+            from = daysAfter(from, 7)
           }
-          return schedule
-        })
-        .then(resolve)
-        .catch(reject)
-    })
-  }
+        }
+        return schedule
+      })
 
   return ContactList
 }

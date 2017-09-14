@@ -26,6 +26,9 @@ let config = {
       refreshTime: 3000,
       reupdateTime: 10000
     },
+    seminarService: {
+      preaddWeeks: 2
+    },
     database: {
       dialect: 'sqlite',
       storage: './db.development.sqlite'

@@ -2,25 +2,30 @@
 
 const weekly = require('./weekly')
 const {genesis} = require('../config')
-const {Seminar, ContactList} = require('../models')
+const {preaddWeeks} = require('../config').seminarService
+const {Seminar, ContactList, System} = require('../models')
+const {daysAfter} = require('../utils').date
 
 const main = () => {
-  ContactList.dutyWithDate('seminarId')
-    .then(schedule => {
-      console.log(schedule)
-      let presenters = schedule.slice(0, 2)
-      for (let p of presenters) {
-        console.log(p)
-        Seminar.create(
-          {
-            presenter: p.contact.name,
-            date: p.startDate
-          }
-        ).then(console.log)
-      }
-    })
+  Promise.all([
+    ContactList.dutyWithDate('seminarId', {nRound: 1, nSchedule: 2, group: 2}),
+    System.load()
+  ]).then(res => {
+    let schedule = res[0]
+    let weekday = res[1].seminarWeekday
+    for (let presentation of schedule) {
+      Seminar.create(
+        {
+          presenter: presentation.contact.name,
+          owner: presentation.contact.account,
+          date: daysAfter(presentation.date, preaddWeeks * 7 + weekday),
+          topic: '.'
+        }
+      )
+        .then(console.log)
+        .catch(console.log)
+    }
+  })
 }
 
 module.exports = weekly(genesis, main)
-
-require('../models').sequelize.sync().then(main)

@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const models = require('./models')
 const {port} = require('./config')
+
+require('./utils')
 require('./services')
 
 app.use(bodyParser.json())
