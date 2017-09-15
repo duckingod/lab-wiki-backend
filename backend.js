@@ -19,9 +19,7 @@ var server
 
 models.sequelize.sync({ alter: true }).then(a => {
   models.System.load()
-  console.log('Express server listening on port ' + String(port))
-  server = app.listen(port)
-  module.exports = server
 })
-
-
+console.log('Express server listening on port ' + String(port))
+server = app.listen(port)
+module.exports = server

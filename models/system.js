@@ -1,7 +1,6 @@
 'use strict'
 
 module.exports = function (sequelize, DataTypes) {
-
   var System = sequelize.define('System', {
     seminarIdOffset: {
       type: DataTypes.INTEGER,

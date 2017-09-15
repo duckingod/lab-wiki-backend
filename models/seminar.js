@@ -29,7 +29,8 @@ module.exports = function (sequelize, DataTypes) {
   /*
   Seminar.associate = function (models) {
     Seminar.hasMany(models.Slide)
-  }*/
+  }
+  */
 
   Seminar.nextSeminars = () => {
     const {ContactList, System} = require('../models')
