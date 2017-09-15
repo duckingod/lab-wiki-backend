@@ -1,17 +1,16 @@
 'use strict'
 
 module.exports = function (sequelize, DataTypes) {
-  let offset = {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    validate: {
-      min: 0
-    }
-  }
 
   var System = sequelize.define('System', {
-    seminarIdOffset: offset,
-    garbageIdOffset: offset,
+    seminarIdOffset: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    garbageIdOffset: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     seminarWeekday: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -26,6 +25,15 @@ module.exports = function (sequelize, DataTypes) {
     System.all().then(vars =>
       (vars.length ? System.findById(1) : System.create()).then(resolve).catch(reject))
   )
+
+  System.change = callback => {
+    return new Promise((resolve, reject) => {
+      System.load().then(config => {
+        callback(config)
+        config.save().then(resolve).catch(reject)
+      }).catch(reject)
+    })
+  }
 
   return System
 }

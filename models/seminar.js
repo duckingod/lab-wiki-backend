@@ -26,8 +26,34 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
+  /*
   Seminar.associate = function (models) {
     Seminar.hasMany(models.Slide)
+  }*/
+
+  Seminar.nextSeminars = () => {
+    const {ContactList, System} = require('../models')
+    const {preaddWeeks} = require('../config').seminarService
+    const {daysAfter} = require('../utils').date
+    return Promise.all([
+      ContactList.dutyWithDate('seminarId', {nRound: 1, nSchedule: 2, group: 2}),
+      System.load()
+    ]).then(res => {
+      let schedule = res[0]
+      let weekday = res[1].seminarWeekday
+      let seminars = []
+      for (let presentation of schedule) {
+        seminars.push(
+          {
+            presenter: presentation.contact.name,
+            owner: presentation.contact.account,
+            date: daysAfter(presentation.date, preaddWeeks * 7 + weekday),
+            topic: '.'
+          }
+        )
+      }
+      return seminars
+    })
   }
 
   return Seminar

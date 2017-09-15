@@ -62,6 +62,19 @@ let config = {
 if (env === 'production') env = ['production']
 if (env === 'test') env = ['test']
 
+/*
+// Compact with sequelize cli
+function writeDBConfig () {
+  const fs = require('fs')
+  let dbConfig = {}
+  for (let env of ['development', 'production', 'test']) {
+    dbConfig[env] = completeConfig(env)['database']
+  }
+  dbConfig = JSON.stringify(dbConfig, null, 2)
+  fs.writeFile('config/config.json', dbConfig, 'utf8')
+}
+*/
+
 function completeConfig (env) {
   let _config = config.development
   function setDict (c, config, e) {
@@ -77,4 +90,5 @@ function completeConfig (env) {
   return _config
 }
 
+// writeDBConfig()
 module.exports = completeConfig(env)

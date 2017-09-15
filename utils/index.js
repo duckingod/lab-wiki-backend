@@ -11,7 +11,7 @@ function daysAfter (date, n) {
 }
 module.exports = {
   render: {
-    err: (res, status) => err => { console.log(err); res.status(status).send(err.name + ": " + err.message) }
+    err: (res, status) => err => { console.log(err); res.status(status).send(err.name + ': ' + err.message) }
   },
   date: {
     weeksBetween: weeksBetween,

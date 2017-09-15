@@ -1,3 +1,5 @@
+'use strict'
+
 const express = require('express')
 const app = express()
 const cookieParser = require('cookie-parser')
@@ -15,9 +17,11 @@ app.use(cookieParser())
 require('./routers')(app)
 var server
 
-models.sequelize.sync().then()
+models.sequelize.sync({ alter: true }).then(a => {
+  models.System.load()
+  console.log('Express server listening on port ' + String(port))
+  server = app.listen(port)
+  module.exports = server
+})
 
-console.log('Express server listening on port ' + String(port))
-server = app.listen(port)
 
-module.exports = server

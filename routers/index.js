@@ -1,8 +1,11 @@
+'use strict'
+
 const login = require('./login')
 const model = require('./model')
 const models = require('../models')
 const gpuUsage = require('./gpu-usage')
 const cfpSearch = require('./cfp-search')
+const seminarManage = require('./seminar-manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
 const {staticWebApp} = require('../config')
@@ -11,9 +14,24 @@ function apiRoute () {
   let api = express.Router()
 
   let emailLogin = [login.forceLogin, login.emailDomain]
+
   api.post('/login', login.googleIdTokenLogin)
   api.post('/logout', emailLogin, login.logout)
   api.get('/', login.checkLogin, (req, res) => { res.send(login.simpleLoginWeb(req.user)) })
+
+  let m = model(models.System)
+  api.get(m.route, emailLogin, m.index)
+  api.post(m.idRoute, emailLogin, m.record, m.editable, m.update)
+
+  api.get('/workstations', emailLogin, gpuUsage)
+  api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
+  api.get('/conference/search', emailLogin, cfpSearch)
+  api.get('/user', login.checkLogin, login.userInfo)
+
+  m = model()
+  for (let route of [['post', 'advance'], ['post', 'postpone'], ['post', 'weekday'], ['get', 'next']]) {
+    api[route[0]]('/seminar/' + route[1], emailLogin, m.admin, seminarManage[route[1]])
+  }
 
   let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
   for (let m of _models) {
@@ -27,14 +45,6 @@ function apiRoute () {
     api.delete(m.idRoute, emailLogin, m.record, m.editable, m.delete)
     api.post(m.idRoute, emailLogin, m.record, m.editable, m.update)
   }
-  api.get('/workstations', emailLogin, gpuUsage)
-  api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
-  api.get('/conference/search', emailLogin, cfpSearch)
-  api.get('/user', login.checkLogin, login.userInfo)
-  api.get('/seminarDuty', (req, res) =>
-    models.ContactList.dutyList('seminarId').then(list =>
-      res.send(list)
-    ).catch(res.status(503).send))
   return api
 }
 

@@ -44,6 +44,9 @@ module.exports = (clientId, user) => {
               })
           }
         </script>
+        <form action="/api/seminar/gAdvance" method="POST">
+          <input type="submit" value='garbage advance'/>
+        </form>
 
       </body>
       `

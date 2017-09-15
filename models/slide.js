@@ -30,6 +30,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
+  /*
   Slide.associate = function (models) {
     Slide.belongsTo(models.Seminar, {
       onDelete: 'CASCADE',
@@ -38,6 +39,6 @@ module.exports = function (sequelize, DataTypes) {
       }
     })
   }
-
+   */
   return Slide
 }

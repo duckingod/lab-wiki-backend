@@ -12,11 +12,15 @@ const permission = {
     if (user && user.email.endsWith(emailDomain)) { return 'user' }
     return 'guest'
   },
+  isAdmin: user => ['admin'].includes(permission.role(user)),
   creatable: (user, model) => ['admin'].includes(permission.role(user)),
   editable: (user, obj) => ['admin', 'owner'].includes(permission.role(user, obj))
 }
 
 module.exports = function (model, args = {}) {
+  if (model == null) {
+    model = {name: 'None'}
+  }
   let route = args.route || model.name.toLowerCase()
   return {
     record: (req, res, next) => {
@@ -37,6 +41,11 @@ module.exports = function (model, args = {}) {
     editable: (req, res, next) => {
       if (permission.editable(req.user, req.record)) { next() } else {
         res.status(403).send('Forbidden: Not owner or admin')
+      }
+    },
+    admin: (req, res, next) => {
+      if (permission.isAdmin(req.user, req.record)) { next() } else {
+        res.status(403).send('Forbidden: Not admin')
       }
     },
     index: (req, res) => {
