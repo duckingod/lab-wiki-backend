@@ -71,7 +71,8 @@ module.exports = function (sequelize, DataTypes) {
         let weeks = weeksBetween(genesis, new Date())
         let weekSince = daysAfter(genesis, weeks * 7)
         let offset = data[1][by + 'Offset'] + weeks
-        let ord = c => (c[by] + offset - 1) % contacts.length
+        let n = contacts.length
+        let ord = c => ((c[by] + offset - 1) % n + n) % n
         contacts.sort((a, b) => ord(a) - ord(b))
         return {contacts: contacts, from: weekSince}
       })

@@ -79,7 +79,7 @@ function completeConfig (env) {
   let _config = config.development
   function setDict (c, config, e) {
     for (let k in c) {
-      if (!config[k]) {
+      if (config[k] === undefined) {
         throw new Error('The ' + e + ' config sets more than original config: ' + k)
       } else if (typeof c[k] === 'object' && !Array.isArray(c[k])) {
         setDict(c[k], config[k], e)

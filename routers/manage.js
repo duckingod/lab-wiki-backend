@@ -30,6 +30,6 @@ module.exports = {
     postpone: (req, res) =>
       System.change(config => { config.garbageIdOffset += 1 })
         .then(c => res.send('ok'))
-        .catch(err(res, 503)),
+        .catch(err(res, 503))
   }
 }
