@@ -25,14 +25,12 @@ module.exports = function (sequelize, DataTypes) {
       (vars.length ? System.findById(1) : System.create()).then(resolve).catch(reject))
   )
 
-  System.change = callback => {
-    return new Promise((resolve, reject) => {
-      System.load().then(config => {
-        callback(config)
-        config.save().then(resolve).catch(reject)
-      }).catch(reject)
-    })
-  }
+  System.change = callback => new Promise((resolve, reject) =>
+    System.load().then(config => {
+      callback(config)
+      config.save().then(resolve).catch(reject)
+    }).catch(reject)
+  )
 
   return System
 }

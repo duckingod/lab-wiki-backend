@@ -2,15 +2,29 @@
 
 const {System, Seminar} = require('../models')
 const {err} = require('../utils').render
+const {daysAfter} = require('../utils').date
+const {modifyRecords, updateRecords} = require('../utils').model
+
+const futureSeminars = () =>
+  Seminar.findAll({ where: { date: { $gte: new Date() } } })
 
 module.exports = {
   seminar: {
-    advance: (req, res) =>
-      System.change(config => { config.seminarIdOffset -= 1 })
+    advance: (req, res) => {
+      Seminar.addNextSeminars()
+        .then(() => futureSeminars())
+        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, -7) }))
+        .then(updateRecords)
+        .then(() => System.change(config => { config.seminarIdOffset -= 2 }))
+        .then(() => Seminar.addNextSeminars())
         .then(c => res.send('ok'))
-        .catch(err(res, 503)),
+        .catch(err(res, 503))
+    },
     postpone: (req, res) =>
-      System.change(config => { config.seminarIdOffset += 1 })
+      futureSeminars()
+        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, 7) }))
+        .then(updateRecords)
+        .then(() => System.change(config => { config.seminarIdOffset += 2 }))
         .then(c => res.send('ok'))
         .catch(err(res, 503)),
     weekday: (req, res) =>

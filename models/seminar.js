@@ -1,5 +1,7 @@
 'use strict'
 
+const {updateRecords} = require('../utils').model
+
 module.exports = function (sequelize, DataTypes) {
   var Seminar = sequelize.define('Seminar', {
     presenter: {
@@ -45,16 +47,35 @@ module.exports = function (sequelize, DataTypes) {
       let seminars = []
       for (let presentation of schedule) {
         seminars.push(
-          {
+          new Seminar({
             presenter: presentation.contact.name,
             owner: presentation.contact.account,
             date: daysAfter(presentation.date, preaddWeeks * 7 + weekday),
             topic: '.'
-          }
+          })
         )
       }
       return seminars
     })
+  }
+
+  Seminar.addNextSeminars = () => {
+    return Seminar.nextSeminars().then(seminars => {
+      let addSeminars = []
+      for (let seminar of seminars) {
+        let args = {
+          where: {
+            date: { $eq: seminar.date },
+            presenter: { $eq: seminar.presenter }
+          }
+        }
+        addSeminars.push(
+          Seminar.findAll(args)
+            .then(res => res.length > 0 ? null : seminar))
+      }
+      return Promise.all(addSeminars)
+    })
+      .then(updateRecords)
   }
 
   return Seminar
