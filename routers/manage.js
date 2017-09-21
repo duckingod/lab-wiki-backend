@@ -28,7 +28,18 @@ module.exports = {
         .then(c => res.send('ok'))
         .catch(err(res, 503)),
     weekday: (req, res) =>
-      System.change(config => { config.seminarWeekday = req.params.weekday })
+      Promise.all([
+        futureSeminars(),
+        System.load()
+      ])
+        .then(res =>
+          modifyRecords(seminar => {
+            seminar.date = daysAfter(seminar.date, req.body.weekday - res[1].seminarWeekday)
+          }
+          )(res[0])
+        )
+        .then(updateRecords)
+        .then(() => System.change(config => { config.seminarWeekday = req.body.weekday }))
         .then(c => res.send('ok'))
         .catch(err(res, 503)),
     next: (req, res) =>

@@ -47,22 +47,43 @@ View `http://url/api/` for example
 
 It's same for all data (`seminar`, `news`, `contactList`, ...)
 
-### Others
-| Method | URL                        | Description                  | Parameter           |
-|:-------|:---------------------------|:-----------------------------|:-------------------:|
-| GET    | http://url/api/gpuUsage    | Get all gpu/cpu usage        |                     |
-| GET    | http://url/api/user        | Get current user info        |                     |
+### Other Informations
+| Method | URL                              | Description                        | Parameter                |
+|:-------|:---------------------------------|:-----------------------------------|:------------------------:|
+| GET    | http://url/api/workstations      | Get info of workstations (gpu ...) |                          |
+| GET    | http://url/api/takeOutGarbage    | Get garbage                        |                          | 
+| GET    | http://url/api/user              | Get current user info              |                          |
+| GET    | http://url/api/conference/search | Search conference on [wikicfp](www.wikicfp.com/) | `{q: ...}` |
+
+### Management
+
+Apis below by `POST` are all admin only.
+
+| Method | URL                              | Description                   | Parameter           |
+|:-------|:---------------------------------|:------------------------------|:-------------------:|
+| POST   | http://url/api/seminar/advance   | Advance the future seminars   |                     |
+| POST   | http://url/api/seminar/postpone  | Postpone the future seminars  |                     |
+| POST   | http://url/api/seminar/weekday   | Change future seminar weekday | `{weekday: 0~6}`    |
+| POST   | http://url/api/garbage/advance   | Advance the garbage schedule  |                     |
+| POST   | http://url/api/garbage/postpone  | Postpone the garbage schedule |                     |
+| GET    | http://url/api/seminar/next      | Get the coming seminar (test) |                     |
+| GET    | http://url/api/system            | Get the system variables      |                     |
+| POST   | http://url/api/system            | Set the system variables (not recommend) | `{seminarWeekday: ..., ...}` |
 
 ## Structure
 ```
 - backend.js      Main Code
 - package.json
 - config.js       Backend config
+- client_secret.json Client secret for google apis
 - models/         Models scheme
-    - ContactList.js
-    - News.js
-    - Seminar.js
-    - Slide.js
+    - contactList.js
+    - news.js
+    - seminar.js
+    - slide.js
+    - system.js
+    - conference.js
+    - email.js
 - routers/         Route defination
     - index.js         Route defination
     - settings/        Settings for express
@@ -70,13 +91,20 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
     - login.js         Function: login/user/google-login relative things
     - gpu-usage.js     Function: get workstation gpu/cpu usage
     - take-out-garbage.js ction: godlike auto take out the garbage by ContactList
+    - manage.js        Function: manage backend (scheduling ...)
+    - cfp-search.js    Function: search conference on www.wikicfp.com/ 
     - fake-fe.js       Function: fake front-end for testing
 - services/
+    - index.js         Loads all service
     - mail-service.js  Mail service
     - gapi-test.js     Kanna tell you taking out the garbage
     - google-api.js    Function: google api things, like getting token in backend
 - tools/           Tools
     - data-parser.js   Parse json data into DB
+- data/            Old wiki data for database initialize
+- static/          Front end single page app
+- test/            Unit test
+
 ```
 
 ## TODO
@@ -93,6 +121,8 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 - Service
   - [x] Mail service
   - [x] Call for paper service
+  - [x] Seminar scheduling
+  - [x] Take out the garbage scheduling
 - [x] delete 權限 (admin/owner only)
 - [x] API route
 - [x] dev/product environment

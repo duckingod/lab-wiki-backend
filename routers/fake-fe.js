@@ -53,6 +53,10 @@ module.exports = (clientId, user) => {
         <form action="/api/garbage/advance" method="POST">
           <input type="submit" value='garbage advance'/>
         </form>
+        <form action="/api/seminar/weekday" method="POST">
+          <input type="text" name="weekday"/>
+          <input type="submit" value='seminar weekday'/>
+        </form>
 
       </body>
       `
