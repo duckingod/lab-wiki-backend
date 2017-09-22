@@ -1,7 +1,7 @@
 'use strict'
 
 const ContactList = require('../models').ContactList
-const {err} = require('../utils').render
+const {error} = require('../utils')
 const {daysAfter} = require('../utils').date
 
 module.exports = (req, res) =>
@@ -17,4 +17,4 @@ module.exports = (req, res) =>
       }
       res.send(out)
     })
-    .catch(err(res, 503))
+    .catch(error.send(res, 503))

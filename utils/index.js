@@ -32,9 +32,35 @@ function updateRecords (records) {
   return Promise.all(promises)
 }
 
+function prettyError (err) {
+  let out = {}
+  out.name = err.name
+  out.message = err.mesage
+  if (err.errors != null) {
+    out.errors = []
+    for (let e of err.errors) {
+      let _out = {}
+      for (let k in e) {
+        if (!k.startsWith('__') && typeof e[k] !== 'object') {
+          _out[k] = e[k]
+        }
+      }
+      out.errors.push(_out)
+    }
+  }
+  return out
+}
+
 module.exports = {
-  render: {
-    err: (res, status) => err => { console.log(err); res.status(status).send(err.name + ': ' + err.message) }
+  error: {
+    pretty: prettyError,
+    send: (res, status) => err =>
+      res.status(status).send(prettyError(err)),
+    handle: (errName, status, cb = r => r) =>
+      (err, req, res, next) =>
+        err.name === errName
+          ? cb(res).status(status).send(prettyError(err))
+          : next(err)
   },
   date: {
     weeksBetween: weeksBetween,

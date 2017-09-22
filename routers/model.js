@@ -1,5 +1,8 @@
+'use strict'
+
 const admins = require('../config').admins
 const emailDomain = require('../config').validEmailDomain
+const {error} = require('../utils')
 
 let json = JSON.stringify
 
@@ -23,69 +26,56 @@ module.exports = function (model, args = {}) {
   }
   let route = args.route || model.name.toLowerCase()
   return {
-    record: (req, res, next) => {
+    record: (req, res, next) =>
       model.findById(req.params.id).then(obj => {
         req.record = obj
-        next()
+        return next()
       })
-        .catch(error => {
-          res.status(503).send(json(error))
-        })
-    },
+        .catch(next),
     role: (user, obj) => permission.role(user, obj),
     creatable: (req, res, next) => {
-      if (permission.creatable(req.user, model)) { next() } else {
+      if (permission.creatable(req.user, model)) {
+        next()
+      } else {
         res.status(403).send('Forbidden: Not admin')
       }
     },
     editable: (req, res, next) => {
-      if (permission.editable(req.user, req.record)) { next() } else {
+      if (permission.editable(req.user, req.record)) {
+        next()
+      } else {
         res.status(403).send('Forbidden: Not owner or admin')
       }
     },
     admin: (req, res, next) => {
-      if (permission.isAdmin(req.user, req.record)) { next() } else {
+      if (permission.isAdmin(req.user, req.record)) {
+        next()
+      } else {
         res.status(403).send('Forbidden: Not admin')
       }
     },
-    index: (req, res) => {
-      model.all().then(objs => {
-        res.send(json(objs))
-      })
-        .catch(error => {
-          res.status(503).send(json(error))
-        })
-    },
-    get: (req, res) => {
-      res.send(json(req.record))
-    },
-    new: (req, res) => {
+    index: (req, res, next) =>
+      model.all()
+        .then(objs => res.send(objs))
+        .catch(next),
+    get: (req, res) =>
+      res.send(json(req.record)),
+    new: (req, res, next) => {
       if (req.body.owner == null) { req.body.owner = req.user.email }
-      model.create(req.body).then(obj => {
-        res.send(obj)
-      })
-        .catch(error => {
-          res.status(503).send(json(error))
-        })
+      model.create(req.body)
+        .then(obj => res.send(obj))
+        .catch(next)
     },
-    update: (req, res) => {
+    update: (req, res, next) =>
       req.record.updateAttributes(req.body)
-        .then(id => {
-          res.send('ok')
-        })
-        .catch(error => {
-          res.status(503).send(json(error))
-        })
-    },
-    delete: (req, res) => {
-      model.destroy({where: {id: Number(req.record.id)}}).then(obj => {
-        res.send('ok')
-      })
-        .catch(error => {
-          res.status(503).send(json(error))
-        })
-    },
+        .then(id => res.send(id))
+        .catch(next),
+    delete: (req, res, next) =>
+      model.destroy({where: {id: Number(req.record.id)}})
+        .then(obj => res.send('ok'))
+        .catch(next),
     route: '/' + route,
-    idRoute: '/' + route + '/:id'
+    idRoute: '/' + route + '/:id',
+    validationError: error.handle('SequelizeValidationError', 400)
   }
 }
