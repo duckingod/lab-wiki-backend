@@ -1,12 +1,27 @@
 'use strict'
 
-const {System, Seminar} = require('../models')
+const {System, Seminar, ContactList} = require('../models')
 const {error} = require('../utils')
-const {daysAfter} = require('../utils').date
+const {daysAfter, weeksBetween} = require('../utils').date
 const {modifyRecords, updateRecords} = require('../utils').model
+const {genesis} = require('../config')
 
 const futureSeminars = () =>
   Seminar.findAll({ where: { date: { $gte: new Date() } } })
+
+const schedule = (by, startDate, idList) => {
+  let weeks = weeksBetween(genesis, startDate)
+  return ContactList.all()
+    .then(contacts => {
+      for (let contact of contacts) {
+        contact[by] = 0
+      }
+      for (let i in idList) {
+        contacts[idList[i]][by] = (i + weeks) % idList.length
+      }
+      return updateRecords(contacts)
+    })
+}
 
 module.exports = {
   seminar: {
@@ -42,9 +57,14 @@ module.exports = {
         .then(c => res.send('ok'))
         .catch(error.send(res, 503)),
     next: (req, res) =>
-        Seminar.nextSeminars()
-          .then(s => res.send(s))
+      Seminar.nextSeminars()
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
+    schedule: (req, res) => {
+      schedule('seminarId', req.body.date, req.body.list)
+        .then(contacts => res.send(contacts))
         .catch(error.send(res, 503))
+    }
   },
   garbage: {
     advance: (req, res) =>
