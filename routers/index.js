@@ -30,7 +30,7 @@ function apiRoute () {
   api.get('/user', login.checkLogin, login.userInfo)
 
   let m = model()
-  for (let route of [['post', 'advance'], ['post', 'postpone'], ['post', 'weekday'], ['get', 'next']]) {
+  for (let route of [['post', 'advance'], ['post', 'postpone'], ['post', 'weekday'], ['get', 'next'], ['post', 'schedule']]) {
     api[route[0]]('/seminar/' + route[1], emailLogin, m.admin, manage.seminar[route[1]])
   }
   for (let route of [['post', 'advance'], ['post', 'postpone']]) {
