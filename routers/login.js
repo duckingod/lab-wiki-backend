@@ -1,3 +1,5 @@
+'use strict'
+
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const GoogleAuth = require('google-auth-library')
@@ -7,6 +9,7 @@ const emailDomain = require('../config').validEmailDomain
 const Model = require('../models').News
 const role = require('./model')(Model).role
 const jwtKey = require('../config').jwtKey
+const {error} = require('../utils')
 
 function cookieJwt (credential) {
   return expressJwt({
@@ -23,11 +26,15 @@ module.exports = {
   checkLogin: cookieJwt(false),
   forceLogin: cookieJwt(true),
   emailDomain: (req, res, next) => {
-    if (req.user.email.endsWith(emailDomain)) { next() } else if (req.user.email === 'julia811021@gmail.com') { next() } else { res.status(403).send('AuthenticationError: invalid email domain') }
+    if (req.user.email.endsWith(emailDomain)) {
+      next()
+    } else if (req.user.email === 'julia811021@gmail.com') {
+      next()
+    } else {
+      res.status(403).send('AuthenticationError: invalid email domain')
+    }
   },
-  simpleLoginWeb: function (user) {
-    return require('./fake-fe.js')(clientId, user)
-  },
+  simpleLoginWeb: user => require('./fake-fe.js')(clientId, user),
   googleIdTokenLogin: function (req, res) {
     var token = req.body.id_token
     googleOauthClient.verifyIdToken(
@@ -67,9 +74,5 @@ module.exports = {
       })
     }
   },
-  unauthorizedError: function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-      res.status(401).clearCookie('token').send(JSON.stringify(err))
-    }
-  }
+  unauthorizedError: error.handle('UnauthorizedError', 401, res => res.clearCookie('token'))
 }

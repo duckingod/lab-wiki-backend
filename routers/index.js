@@ -9,6 +9,7 @@ const manage = require('./manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
 const {staticWebApp} = require('../config')
+const {error} = require('../utils')
 
 function apiRoute () {
   let api = express.Router()
@@ -65,4 +66,7 @@ module.exports = function (app) {
   app.use('/api', apiRoute())
 
   app.use(login.unauthorizedError)
+  app.use(model().validationError)
+  app.use((err, req, res, next) => error.send(res, 999)(err))
+  app.use((req, res, next) => res.status(404).send('not found'))
 }

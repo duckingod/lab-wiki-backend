@@ -8,7 +8,7 @@
     "start": "cross-env NODE_ENV=production nodemon backend.js",
     "data-init": "cross-env NODE_ENV=production node tools/data-parser.js ./data/",
     "data-init-dev": "cross-env NODE_ENV=development node tools/data-parser.js ./data/",
-    "test": "./node_modules/mocha/bin/mocha ./test"
+    "test": "./node_modules/mocha/bin/mocha ./test --timeout 4000"
   },
   "repository": {
     "type": "git",
