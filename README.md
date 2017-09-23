@@ -26,7 +26,7 @@ To depoly a production webserver in server:
 
 ```
 url = localhost:3000             (development)
-    = nlg17.csie.ntu.edu.tw:3000 (production)
+    = nlg17.csie.ntu.edu.tw      (production)
 ```
 
 View `http://url/api/` for example

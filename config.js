@@ -27,7 +27,7 @@ let config = {
       reupdateTime: 10000
     },
     seminarService: {
-      preaddWeeks: 2
+      preaddWeeks: 4
     },
     database: {
       dialect: 'sqlite',
@@ -41,6 +41,9 @@ let config = {
     appUrl: 'http://nlg17.csie.ntu.edu.tw',
     gpuUsage: {
       url: 'http://localhost:13579'
+    },
+    seminarService: {
+      preaddWeeks: 24
     },
     database: {
       storage: './db.sqlite'

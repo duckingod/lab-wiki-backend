@@ -1,14 +1,14 @@
 'use strict'
 
-const {System, Seminar, ContactList} = require('../models')
+const {System, Seminar} = require('../models')
 const {error} = require('../utils')
-const {daysAfter, weeksBetween} = require('../utils').date
+const {daysAfter} = require('../utils').date
 const {modifyRecords, updateRecords} = require('../utils').model
-const {genesis} = require('../config')
+// const {genesis} = require('../config')
 
 const futureSeminars = () =>
   Seminar.findAll({ where: { date: { $gte: new Date() } } })
-
+/*
 const schedule = (by, startDate, idList) => {
   let weeks = weeksBetween(genesis, startDate)
   return ContactList.all()
@@ -22,18 +22,13 @@ const schedule = (by, startDate, idList) => {
       return updateRecords(contacts)
     })
 }
+ */
 
 module.exports = {
   seminar: {
-    advance: (req, res) =>
-      Seminar.addNextSeminars()
-        .then(() => futureSeminars())
-        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, -7) }))
-        .then(updateRecords)
-        .then(() => System.change(config => { config.seminarIdOffset -= 2 }))
-        .then(() => Seminar.addNextSeminars())
-        .then(c => res.send('ok'))
-        .catch(error.send(res, 503)),
+    postpone: (req, res) =>
+      res.status(501).send('seminar postpone not implemented: should pass date'),
+    /*
     postpone: (req, res) =>
       futureSeminars()
         .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, 7) }))
@@ -41,6 +36,7 @@ module.exports = {
         .then(() => System.change(config => { config.seminarIdOffset += 2 }))
         .then(c => res.send('ok'))
         .catch(error.send(res, 503)),
+     */
     weekday: (req, res) =>
       Promise.all([
         futureSeminars(),
@@ -56,15 +52,10 @@ module.exports = {
         .then(() => System.change(config => { config.seminarWeekday = req.body.weekday }))
         .then(c => res.send('ok'))
         .catch(error.send(res, 503)),
-    next: (req, res) =>
-      Seminar.nextSeminars()
-        .then(s => res.send(s))
-        .catch(error.send(res, 503)),
-    schedule: (req, res) => {
-      schedule('seminarId', req.body.date, req.body.list)
-        .then(contacts => res.send(contacts))
-        .catch(error.send(res, 503))
-    }
+    schedule: (req, res) =>
+      res.status(501).send('seminar scheduling not implemented: should post with id list, initial date'),
+    swap: (req, res) =>
+      res.status(501).send('swap seminars not implemented: should post with date1, date2')
   },
   garbage: {
     advance: (req, res) =>
