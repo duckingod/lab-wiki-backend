@@ -1,0 +1,50 @@
+[
+  {
+    "seat": 2,
+    "name": "火斑馬",
+    "account": "firezebra",
+    "email": "fire.zebra@labwiki.com",
+    "phone": "0912-345-678",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  },
+  {
+    "seat": 3,
+    "name": "安娜",
+    "account": "anna",
+    "email": "anna@labwiki.com",
+    "phone": "0924-713-479",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  },
+  {
+    "seat": 4,
+    "name": "亨利",
+    "account": "henrygod",
+    "email": "henry.god@labwiki.com",
+    "phone": "0993-626-917",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  },
+  {
+    "seat": 5,
+    "name": "小林",
+    "account": "kobayashi",
+    "email": "Kobayashi@labwiki.com",
+    "phone": "0923-267-269",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  },
+  {
+    "seat": 6,
+    "name": "托爾",
+    "account": "tohru",
+    "email": "tohru@labwiki.com",
+    "phone": "0925-856-661",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  },
+  {
+    "seat": 7,
+    "name": "康娜",
+    "account": "kanna",
+    "email": "kanna@labwiki.com",
+    "phone": "0923-462-123",
+    "avatar": "http://localhost:3000/avatar.jpg"
+  }
+]

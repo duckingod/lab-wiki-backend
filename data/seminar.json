@@ -1,0 +1,32 @@
+[
+  {
+    "date": "2017/08/23",
+    "presenter": "小林",
+    "topic": "Introduction to Python",
+    "slides": ""
+  },
+  {
+    "date": "2017/09/06",
+    "presenter": "火斑馬",
+    "topic": "Parallel Frequent Patterns Mining Algorithm on GPU",
+    "slides": ""
+  },
+  {
+    "date": "2017/09/06",
+    "presenter": "安娜",
+    "topic": "Strategy on Trading: A Case Study on Maple Story",
+    "slides": ""
+  },
+  {
+    "date": "2017/09/20",
+    "presenter": "Vicky",
+    "topic": "Dominion Tutorial: Think Deeper and Longer",
+    "slides": ""
+  },
+  {
+    "date": "2017/09/20",
+    "presenter": "PCH",
+    "topic": "5 Steps to Ban Henry",
+    "slides": ""
+  }
+]
