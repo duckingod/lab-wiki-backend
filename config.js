@@ -26,8 +26,8 @@ let config = {
       refreshTime: 3000,
       reupdateTime: 10000
     },
-    seminarService: {
-      preaddWeeks: 4
+    dutySchedule: {
+      weeks: 4
     },
     database: {
       dialect: 'sqlite',
@@ -42,8 +42,8 @@ let config = {
     gpuUsage: {
       url: 'http://localhost:13579'
     },
-    seminarService: {
-      preaddWeeks: 24
+    dutySchedule: {
+      weeks: 24
     },
     database: {
       storage: './db.sqlite'
