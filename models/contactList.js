@@ -4,6 +4,13 @@ let {genesis} = require('../config')
 genesis = new Date(genesis)
 const {daysAfter, weeksBetween} = require('../utils').date
 
+
+let dutyProp = by => {
+  id: by + "Id",
+  offset: by + "IdOffset",
+  event: name => by + name
+}
+
 module.exports = function (sequelize, DataTypes) {
   var ContactList = sequelize.define('ContactList', {
     seat: {
@@ -61,16 +68,16 @@ module.exports = function (sequelize, DataTypes) {
   ContactList.dutyList = function (by, offset = 0) {
     let System = require('../models').System
     let args = {where: {}}
-    args['where'][by] = {$gte: 1}
+    let duty = dutyProp(by)
+    args['where'][duty.id] = {$gte: 1}
     return Promise.all([
       this.findAll(args),
-      System.load()
+      Event.withName(duty.event)
     ])
       .then(data => {
-        let contacts = data[0]
+        let [contacts, events] = data
         let weeks = weeksBetween(genesis, new Date())
         let weekSince = daysAfter(genesis, weeks * 7)
-        let offset = data[1][by + 'Offset'] + weeks
         let n = contacts.length
         let ord = c => ((c[by] + offset - 1) % n + n) % n
         contacts.sort((a, b) => ord(a) - ord(b))

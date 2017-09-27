@@ -9,6 +9,10 @@ function daysAfter (date, n) {
   d.setDate(d.getDate() + n)
   return d
 }
+function sameWeek(date1, date2) {
+  let d = new Date(date)
+  return weeksBetween(d, date1) === weeksBetween(d, date2)
+}
 
 function modifyRecords (operation) {
   return (records) => {
@@ -64,7 +68,8 @@ module.exports = {
   },
   date: {
     weeksBetween: weeksBetween,
-    daysAfter: daysAfter
+    daysAfter: daysAfter,
+    sameWeek: sameWeek
   },
   model: {
     modifyRecords: modifyRecords,

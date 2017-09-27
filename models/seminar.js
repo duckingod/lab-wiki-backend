@@ -39,7 +39,7 @@ module.exports = function (sequelize, DataTypes) {
     const {preaddWeeks} = require('../config').seminarService
     const {daysAfter} = require('../utils').date
     return Promise.all([
-      ContactList.dutyWithDate('seminarId', {nRound: 1, nSchedule: 2, group: 2}),
+      ContactList.dutyWithDate('seminar', {nRound: 1, nSchedule: 2, group: 2}),
       System.load()
     ]).then(res => {
       let schedule = res[0]
@@ -50,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
           new Seminar({
             presenter: presentation.contact.name,
             owner: presentation.contact.account,
-            date: daysAfter(presentation.date, preaddWeeks * 7 + weekday),
+            date: daysAfter(presentation.date, weekday),
             topic: '.'
           })
         )
