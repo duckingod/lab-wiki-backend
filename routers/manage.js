@@ -55,7 +55,9 @@ module.exports = {
     schedule: (req, res) =>
       res.status(501).send('seminar scheduling not implemented: should post with id list, initial date'),
     swap: (req, res) =>
-      res.status(501).send('swap seminars not implemented: should post with date1, date2')
+      res.status(501).send('swap seminars not implemented: should post with date1, date2'),
+    next: (req, res) =>
+      Seminar.nextSeminars(new Date()).then(s => res.send(s)).catch(error.send(res, 503))
   },
   garbage: {
     advance: (req, res) =>

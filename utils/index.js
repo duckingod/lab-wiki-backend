@@ -9,8 +9,9 @@ function daysAfter (date, n) {
   d.setDate(d.getDate() + n)
   return d
 }
-function sameWeek(date1, date2) {
-  let d = new Date(date)
+function sameWeek (date1, date2) {
+  let {genesis} = require('../config')
+  let d = new Date(genesis)
   return weeksBetween(d, date1) === weeksBetween(d, date2)
 }
 
@@ -39,7 +40,7 @@ function updateRecords (records) {
 function prettyError (err) {
   let out = {}
   out.name = err.name
-  out.message = err.mesage
+  out.message = err.message
   if (err.errors != null) {
     out.errors = []
     for (let e of err.errors) {
@@ -74,5 +75,50 @@ module.exports = {
   model: {
     modifyRecords: modifyRecords,
     updateRecords: updateRecords
+  },
+  const: {
+    event: {
+      seminar: {
+        swap: 'seminar swap',
+        skip: 'seminar postpone'
+      },
+      garbage: {
+        skip: 'garbage postpone'
+      }
+    }
+  },
+  schedule: {
+    dutyProp: by => {
+      let {skip} = require('../utils').const.event[by]
+      let args = { where: {}, order: [by + 'Id'] }
+      args.where[by + 'Id'] = {$gte: 1}
+      return {
+        id: by + 'Id',
+        offset: by + 'IdOffset',
+        event: skip,
+        queryArgs: args
+      }
+    }
+  },
+  listify: (p1, p2) => {
+    let constructor = cb => ary => {
+      let out = []
+      if (typeof ary === 'number') {
+        for (let i = 0; i < ary; i++) {
+          out.push(cb(i))
+        }
+      } else {
+        for (let a of ary) {
+          out.push(cb(a))
+        }
+      }
+      return out
+    }
+
+    if (p2 === undefined) {
+      return constructor(p1)
+    } else {
+      return constructor(p2)(p1)
+    }
   }
 }
