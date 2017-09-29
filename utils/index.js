@@ -53,6 +53,7 @@ function prettyError (err) {
       out.errors.push(_out)
     }
   }
+  console.log(err)
   return out
 }
 
@@ -103,13 +104,19 @@ module.exports = {
   listify: (p1, p2) => {
     let constructor = cb => ary => {
       let out = []
+      let push = a => {
+        let tmp = cb(a)
+        if (tmp !== undefined) {
+          out.push(tmp)
+        }
+      }
       if (typeof ary === 'number') {
         for (let i = 0; i < ary; i++) {
-          out.push(cb(i))
+          push(i)
         }
       } else {
         for (let a of ary) {
-          out.push(cb(a))
+          push(a)
         }
       }
       return out

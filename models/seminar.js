@@ -34,9 +34,9 @@ module.exports = function (sequelize, DataTypes) {
         min: 0
       }
     },
-    edited: {
-      type: DataTypes.INTEGER,
-      defaultValue: false,
+    placeholder: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
       allowNull: false
     }
   })
@@ -46,6 +46,10 @@ module.exports = function (sequelize, DataTypes) {
     Seminar.hasMany(models.Slide)
   }
   */
+  Seminar.beforeUpdate(function (seminar, options) {
+    seminar.placeholder = false
+  })
+
   Seminar.nextSeminars = fromDate => {
     const {ContactList} = require('../models')
     const {weeks} = require('../config').seminarSchedule

@@ -71,30 +71,24 @@ module.exports = function (sequelize, DataTypes) {
     ])
       .then(data => {
         let [contacts, skips] = data
-        let pos
         let duties = []
-        let fromId = options.fromId
-        let nRound
-        let toId
+        let toId = options.toId
         if (options.nRound) {
-          nRound = contacts.length * options.nRound
-        } else {
-          toId = options.toId
+          toId = options.fromId + contacts.length * options.nRound
         }
         for (let s of skips) {
           s.meta = JSON.parse(s.meta)
         }
         skips.sort((a, b) => a.meta < b.meta)
-        for (pos = 0; pos < skips.length && skips[pos].meta < fromId; pos++)
-          ;
+        let pos = 0
         contacts.sort((a, b) => a[duty.id] - b[duty.id])
-        for (let id = fromId, i = 0; nRound ? i < nRound : id < toId; id++) {
+        for (let id = 0; id < toId;) {
           if (pos < skips.length && id === skips[pos].meta) {
-            duties.push({ id: id, contact: null })
+            duties.push({ id: -1, contact: null })
             pos++
           } else {
-            duties.push({ id: id, contact: contacts[(fromId + i) % contacts.length] })
-            i++
+            duties.push({ id: id, contact: contacts[id % contacts.length] })
+            id++
           }
         }
         return duties
@@ -112,10 +106,10 @@ module.exports = function (sequelize, DataTypes) {
       })
       .then(duties => {
         let schedule = []
-        let date = daysAfter(genesis, weeksBetween(genesis, fromDate) * 7)
+        let date = genesis
         for (let i = 0; i < duties.length;) {
           for (let j = 0; j < nPerWeek; j++, i++) {
-            if (duties[i].contact) {
+            if (i < duties.length && duties[i].contact && date >= fromDate) {
               schedule.push({
                 contact: duties[i].contact,
                 date: date,

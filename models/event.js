@@ -18,10 +18,7 @@ module.exports = function (sequelize, DataTypes) {
     enable: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
-      validate: {
-        isDate: true
-      }
+      defaultValue: true
     }
 
   })
