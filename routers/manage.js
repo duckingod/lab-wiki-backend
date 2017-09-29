@@ -1,7 +1,7 @@
 'use strict'
 
-const {System, Seminar} = require('../models')
-const {error} = require('../utils')
+const {System, Seminar, Event} = require('../models')
+const {error, listify} = require('../utils')
 const {daysAfter} = require('../utils').date
 const {modifyRecords, updateRecords} = require('../utils').model
 // const {genesis} = require('../config')
@@ -26,17 +26,45 @@ const schedule = (by, startDate, idList) => {
 
 module.exports = {
   seminar: {
-    postpone: (req, res) =>
-      res.status(501).send('seminar postpone not implemented: should pass date'),
-    /*
-    postpone: (req, res) =>
-      futureSeminars()
-        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, 7) }))
+    postpone: (req, res) => {
+      const {dutyProp} = require('../utils').schedule
+      let dp = dutyProp('seminar')
+      Seminar.findById(req.body.id)
+        .then(seminar => {
+          if (seminar.placeholder) {
+            return seminar
+          } else {
+            throw new Error('Cannot postpone a non-placeholder seminar')
+          }
+        })
+        .then(seminar => new Event({ name: dp.event, meta: seminar.scheduleId, date: seminar.date }))
+        .then(event => event.save())
+        .then(event => {
+          let args = {
+            where: {
+              date: { $gte: event.date },
+              placeholder: { $eq: true }
+            }
+          }
+          return Promise.all([
+            Seminar.findAll(args),
+            Seminar.nextSeminars(event.date)
+          ]).then(res =>
+            Seminar.destroy(args).then(() => res)
+          )
+        })
+        .then(res => {
+          return listify(
+            res[1],
+            seminar =>
+              res[0].find(a => a.scheduleId === seminar.scheduleId)
+              ? seminar
+              : undefined)
+        })
         .then(updateRecords)
-        .then(() => System.change(config => { config.seminarIdOffset += 2 }))
-        .then(c => res.send('ok'))
-        .catch(error.send(res, 503)),
-     */
+        .then(seminars => res.send(seminars))
+        .catch(error.send(res, 400))
+    },
     weekday: (req, res) =>
       Promise.all([
         futureSeminars(),
@@ -57,7 +85,9 @@ module.exports = {
     swap: (req, res) =>
       res.status(501).send('swap seminars not implemented: should post with date1, date2'),
     next: (req, res) =>
-      Seminar.nextSeminars(new Date()).then(s => res.send(s)).catch(error.send(res, 503))
+      Seminar.nextSeminars(new Date()).then(s => res.send(s)).catch(error.send(res, 503)),
+    addFuture: (req, res) =>
+      Seminar.nextSeminars(new Date()).then(updateRecords).then(s => res.send(s))
   },
   garbage: {
     advance: (req, res) =>

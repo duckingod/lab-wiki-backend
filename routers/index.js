@@ -30,14 +30,14 @@ function apiRoute () {
   api.get('/user', login.checkLogin, login.userInfo)
 
   let m = model()
-  for (let route of [['post', 'postpone'], ['post', 'weekday'], ['post', 'schedule'], ['post', 'swap'], ['get', 'next']]) {
+  for (let route of [['post', 'postpone'], ['post', 'weekday'], ['post', 'schedule'], ['post', 'swap'], ['get', 'next'], ['get', 'addFuture']]) {
     api[route[0]]('/seminar/' + route[1], emailLogin, m.admin, manage.seminar[route[1]])
   }
   for (let route of [['post', 'advance'], ['post', 'postpone']]) {
     api[route[0]]('/garbage/' + route[1], emailLogin, m.admin, manage.garbage[route[1]])
   }
 
-  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
+  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail, models.Event]
   for (let m of _models) {
     let args = {}
     if (m.name === 'EMail') args.route = 'emailSchedule'
