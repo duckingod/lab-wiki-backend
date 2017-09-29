@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     edited: {
       type: DataTypes.INTEGER,
-      defaultVaule: false,
+      defaultValue: false,
       allowNull: false
     }
   })
