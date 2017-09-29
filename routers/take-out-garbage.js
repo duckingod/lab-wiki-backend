@@ -5,7 +5,7 @@ const {error} = require('../utils')
 const {daysAfter} = require('../utils').date
 
 module.exports = (req, res) =>
-  ContactList.dutyWithDate('garbageId')
+  ContactList.dutyWithDate('garbage', { nPerWeek: 1, nRound: 2, fromDate: new Date() })
     .then(duties => {
       let out = []
       for (let duty of duties) {

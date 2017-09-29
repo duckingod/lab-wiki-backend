@@ -1,6 +1,7 @@
 'use strict'
 
 const {updateRecords} = require('../utils').model
+const {listify} = require('../utils')
 
 module.exports = function (sequelize, DataTypes) {
   var Seminar = sequelize.define('Seminar', {
@@ -25,6 +26,18 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         notEmpty: true
       }
+    },
+    scheduleId: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      validate: {
+        min: 0
+      }
+    },
+    edited: {
+      type: DataTypes.INTEGER,
+      defaultVaule: false,
+      allowNull: false
     }
   })
 
@@ -33,31 +46,28 @@ module.exports = function (sequelize, DataTypes) {
     Seminar.hasMany(models.Slide)
   }
   */
-
-  Seminar.nextSeminars = () => {
-    const {ContactList, System} = require('../models')
-    const {preaddWeeks} = require('../config').seminarService
-    const {daysAfter} = require('../utils').date
-    return Promise.all([
-      ContactList.dutyWithDate('seminar', {nRound: 1, nSchedule: 2, group: 2}),
-      System.load()
-    ]).then(res => {
-      let schedule = res[0]
-      let weekday = res[1].seminarWeekday
-      let seminars = []
-      for (let presentation of schedule) {
-        seminars.push(
-          new Seminar({
-            presenter: presentation.contact.name,
-            owner: presentation.contact.account,
-            date: daysAfter(presentation.date, weekday),
-            topic: '.'
-          })
-        )
-      }
-      return seminars
-    })
+  Seminar.nextSeminars = fromDate => {
+    const {ContactList} = require('../models')
+    const {weeks} = require('../config').seminarSchedule
+    return ContactList.dutyWithDate(
+      'seminar',
+      {
+        nRound: weeks,
+        nPerWeek: 2,
+        fromDate: fromDate
+      })
+      .then(listify(presentation =>
+        new Seminar({
+          presenter: presentation.contact.name,
+          owner: presentation.contact.account,
+          date: presentation.date,
+          scheduleId: presentation.id,
+          topic: '.'
+        })
+      ))
   }
+
+  Seminar.applySwap = seminars => {}
 
   Seminar.addNextSeminars = () => {
     return Seminar.nextSeminars().then(seminars => {

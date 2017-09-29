@@ -2,8 +2,10 @@
 
 const weekly = require('./weekly')
 const {genesis} = require('../config')
-const {Seminar} = require('../models')
+// const {Seminar} = require('../models')
 
-const main = () => Seminar.addNextSeminars()
+const main = () =>
+  false
+  // Seminar.addNextSeminars()
 
 module.exports = weekly(genesis, main)
