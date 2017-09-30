@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const path = require('path')
 const models = require('../models')
 const fs = require('fs')

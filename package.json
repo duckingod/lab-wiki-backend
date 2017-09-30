@@ -10,6 +10,10 @@
     "data-init-dev": "cross-env NODE_ENV=development node tools/data-parser.js ./data/",
     "test": "./node_modules/mocha/bin/mocha ./test --timeout 4000"
   },
+  "bin": {
+    "lab-wiki-backend": "backend.js",
+    "data-parser": "tools/data-parser.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/duckingod/lab-wiki-backend.git"
