@@ -28,7 +28,7 @@ deploy:
     skip_cleanup: true
     script:
       - ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST
-        'cd lab-wiki-backend && git checkout master && git pull && rm package-lock.json -f && npm install'
+        cd lab-wiki-backend && git checkout $TRAVIS_BRANCH && git pull && rm package-lock.json -f && npm install
     on:
       branch:
         - master
