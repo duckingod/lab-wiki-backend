@@ -61,66 +61,50 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
-  ContactList.dutyId = (from, nDutyPerWeek) => weeksBetween(genesis, from) * nDutyPerWeek
-  ContactList.dutyList = function (by, options) {
+  ContactList.dutyList = async function (by) {
     let {Event} = require('../models')
     let duty = dutyProp(by)
-    return Promise.all([
+    let [contacts, skips] = await Promise.all([
       this.findAll(duty.queryArgs),
       Event.get(duty.event)
     ])
-      .then(data => {
-        let [contacts, skips] = data
-        let duties = []
-        let toId = options.toId
-        if (options.nRound) {
-          toId = options.fromId + contacts.length * options.nRound
+    skips.sort((a, b) => Number(a.meta) < Number(b.meta))
+    contacts.sort((a, b) => a[duty.id] - b[duty.id])
+    let dutyGen = function* () {
+      let pos = 0, id = 0
+      while (true) {
+        if (pos < skips.length && id === Number(skips[pos].meta)) {
+          yield { id: -1, contact: null }
+          pos++
+        } else {
+          yield { id: id, contact: contacts[id % contacts.length] }
+          id++
         }
-        for (let s of skips) {
-          s.meta = JSON.parse(s.meta)
-        }
-        skips.sort((a, b) => a.meta < b.meta)
-        let pos = 0
-        contacts.sort((a, b) => a[duty.id] - b[duty.id])
-        for (let id = 0; id < toId;) {
-          if (pos < skips.length && id === skips[pos].meta) {
-            duties.push({ id: -1, contact: null })
-            pos++
-          } else {
-            duties.push({ id: id, contact: contacts[id % contacts.length] })
-            id++
-          }
-        }
-        return duties
-      })
+      }
+    }()
+    return { next: () => dutyGen.next().value, nPerson: contacts.length }
   }
 
-  ContactList.dutyWithDate = (by, options = {}) => {
-    let nRound = options.nRound || 2
-    let nPerWeek = options.nPerWeek || 1
-    let fromDate = options.fromDate
-    return ContactList.dutyList(
-      by, {
-        fromId: ContactList.dutyId(fromDate, nPerWeek),
-        nRound: nRound
-      })
-      .then(duties => {
-        let schedule = []
-        let date = genesis
-        for (let i = 0; i < duties.length;) {
-          for (let j = 0; j < nPerWeek; j++, i++) {
-            if (i < duties.length && duties[i].contact && date >= fromDate) {
-              schedule.push({
-                contact: duties[i].contact,
-                date: date,
-                id: duties[i].id
-              })
-            }
-          }
-          date = daysAfter(date, 7)
+  ContactList.dutyWithDate = async (by, {nRound, nPerWeek, fromDate}) => {
+    nRound = nRound || 2
+    nPerWeek = nPerWeek || 1
+    let list = await ContactList.dutyList(by)
+    let schedule = []
+    let date = genesis
+    while(schedule.length < nRound * list.nPerson) {
+      for (let j = 0; j < nPerWeek; j++) {
+        let duty = list.next()
+        if (duty.contact && date >= fromDate) {
+          schedule.push({
+            contact: duty.contact,
+            date: date,
+            id: duty.id
+          })
         }
-        return schedule
-      })
+      }
+      date = daysAfter(date, 7)
+    }
+    return schedule
   }
 
   return ContactList

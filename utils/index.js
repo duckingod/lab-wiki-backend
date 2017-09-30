@@ -14,6 +14,11 @@ function sameWeek (date1, date2) {
   let d = new Date(genesis)
   return weeksBetween(d, date1) === weeksBetween(d, date2)
 }
+function toWeek (date) {
+  let {genesis} = require('../config')
+  genesis = new Date(genesis)
+  return daysAfter(genesis, weeksBetween(genesis, date) * 7)
+}
 
 function modifyRecords (operation) {
   return (records) => {
@@ -71,7 +76,8 @@ module.exports = {
   date: {
     weeksBetween: weeksBetween,
     daysAfter: daysAfter,
-    sameWeek: sameWeek
+    sameWeek: sameWeek,
+    toWeek: toWeek
   },
   model: {
     modifyRecords: modifyRecords,
