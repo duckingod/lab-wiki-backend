@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/duckingod/lab-wiki-backend.svg?token=BMv3FopsAyzypbivpLC3&branch=master)](https://travis-ci.com/duckingod/lab-wiki-backend)
+[![Build Status](https://travis-ci.org/duckingod/lab-wiki-backend.svg?branch=master)](https://travis-ci.com/duckingod/lab-wiki-backend)
 # Lab Wiki Backend
 NTU NLP lab wiki backend by [express](http://expressjs.com)
 
