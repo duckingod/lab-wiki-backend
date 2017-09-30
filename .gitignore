@@ -1,6 +1,7 @@
 .idea
-db.development.*
+/db.*
 package-lock.json
+/static
 
 # Secret
 client_secret.json
