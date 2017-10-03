@@ -62,6 +62,7 @@ module.exports = function (app) {
     app.use(express.static('./static'))
   } else {
     app.use(require('./settings/cors'))
+    app.use(require('./settings/pretty-json'))
   }
 
   app.use('/api', apiRoute())
