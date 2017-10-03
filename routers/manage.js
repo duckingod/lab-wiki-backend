@@ -27,41 +27,28 @@ const schedule = (by, startDate, idList) => {
 module.exports = {
   seminar: {
     postpone: (req, res) => {
-      const {dutyProp} = require('../utils').schedule
-      let dp = dutyProp('seminar')
-      Seminar.findById(req.body.id)
-        .then(seminar => {
-          if (seminar.placeholder) {
-            return seminar
-          } else {
-            throw new Error('Cannot postpone a non-placeholder seminar')
+      let f = async () => {
+        const {dutyProp} = require('../utils').schedule
+        let dp = dutyProp('seminar')
+        let seminar = await Seminar.findById(req.body.id)
+        if (!seminar.placeholder) {
+          throw new Error('Cannot postpone a non-placeholder seminar')
+        }
+        await (new Event({ name: dp.event, meta: seminar.scheduleId })).save()
+        let args = {
+          where: {
+            scheduleId: { $gte: seminar.scheduleId },
+            placeholder: { $eq: true }
           }
-        })
-        .then(seminar => new Event({ name: dp.event, meta: seminar.scheduleId, date: seminar.date }))
-        .then(event => event.save())
-        .then(event => {
-          let args = {
-            where: {
-              date: { $gte: event.date },
-              placeholder: { $eq: true }
-            }
-          }
-          return Promise.all([
-            Seminar.findAll(args),
-            Seminar.nextSeminars(event.date)
-          ]).then(res =>
-            Seminar.destroy(args).then(() => res)
-          )
-        })
-        .then(res => {
-          return listify(
-            res[1],
-            seminar =>
-              res[0].find(a => a.scheduleId === seminar.scheduleId)
-              ? seminar
-              : undefined)
-        })
-        .then(updateRecords)
+        }
+        let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.nextSeminars(seminar.date)]
+        await Seminar.destroy(args)
+        newSeminars = await updateRecords(listify(
+          newSeminars,
+          seminar => seminars.find(a => a.scheduleId === seminar.scheduleId) ? seminar : undefined))
+        return newSeminars
+      }
+      f()
         .then(seminars => res.send(seminars))
         .catch(error.send(res, 400))
     },

@@ -50,25 +50,27 @@ module.exports = function (sequelize, DataTypes) {
     seminar.placeholder = false
   })
 
-  Seminar.nextSeminars = fromDate => {
+  Seminar.nextSeminars = async fromDate => {
     const {ContactList} = require('../models')
     const {weeks} = require('../config').seminarSchedule
-    return ContactList.dutyWithDate(
+    let duties = await ContactList.dutyWithDate(
       'seminar',
       {
         nRound: weeks,
         nPerWeek: 2,
         fromDate: fromDate
+      }
+    )
+    let seminars = listify(duties, presentation =>
+      new Seminar({
+        presenter: presentation.contact.name,
+        owner: presentation.contact.account,
+        date: presentation.date,
+        scheduleId: presentation.id,
+        topic: '.'
       })
-      .then(listify(presentation =>
-        new Seminar({
-          presenter: presentation.contact.name,
-          owner: presentation.contact.account,
-          date: presentation.date,
-          scheduleId: presentation.id,
-          topic: '.'
-        })
-      ))
+    )
+    return seminars
   }
 
   Seminar.applySwap = seminars => {}
