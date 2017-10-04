@@ -139,23 +139,27 @@ module.exports = function (sequelize, DataTypes) {
   Seminar.applySwap = seminars => {
   }
 
-  Seminar.addNextSeminars = () => {
-    return Seminar.nextSeminars().then(seminars => {
-      let addSeminars = []
-      for (let seminar of seminars) {
-        let args = {
-          where: {
-            date: { $eq: seminar.date },
-            presenter: { $eq: seminar.presenter }
-          }
+  Seminar.addNextSeminars = async fromDate => {
+    let [nextSeminars, seminars] = [
+      await Seminar.nextSeminars(fromDate),
+      await Seminar.findAll({
+        where: {
+          date: { $gte: new Date() },
+          placeholder: { $eq: true },
+          scheduleId: { $gte: 0 }
         }
-        addSeminars.push(
-          Seminar.findAll(args)
-            .then(res => res.length > 0 ? null : seminar))
+      })
+    ]
+    let newSeminars = []
+    nextSeminars.sort((a, b) => b.scheduleId - a.scheduleId)
+    for (let s of nextSeminars) {
+      if (!seminars.find(_s => _s.scheduleId === s.scheduleId)) {
+        newSeminars.push(s)
+      } else {
+        break
       }
-      return Promise.all(addSeminars)
-    })
-      .then(updateRecords)
+    }
+    return updateRecords(newSeminars)
   }
 
   return Seminar
