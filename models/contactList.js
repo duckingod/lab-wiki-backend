@@ -2,7 +2,7 @@
 
 let {genesis} = require('../config')
 genesis = new Date(genesis)
-const {daysAfter, weeksBetween} = require('../utils').date
+const {daysAfter} = require('../utils').date
 // const {listify} = require('../utils')
 
 let {dutyProp} = require('../utils').schedule
@@ -70,8 +70,9 @@ module.exports = function (sequelize, DataTypes) {
     ])
     skips.sort((a, b) => Number(a.meta) < Number(b.meta))
     contacts.sort((a, b) => a[duty.id] - b[duty.id])
-    let dutyGen = function* () {
-      let pos = 0, id = 0
+    let dutyGen = (function * () {
+      let pos = 0
+      let id = 0
       while (true) {
         if (pos < skips.length && id === Number(skips[pos].meta)) {
           yield { id: -1, contact: null }
@@ -81,7 +82,7 @@ module.exports = function (sequelize, DataTypes) {
           id++
         }
       }
-    }()
+    }())
     return { next: () => dutyGen.next().value, nPerson: contacts.length }
   }
 
@@ -91,7 +92,7 @@ module.exports = function (sequelize, DataTypes) {
     let list = await ContactList.dutyList(by)
     let schedule = []
     let date = genesis
-    while(schedule.length < nRound * list.nPerson) {
+    while (schedule.length < nRound * list.nPerson) {
       for (let j = 0; j < nPerWeek; j++) {
         let duty = list.next()
         if (duty.contact && date >= fromDate) {

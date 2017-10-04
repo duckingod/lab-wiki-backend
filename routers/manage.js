@@ -1,57 +1,20 @@
 'use strict'
 
-const {System, Seminar, Event} = require('../models')
-const {error, listify} = require('../utils')
+const {System, Seminar} = require('../models')
+const {error} = require('../utils')
 const {daysAfter} = require('../utils').date
 const {modifyRecords, updateRecords} = require('../utils').model
 // const {genesis} = require('../config')
 
 const futureSeminars = () =>
   Seminar.findAll({ where: { date: { $gte: new Date() } } })
-/*
-const schedule = (by, startDate, idList) => {
-  let weeks = weeksBetween(genesis, startDate)
-  return ContactList.all()
-    .then(contacts => {
-      for (let contact of contacts) {
-        contact[by] = 0
-      }
-      for (let i in idList) {
-        contacts[idList[i]][by] = (i + weeks) % idList.length
-      }
-      return updateRecords(contacts)
-    })
-}
- */
 
 module.exports = {
   seminar: {
-    postpone: (req, res) => {
-      let f = async () => {
-        const {dutyProp} = require('../utils').schedule
-        let dp = dutyProp('seminar')
-        let seminar = await Seminar.findById(req.body.id)
-        if (!seminar.placeholder) {
-          throw new Error('Cannot postpone a non-placeholder seminar')
-        }
-        await (new Event({ name: dp.event, meta: seminar.scheduleId })).save()
-        let args = {
-          where: {
-            scheduleId: { $gte: seminar.scheduleId },
-            placeholder: { $eq: true }
-          }
-        }
-        let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.nextSeminars(seminar.date)]
-        await Seminar.destroy(args)
-        newSeminars = await updateRecords(listify(
-          newSeminars,
-          seminar => seminars.find(a => a.scheduleId === seminar.scheduleId) ? seminar : undefined))
-        return newSeminars
-      }
-      f()
+    postpone: (req, res) =>
+      Seminar.postpone(req.body.id)
         .then(seminars => res.send(seminars))
-        .catch(error.send(res, 400))
-    },
+        .catch(error.send(res, 400)),
     weekday: (req, res) =>
       Promise.all([
         futureSeminars(),
@@ -70,11 +33,17 @@ module.exports = {
     schedule: (req, res) =>
       res.status(501).send('seminar scheduling not implemented: should post with id list, initial date'),
     swap: (req, res) =>
-      res.status(501).send('swap seminars not implemented: should post with date1, date2'),
+      Seminar.swap(req.body.seminar1Id, req.body.seminar2Id)
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
     next: (req, res) =>
-      Seminar.nextSeminars(new Date()).then(s => res.send(s)).catch(error.send(res, 503)),
+      Seminar.nextSeminars(new Date())
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
     addFuture: (req, res) =>
-      Seminar.nextSeminars(new Date()).then(updateRecords).then(s => res.send(s))
+      Seminar.nextSeminars(new Date()).then(updateRecords)
+        .then(s => res.send(s))
+        .catch(error.send(res, 503))
   },
   garbage: {
     advance: (req, res) =>
