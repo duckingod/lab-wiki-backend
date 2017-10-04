@@ -2,16 +2,16 @@ let crypto = require('crypto')
 let env = process.env.NODE_ENV || 'development'
 let config = {
   development: {
-    staticWebApp: false,
+    webAppUrl: 'http://localhost:12345',
+    prettyJson: true,
     port: 3000,
     googleOauthClientId:
       '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
     validEmailDomain: '@nlg.csie.ntu.edu.tw',
     loginExpirePeriod: 24 * 30, // a month
-    appUrl: 'http://localhost:12345',
     admins: ['labwiki@nlg.csie.ntu.edu.tw'],
     gpuUsage: {
-      url: 'http://nlg17.csie.ntu.edu.tw:5566/',
+      url: 'http://nlg17.csie.ntu.edu.tw/monitor',
       timeout: 30000
     },
     genesis: '2017-09-04',
@@ -37,12 +37,9 @@ let config = {
     jwtKey: 'vicky_is_sooooo_god'
   },
   production: {
-    staticWebApp: true,
+    webAppUrl: null,
+    prettyJson: false,
     port: 12345,
-    appUrl: 'http://nlg17.csie.ntu.edu.tw',
-    gpuUsage: {
-      url: 'http://localhost:13579'
-    },
     seminarSchedule: {
       weeks: 24
     },
@@ -59,25 +56,14 @@ let config = {
     jwtKey: crypto.randomBytes(256).toString('hex')
   },
   test: {
-    jwtKey: 'vicky_godlike'
+    jwtKey: 'vicky_godlike',
+    webAppUrl: null,
+    prettyJson: false
   }
 }
 
 if (env === 'production') env = ['production']
 if (env === 'test') env = ['test']
-
-/*
-// Compact with sequelize cli
-function writeDBConfig () {
-  const fs = require('fs')
-  let dbConfig = {}
-  for (let env of ['development', 'production', 'test']) {
-    dbConfig[env] = completeConfig(env)['database']
-  }
-  dbConfig = JSON.stringify(dbConfig, null, 2)
-  fs.writeFile('config/config.json', dbConfig, 'utf8')
-}
-*/
 
 function completeConfig (env) {
   let _config = config.development
@@ -94,5 +80,4 @@ function completeConfig (env) {
   return _config
 }
 
-// writeDBConfig()
 module.exports = completeConfig(env)

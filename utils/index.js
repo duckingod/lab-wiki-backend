@@ -1,3 +1,4 @@
+#!/usr/bin/node --harmony
 'use strict'
 
 function weeksBetween (startDate, endDate) {
@@ -37,7 +38,7 @@ function updateRecords (records) {
   let promises = []
   for (let r of records) {
     if (!r) { continue }
-    promises.push(r.save())
+    promises.push(r.save().then(a => a.reload()))
   }
   return Promise.all(promises)
 }

@@ -8,7 +8,7 @@ const cfpSearch = require('./cfp-search')
 const manage = require('./manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
-const {staticWebApp} = require('../config')
+const {webAppUrl, prettyJson} = require('../config')
 const {error} = require('../utils')
 
 function apiRoute () {
@@ -57,11 +57,13 @@ module.exports = function (app) {
   // app.use(require('helmet'))
   app.use(require('./settings/session'))
 
-  if (staticWebApp) {
+  if (webAppUrl == null) {
     app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
     app.use(express.static('./static'))
   } else {
     app.use(require('./settings/cors'))
+  }
+  if (prettyJson) {
     app.use(require('./settings/pretty-json'))
   }
 
