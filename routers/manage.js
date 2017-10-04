@@ -41,7 +41,7 @@ module.exports = {
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     addFuture: (req, res) =>
-      Seminar.nextSeminars(new Date()).then(updateRecords)
+      Seminar.addNextSeminars(new Date())
         .then(s => res.send(s))
         .catch(error.send(res, 503))
   },
