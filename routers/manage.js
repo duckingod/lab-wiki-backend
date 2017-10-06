@@ -2,12 +2,7 @@
 
 const {System, Seminar} = require('../models')
 const {error} = require('../utils')
-const {daysAfter} = require('../utils').date
-const {modifyRecords, updateRecords} = require('../utils').model
 // const {genesis} = require('../config')
-
-const futureSeminars = () =>
-  Seminar.findAll({ where: { date: { $gte: new Date() } } })
 
 module.exports = {
   seminar: {
@@ -16,32 +11,21 @@ module.exports = {
         .then(seminars => res.send(seminars))
         .catch(error.send(res, 400)),
     weekday: (req, res) =>
-      Promise.all([
-        futureSeminars(),
-        System.load()
-      ])
-        .then(res =>
-          modifyRecords(seminar => {
-            seminar.date = daysAfter(seminar.date, req.body.weekday - res[1].seminarWeekday)
-          }
-          )(res[0])
-        )
-        .then(updateRecords)
-        .then(() => System.change(config => { config.seminarWeekday = req.body.weekday }))
-        .then(c => res.send('ok'))
+      Seminar.setWeekday(req.body.date, req.body.weekday)
+        .then(s => res.send(s))
         .catch(error.send(res, 503)),
     schedule: (req, res) =>
       res.status(501).send('seminar scheduling not implemented: should post with id list, initial date'),
     swap: (req, res) =>
-      Seminar.swap(req.body.seminar1Id, req.body.seminar2Id)
+      Seminar.swap(req.body.id1, req.body.id2)
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     next: (req, res) =>
-      Seminar.nextSeminars(new Date())
+      Seminar.futureSeminars(new Date())
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     addFuture: (req, res) =>
-      Seminar.addNextSeminars(new Date())
+      Seminar.addFutureSeminars(new Date())
         .then(s => res.send(s))
         .catch(error.send(res, 503))
   },

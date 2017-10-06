@@ -56,6 +56,7 @@ module.exports = (clientId, user) => {
         </form>
         <form action="/api/seminar/weekday" method="POST">
           <input type="text" name="weekday"/>
+          <input type="text" name="date"/>
           <input type="submit" value='seminar weekday'/>
         </form>
         <form action="/api/seminar/swap" method="POST">

@@ -1,7 +1,8 @@
 'use strict'
 
 const {modifyRecords, updateRecords} = require('../utils').model
-const {listify} = require('../utils')
+const {listify, promise} = require('../utils')
+const {daysAfter, toWeek} = require('../utils').date
 
 module.exports = function (sequelize, DataTypes) {
   var Seminar = sequelize.define('Seminar', {
@@ -61,7 +62,10 @@ module.exports = function (sequelize, DataTypes) {
     seminar.placeholder = seminar.placeholder === 'keep' ? undefined : false
   })
 
-  Seminar.nextSeminars = async fromDate => {
+  Seminar.futureSeminars = () =>
+    Seminar.findAll({ where: { date: { $gte: new Date() } } })
+
+  Seminar.futureSeminars = async fromDate => {
     const {ContactList} = require('../models')
     const {weeks} = require('../config').seminarSchedule
     let duties = await ContactList.dutyWithDate(
@@ -99,7 +103,7 @@ module.exports = function (sequelize, DataTypes) {
         placeholder: { $eq: true }
       }
     }
-    let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.nextSeminars(seminar.date)]
+    let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.futureSeminars(seminar.date)]
     seminars = await modifyRecords(s => {
       s.placeholder = 'keep'
       let newS = newSeminars.find(_s => _s.scheduleId === s.scheduleId)
@@ -139,20 +143,13 @@ module.exports = function (sequelize, DataTypes) {
   Seminar.applySwap = seminars => {
   }
 
-  Seminar.addNextSeminars = async fromDate => {
-    let [nextSeminars, seminars] = [
-      await Seminar.nextSeminars(fromDate),
-      await Seminar.findAll({
-        where: {
-          date: { $gte: new Date() },
-          placeholder: { $eq: true },
-          scheduleId: { $gte: 0 }
-        }
-      })
-    ]
+  Seminar.addFutureSeminars = async fromDate => {
+    let [futureSeminars, seminars] = [
+      await Seminar.futureSeminars(fromDate),
+      await Seminar.after(fromDate, true)]
     let newSeminars = []
-    nextSeminars.sort((a, b) => b.scheduleId - a.scheduleId)
-    for (let s of nextSeminars) {
+    futureSeminars.sort((a, b) => b.scheduleId - a.scheduleId)
+    for (let s of futureSeminars) {
       if (!seminars.find(_s => _s.scheduleId === s.scheduleId)) {
         newSeminars.push(s)
       } else {
@@ -160,6 +157,35 @@ module.exports = function (sequelize, DataTypes) {
       }
     }
     return updateRecords(newSeminars)
+  }
+
+  Seminar.after = (date, placeholder) =>
+    Seminar.findAll(
+      placeholder
+      ? {
+        where: {
+          date: { $gte: date },
+          placeholder: { $eq: true },
+          scheduleId: { $gte: 0 }
+        }
+      }
+      : {
+        where: {
+          date: { $gte: date }
+        }
+      }
+    )
+
+  Seminar.setWeekday = async (date, weekday) => {
+    let {System} = require('../models')
+    let seminars = await Seminar.after(date, true)
+    await System.change(c => { c.seminarWeekday = weekday })
+    return promise(seminars)
+      .then(modifyRecords(s => {
+        s.date = daysAfter(toWeek(s.date), Number(weekday))
+        s.placeholder = 'keep'
+      }))
+      .then(updateRecords)
   }
 
   return Seminar
