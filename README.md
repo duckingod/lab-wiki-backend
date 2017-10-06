@@ -59,15 +59,14 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 
 Apis below by `POST` are all admin only.
 
-| Method | URL                              | Description                   | Parameter           |
-|:-------|:---------------------------------|:------------------------------|:-------------------:|
-| POST   | http://url/api/seminar/advance   | Advance the future seminars   |                     |
-| POST   | http://url/api/seminar/postpone  | Postpone the future seminars  |                     |
-| POST   | http://url/api/seminar/weekday   | Change future seminar weekday | `{weekday: 0~6}`    |
-| POST   | http://url/api/garbage/advance   | Advance the garbage schedule  |                     |
-| POST   | http://url/api/garbage/postpone  | Postpone the garbage schedule |                     |
-| GET    | http://url/api/seminar/next      | Get the coming seminar (test) |                     |
-| GET    | http://url/api/system            | Get the system variables      |                     |
+| Method | URL                              | Description                   | Parameter                  |
+|:-------|:---------------------------------|:------------------------------|:--------------------------:|
+| POST   | http://url/api/seminar/postpone  | Postpone the future seminars  | `{id: ...}`                |
+| POST   | http://url/api/seminar/weekday   | Change future seminars' weekday | `{weekday: 0~6}`         |
+| POST   | http://url/api/seminar/swap      | Swap two auto-gen seminars    | `{id1: ..., id2: ...}`     |
+| POST   | http://url/api/seminar/schedule  | Re-schedule future seminars   | `{idList: ..., date: ...}` |
+| GET    | http://url/api/seminar/next      | Get the coming seminars (for test) |                       |
+| GET    | http://url/api/system            | Get the system variables      |                            |
 | POST   | http://url/api/system            | Set the system variables (not recommend) | `{seminarWeekday: ..., ...}` |
 
 ## Structure

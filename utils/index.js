@@ -1,9 +1,9 @@
 #!/usr/bin/node --harmony
 'use strict'
 
+let msPerDay = 24 * 60 * 60 * 1000
 function weeksBetween (startDate, endDate) {
-  var millisecondsPerDay = 24 * 60 * 60 * 1000
-  return parseInt((endDate.getTime() - startDate.getTime()) / millisecondsPerDay / 7)
+  return parseInt((endDate.getTime() - startDate.getTime()) / msPerDay / 7)
 }
 function daysAfter (date, n) {
   let d = new Date(date)
@@ -19,6 +19,9 @@ function toWeek (date) {
   let {genesis} = require('../config')
   genesis = new Date(genesis)
   return daysAfter(genesis, weeksBetween(genesis, date) * 7)
+}
+function weekdayOf (date) {
+  return parseInt((date.getTime() - toWeek(date).getTime()) / msPerDay)
 }
 
 function modifyRecords (operation) {
@@ -78,7 +81,8 @@ module.exports = {
     weeksBetween: weeksBetween,
     daysAfter: daysAfter,
     sameWeek: sameWeek,
-    toWeek: toWeek
+    toWeek: toWeek,
+    weekdayOf: weekdayOf
   },
   model: {
     modifyRecords: modifyRecords,
@@ -134,5 +138,7 @@ module.exports = {
     } else {
       return constructor(p2)(p1)
     }
-  }
+  },
+  promise: obj =>
+    new Promise(resolve => resolve(obj))
 }
