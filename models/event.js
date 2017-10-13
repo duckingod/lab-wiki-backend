@@ -1,5 +1,7 @@
 'use strict'
 
+const {_with} = require('../utils').models
+
 module.exports = function (sequelize, DataTypes) {
   var Event = sequelize.define('Event', {
     name: {
@@ -13,15 +15,23 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE
     },
     meta: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      get () {
+        return JSON.parse(this.getDataValue('meta'))
+      },
+      set (meta) {
+        return this.setDataValue('meta', JSON.stringify(meta))
+      }
     },
     enable: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
     }
-
   })
+
+  Event.prototype.with = _with
+
   Event.get = (name, date) =>
     Event.findAll(
       date != null

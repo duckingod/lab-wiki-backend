@@ -60,8 +60,8 @@ module.exports = (clientId, user) => {
           <input type="submit" value='seminar weekday'/>
         </form>
         <form action="/api/seminar/swap" method="POST">
-          <input type="text" name="seminar1Id"/>
-          <input type="text" name="seminar2Id"/>
+          <input type="text" name="id1"/>
+          <input type="text" name="id2"/>
           <input type="submit" value='swap'/>
         </form>
 
