@@ -1,7 +1,8 @@
 #!/usr/bin/node --harmony
 'use strict'
 
-let msPerDay = 24 * 60 * 60 * 1000
+const EPS = 1e-9
+const msPerDay = 24 * 60 * 60 * 1000
 function weeksBetween (startDate, endDate) {
   return parseInt((endDate.getTime() - startDate.getTime()) / msPerDay / 7)
 }
@@ -11,17 +12,20 @@ function daysAfter (date, n) {
   return d
 }
 function sameWeek (date1, date2) {
-  let {genesis} = require('../config')
-  let d = new Date(genesis)
-  return weeksBetween(d, date1) === weeksBetween(d, date2)
+  let genesis = new Date(require('../config').genesis)
+  return weeksBetween(genesis, date1) === weeksBetween(genesis, date2)
 }
 function toWeek (date) {
-  let {genesis} = require('../config')
-  genesis = new Date(genesis)
+  let genesis = new Date(require('../config').genesis)
+  console.log(genesis)
+  console.log(date)
+  console.log(weeksBetween(genesis, date))
+  console.log(daysAfter(genesis, weeksBetween(genesis, date) * 7))
   return daysAfter(genesis, weeksBetween(genesis, date) * 7)
 }
 function weekdayOf (date) {
-  return parseInt((date.getTime() - toWeek(date).getTime()) / msPerDay)
+  console.log((date.getTime() - toWeek(date).getTime()))
+  return parseInt((date.getTime() - toWeek(date).getTime()) / msPerDay + EPS)
 }
 
 function modifyRecords (operation) {
@@ -32,6 +36,18 @@ function modifyRecords (operation) {
       promises.push(new Promise((resolve, reject) => {
         operation(r)
         resolve(r)
+      }))
+    }
+    return Promise.all(promises)
+  }
+}
+function modifyRecordsAsync (operation) {
+  return (records) => {
+    let promises = []
+    for (let r of records) {
+      if (!r) { continue }
+      promises.push(new Promise((resolve, reject) => {
+        operation(r).then(() => resolve(r)).catch(reject)
       }))
     }
     return Promise.all(promises)
@@ -86,7 +102,17 @@ module.exports = {
   },
   model: {
     modifyRecords: modifyRecords,
+    modifyRecordsAsync: modifyRecordsAsync,
     updateRecords: updateRecords
+  },
+  models: {
+    _with: function (values) {
+      for (let k in values) {
+        this[k] = values[k]
+      }
+      return this
+    }
+
   },
   const: {
     event: {
@@ -126,8 +152,8 @@ module.exports = {
           push(i)
         }
       } else {
-        for (let a of ary) {
-          push(a)
+        for (let a in ary) {
+          push(ary[a])
         }
       }
       return out
@@ -140,5 +166,8 @@ module.exports = {
     }
   },
   promise: obj =>
-    new Promise(resolve => resolve(obj))
+    new Promise(resolve => resolve(obj)),
+  debug: {
+    j: obj => JSON.stringify(obj, null, 3)
+  }
 }
