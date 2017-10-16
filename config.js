@@ -58,7 +58,8 @@ let config = {
   test: {
     jwtKey: 'vicky_godlike',
     webAppUrl: null,
-    prettyJson: false
+    prettyJson: false,
+    port: 5566
   }
 }
 

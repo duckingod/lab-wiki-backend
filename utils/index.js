@@ -82,6 +82,19 @@ function prettyError (err) {
   return out
 }
 
+function Schedule ({contact, date, id}) {
+  this.contact = contact
+  this.date = date
+  this.id = id
+}
+Schedule.prototype.copy = function () {
+  return new Schedule({
+    contact: this.contact,
+    date: this.date,
+    id: this.id
+  })
+}
+
 module.exports = {
   error: {
     pretty: prettyError,
@@ -112,7 +125,6 @@ module.exports = {
       }
       return this
     }
-
   },
   const: {
     event: {
@@ -136,7 +148,8 @@ module.exports = {
         event: skip,
         queryArgs: args
       }
-    }
+    },
+    Schedule: Schedule
   },
   listify: (p1, p2) => {
     let constructor = cb => ary => {

@@ -5,7 +5,7 @@ genesis = new Date(genesis)
 const {daysAfter} = require('../utils').date
 // const {listify} = require('../utils')
 
-let {dutyProp} = require('../utils').schedule
+let {dutyProp, Schedule} = require('../utils').schedule
 const {validEmailDomain} = require('../config')
 
 module.exports = function (sequelize, DataTypes) {
@@ -118,11 +118,11 @@ module.exports = function (sequelize, DataTypes) {
       for (let j = 0; j < nPerWeek; j++) {
         let duty = list.next()
         if (duty.contact && (all || (!fromDate || date >= fromDate))) {
-          schedule.push({
+          schedule.push(new Schedule({
             contact: duty.contact,
             date: date,
             id: duty.id
-          })
+          }))
           if (fromDate && date >= fromDate) {
             cnt++
           }
