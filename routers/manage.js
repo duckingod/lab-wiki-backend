@@ -15,7 +15,9 @@ module.exports = {
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     schedule: (req, res) =>
-      res.status(501).send('seminar scheduling not implemented: should post with id list, initial date'),
+      Seminar.reschedule(req.body.idList, req.body.date)
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
     swap: (req, res) =>
       Seminar.swap(req.body.id1, req.body.id2)
         .then(s => res.send(s))

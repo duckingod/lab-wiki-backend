@@ -64,6 +64,14 @@ module.exports = (clientId, user) => {
           <input type="text" name="id2"/>
           <input type="submit" value='swap'/>
         </form>
+        <form action="/api/seminar/schedule" method="POST">
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="date"/>
+          <input type="submit" value='schedule'/>
+        </form>
 
       </body>
       `

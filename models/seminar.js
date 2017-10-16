@@ -6,6 +6,7 @@ const {modifyRecords, modifyRecordsAsync, updateRecords} = utils.model
 const {_with} = utils.models
 const {listify, promise} = utils
 const {daysAfter, toWeek, weeksBetween, weekdayOf} = utils.date
+const {j} = utils.debug
 
 // -(negative generateId) === (id of contact)
 // negative generateId only appears at beginning of swap events
@@ -248,6 +249,8 @@ module.exports = function (sequelize, DataTypes) {
   }
 
   Seminar.reschedule = async (newIdList, initialDate) => {
+    newIdList = listify(newIdList, i => Number(i))
+    initialDate = new Date(initialDate)
     const {swap, skip} = utils.const.event.seminar
     const {ContactList, Event, System} = require('../models')
     const genesis = new Date(config.genesis)
@@ -334,7 +337,9 @@ module.exports = function (sequelize, DataTypes) {
       .then(updateRecords)
     await System.change(c => { c.seminarWeekday = weekday })
     schedule = await Seminar.futureSeminars({ fromDate: initialDate })
+    console.log(j(schedule))
     schedule = await Seminar.applySwap(schedule)
+    console.log(j(schedule))
     await promise(schedule)
       .then(updateRecords)
     return Seminar.all()
