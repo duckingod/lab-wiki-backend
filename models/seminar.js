@@ -11,65 +11,6 @@ const {j} = utils.debug
 // -(negative generateId) === (id of contact)
 // negative generateId only appears at beginning of swap events
 
-const swapList = async () => {
-  let {Event} = require('../models')
-  let {swap} = utils.const.event.seminar
-  let events = await Event.get(swap)
-  events.sort((a, b) => a.date - b.date)
-  let map = {}
-  let get = k => k >= 0 ? (map[k] || k) : k
-  for (let e of events) {
-    let [f, t] = e.meta
-    let [trueF, trueT] = [get(f), get(t)]
-    map[f] = trueT
-    map[t] = trueF
-  }
-  return map
-}
-
-const swapPresenterComp = async beforeDate => {
-  beforeDate = toWeek(beforeDate || new Date())
-  const {ContactList} = require('../models')
-  const idMap = await swapList()
-  const swaps = {}
-  const {weeks, perWeek} = config.seminarSchedule
-  let schedule = await ContactList.dutyWithDate('seminar', {
-    toDate: beforeDate,
-    nPerWeek: perWeek
-  })
-  let futureSchedule = await ContactList.dutyWithDate('seminar', {
-    fromDate: beforeDate,
-    nRound: weeks,
-    nPerWeek: perWeek
-  })
-  let contacts = await ContactList.all()
-  let lastPresentation = schedule[schedule.length - 1]
-  let futureLastPresentation = futureSchedule[futureSchedule.length - 1]
-  let addSwap = (originalContact, replacedBy) => {
-    swaps[originalContact.account] || (swaps[originalContact.account] = [])
-    swaps[originalContact.account].push(replacedBy)
-  }
-  for (let originalPresentation of schedule) {
-    let swappingId = idMap[originalPresentation.id]
-    if (swappingId != null &&
-      swappingId >= 0 &&
-      swappingId > lastPresentation.id &&
-      swappingId <= futureLastPresentation.id
-    ) {
-      let swappingContact = futureSchedule.find(_s => _s.id === swappingId).contact
-      addSwap(swappingContact, originalPresentation.contact)
-    }
-  }
-  for (let futurePresentation of futureSchedule) {
-    let swappingId = idMap[futurePresentation.id]
-    if (swappingId != null && swappingId < 0) {
-      let replacingContact = contacts.find(c => c.id === -swappingId)
-      addSwap(futurePresentation.contact, replacingContact)
-    }
-  }
-  return swaps
-}
-
 const duty2Seminar = async duties => {
   const {System, Seminar} = require('../models')
   let weekday = (await System.load()).seminarWeekday
@@ -188,18 +129,15 @@ module.exports = function (sequelize, DataTypes) {
         placeholder: { $eq: true }
       }
     }
-    let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.futureSeminars({fromDate: seminar.date})]
+    let [seminars, newSeminars] = [await Seminar.findAll(args), await Seminar.futureSeminars({fromDate: toWeek(seminar.date)})]
     return modifyRecordsAsync(async s => {
       s.placeholder = 'keep'
       let newS = newSeminars.find(_s => _s.scheduleId === s.scheduleId)
-      s.contact = await newS.contact
       s.date = newS.date
     })(seminars)
       .then(updateRecords)
   }
 
-  Seminar._1 = swapList
-  Seminar._2 = swapPresenterComp
   Seminar.swap = async (seminar1Id, seminar2Id) => {
     const {Event} = require('../models')
     let now = new Date()
@@ -221,9 +159,9 @@ module.exports = function (sequelize, DataTypes) {
         meta: [s1.scheduleId, s2.scheduleId]
       })
       .save()
-    let [tmpC1, tmpC2] = [await s2.contact, await s2.contact]
-    s1.contact = tmpC1
-    s2.contact = tmpC2
+    let [tmpC1, tmpC2] = [await s1.contact, await s2.contact]
+    s1.contact = tmpC2
+    s2.contact = tmpC1
     s1.placeholder = s2.placeholder = 'keep'
     return updateRecords([s1, s2])
   }
@@ -248,28 +186,22 @@ module.exports = function (sequelize, DataTypes) {
     return seminars
   }
 
-  Seminar.reschedule = async (newIdList, initialDate) => {
-    newIdList = listify(newIdList, i => Number(i))
-    initialDate = new Date(initialDate)
+  Seminar.reschedule = async (idList, initialDate) => {
     const {swap, skip} = utils.const.event.seminar
     const {ContactList, Event, System} = require('../models')
     const genesis = new Date(config.genesis)
+    const {perWeek} = config.seminarSchedule
     const contacts = await ContactList.all()
     const weekday = weekdayOf(initialDate)
     initialDate = toWeek(initialDate)
-    const getSwapMap = async () => {
-      let original = await Seminar.futureSeminars({
-        fromDate: initialDate,
-        all: true
-      })
-      let swapped = await Seminar.applySwap(original)
+    const getSwapMap = async (original, swapped) => {
       let swapMap = {}
       for (let contact of contacts) {
         swapMap[contact.accountEmail] = []
       }
       for (let i in original) {
         if (original[i].date >= initialDate && original[i].owner !== swapped[i].owner) {
-          let swappingContact = contacts.find(c => c.accountEmail)
+          let swappingContact = contacts.find(c => c.accountEmail === swapped[i].owner)
           swapMap[original[i].owner].push(swappingContact)
         }
       }
@@ -296,19 +228,6 @@ module.exports = function (sequelize, DataTypes) {
         }
       })
     }
-    const setContactSeminarId = async () => {
-      let {perWeek} = config.seminarSchedule
-      let idxThisWeek = weeksBetween(genesis, initialDate) * perWeek % newIdList.length
-      let initialIdx = newIdList.length - idxThisWeek
-      await promise(await ContactList.all())
-        .then(modifyRecords(contact => {
-          let idx = newIdList.indexOf(contact.id)
-          contact.seminarId = idx >= 0
-            ? (idx + initialIdx) % newIdList.length + 1
-            : 0
-        }))
-        .then(updateRecords)
-    }
     const preSwapEvents = (schedule, swapMap) => {
       // When reschedule again, we need to swap presenter by the same ways.
       // Hence the swapping ways are saved into events.
@@ -328,18 +247,18 @@ module.exports = function (sequelize, DataTypes) {
       return events
     }
 
-    let swapMap = await getSwapMap()
+    let original = await Seminar.futureSeminars({ fromDate: initialDate, all: true })
+    let swapped = await Seminar.applySwap(original)
+    let swapMap = await getSwapMap(original, swapped)
     await clearEvents()
-    await setContactSeminarId()
+    await ContactList.setScheduleId('seminar', idList, initialDate, perWeek)
     await removeOriginalSeminars()
     let schedule = await Seminar.futureSeminars({ fromDate: initialDate, asSchedule: true })
     await promise(preSwapEvents(schedule, swapMap))
       .then(updateRecords)
     await System.change(c => { c.seminarWeekday = weekday })
     schedule = await Seminar.futureSeminars({ fromDate: initialDate })
-    console.log(j(schedule))
     schedule = await Seminar.applySwap(schedule)
-    console.log(j(schedule))
     await promise(schedule)
       .then(updateRecords)
     return Seminar.all()
@@ -380,11 +299,14 @@ module.exports = function (sequelize, DataTypes) {
 
   Seminar.setWeekday = async (date, weekday) => {
     let {System} = require('../models')
+    date = new Date(date)
+    weekday = weekday || weekdayOf(date)
+    date = toWeek(date)
     let seminars = await Seminar.after(date, true)
     await System.change(c => { c.seminarWeekday = weekday })
     return promise(seminars)
       .then(modifyRecords(s => {
-        s.date = daysAfter(toWeek(s.date), Number(weekday))
+        s.date = daysAfter(toWeek(s.date), weekday)
         s.placeholder = 'keep'
       }))
       .then(updateRecords)

@@ -17,10 +17,6 @@ function sameWeek (date1, date2) {
 }
 function toWeek (date) {
   let genesis = new Date(require('../config').genesis)
-  console.log(genesis)
-  console.log(date)
-  console.log(weeksBetween(genesis, date))
-  console.log(daysAfter(genesis, weeksBetween(genesis, date) * 7))
   return daysAfter(genesis, weeksBetween(genesis, date) * 7)
 }
 function weekdayOf (date) {

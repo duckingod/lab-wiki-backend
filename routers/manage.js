@@ -1,7 +1,8 @@
 'use strict'
 
-const {System, Seminar} = require('../models')
-const {error} = require('../utils')
+const {System, Seminar, ContactList} = require('../models')
+const {error, listify} = require('../utils')
+const takeOutGarbage = require('./take-out-garbage')
 // const {genesis} = require('../config')
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     schedule: (req, res) =>
-      Seminar.reschedule(req.body.idList, req.body.date)
+      Seminar.reschedule(listify(req.body.idList, Number), new Date(req.body.date))
         .then(s => res.send(s))
         .catch(error.send(res, 503)),
     swap: (req, res) =>
@@ -32,13 +33,8 @@ module.exports = {
         .catch(error.send(res, 503))
   },
   garbage: {
-    advance: (req, res) =>
-      System.change(config => { config.garbageIdOffset -= 1 })
-        .then(c => res.send('ok'))
-        .catch(error.send(res, 503)),
-    postpone: (req, res) =>
-      System.change(config => { config.garbageIdOffset += 1 })
-        .then(c => res.send('ok'))
-        .catch(error.send(res, 503))
+    schedule: (req, res) => 
+      ContactList.setScheduleId('garbage', listify(req.body.idList, Number), new Date(req.body.date), 1)
+        .then(() => takeOutGarbage(req, res))
   }
 }

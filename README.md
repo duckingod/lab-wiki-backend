@@ -65,7 +65,7 @@ Apis below by `POST` are all admin only.
 | POST   | http://url/api/seminar/weekday   | Change future seminars' weekday | `{weekday: 0~6}`         |
 | POST   | http://url/api/seminar/swap      | Swap two auto-gen seminars    | `{id1: ..., id2: ...}`     |
 | POST   | http://url/api/seminar/schedule  | Re-schedule future seminars   | `{idList: ..., date: ...}` |
-| GET    | http://url/api/seminar/next      | Get the coming seminars (for test) |                       |
+| POST   | http://url/api/garbage/schedule  | Schedule garbage order        | `{idList: ..., date: ...}` |
 | GET    | http://url/api/system            | Get the system variables      |                            |
 | POST   | http://url/api/system            | Set the system variables (not recommend) | `{seminarWeekday: ..., ...}` |
 

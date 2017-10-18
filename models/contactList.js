@@ -1,12 +1,16 @@
 'use strict'
 
+const config = require('../config')
+const utils = require('../utils')
 let {genesis} = require('../config')
 genesis = new Date(genesis)
-const {daysAfter} = require('../utils').date
+const {daysAfter, weeksBetween, toWeek} = utils.date
 // const {listify} = require('../utils')
 
-let {dutyProp, Schedule} = require('../utils').schedule
-const {validEmailDomain} = require('../config')
+let {dutyProp, Schedule} = utils.schedule
+let {promise, listify} = utils
+const {modifyRecords, modifyRecordsAsync, updateRecords} = utils.model
+const {validEmailDomain} = config
 
 module.exports = function (sequelize, DataTypes) {
   var ContactList = sequelize.define('ContactList', {
@@ -105,6 +109,7 @@ module.exports = function (sequelize, DataTypes) {
   ContactList.dutyWithDate = async (by, {nRound, nPerWeek, fromDate, toDate, all}) => {
     nRound = nRound || 2
     nPerWeek = nPerWeek || 1
+    fromDate = fromDate ? toWeek(fromDate) : fromDate
     let list = await ContactList.dutyList(by)
     let schedule = []
     let date = genesis
@@ -131,6 +136,19 @@ module.exports = function (sequelize, DataTypes) {
       date = daysAfter(date, 7)
     }
     return schedule
+  }
+
+  ContactList.setScheduleId = async (by, idList, date, perWeek) => {
+    let idxThisWeek = weeksBetween(genesis, date) * perWeek % idList.length
+    let duty = dutyProp(by)
+    return ContactList.all()
+      .then(modifyRecords(contact => {
+        let idx = idList.indexOf(contact.id)
+        contact[duty.id] = idx >= 0
+          ? (idx + idxThisWeek) % idList.length + 1
+          : 0
+      }))
+      .then(updateRecords)
   }
 
   return ContactList

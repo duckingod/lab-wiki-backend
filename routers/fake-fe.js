@@ -51,8 +51,13 @@ module.exports = (clientId, user) => {
           <input type="text" name="id"/>
           <input type="submit" value='seminar postpone'/>
         </form>
-        <form action="/api/garbage/advance" method="POST">
-          <input type="submit" value='garbage advance'/>
+        <form action="/api/garbage/schedule" method="POST">
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="idList[]"/>
+          <input type="text" name="date"/>
+          <input type="submit" value='garbage schedule'/>
         </form>
         <form action="/api/seminar/weekday" method="POST">
           <input type="text" name="weekday"/>
@@ -70,7 +75,7 @@ module.exports = (clientId, user) => {
           <input type="text" name="idList[]"/>
           <input type="text" name="idList[]"/>
           <input type="text" name="date"/>
-          <input type="submit" value='schedule'/>
+          <input type="submit" value='seminar schedule'/>
         </form>
 
       </body>
