@@ -8,8 +8,7 @@ const {daysAfter, weeksBetween, toWeek} = utils.date
 // const {listify} = require('../utils')
 
 let {dutyProp, Schedule} = utils.schedule
-let {promise, listify} = utils
-const {modifyRecords, modifyRecordsAsync, updateRecords} = utils.model
+const {modifyRecords, updateRecords} = utils.model
 const {validEmailDomain} = config
 
 module.exports = function (sequelize, DataTypes) {

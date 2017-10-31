@@ -1,6 +1,6 @@
 'use strict'
 
-const {System, Seminar, ContactList} = require('../models')
+const {Seminar, ContactList} = require('../models')
 const {error, listify} = require('../utils')
 const takeOutGarbage = require('./take-out-garbage')
 // const {genesis} = require('../config')
@@ -33,7 +33,7 @@ module.exports = {
         .catch(error.send(res, 503))
   },
   garbage: {
-    schedule: (req, res) => 
+    schedule: (req, res) =>
       ContactList.setScheduleId('garbage', listify(req.body.idList, Number), new Date(req.body.date), 1)
         .then(() => takeOutGarbage(req, res))
   }

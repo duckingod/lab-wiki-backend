@@ -5,8 +5,8 @@ const utils = require('../utils')
 const {modifyRecords, modifyRecordsAsync, updateRecords} = utils.model
 const {_with} = utils.models
 const {listify, promise} = utils
-const {daysAfter, toWeek, weeksBetween, weekdayOf} = utils.date
-const {j} = utils.debug
+const {daysAfter, toWeek, weekdayOf} = utils.date
+// const {j} = utils.debug
 
 // -(negative generateId) === (id of contact)
 // negative generateId only appears at beginning of swap events
@@ -189,7 +189,6 @@ module.exports = function (sequelize, DataTypes) {
   Seminar.reschedule = async (idList, initialDate) => {
     const {swap, skip} = utils.const.event.seminar
     const {ContactList, Event, System} = require('../models')
-    const genesis = new Date(config.genesis)
     const {perWeek} = config.seminarSchedule
     const contacts = await ContactList.all()
     const weekday = weekdayOf(initialDate)
@@ -213,12 +212,14 @@ module.exports = function (sequelize, DataTypes) {
         {
           fromDate: initialDate,
           toDate: daysAfter(initialDate, 4 * 7) }) // magic number XD
-      let firstPresentationId = duties[0].scheduleId
-      let pastSkips = (await Event.get(skip)).filter(s => s.meta < firstPresentationId)
       await Event.destroy({ where: { name: swap } })
       // Destory all pastpone events before the date: they don't affect result
       // And can simplify the following procedure
-      await Event.destroy({ where: { id: { $in: listify(pastSkips, s => s.id) } } })
+      if (duties.length) {
+        let firstPresentationId = duties[0].scheduleId
+        let pastSkips = (await Event.get(skip)).filter(s => s.meta < firstPresentationId)
+        await Event.destroy({ where: { id: { $in: listify(pastSkips, s => s.id) } } })
+      }
     }
     const removeOriginalSeminars = async () => {
       await Seminar.destroy({
