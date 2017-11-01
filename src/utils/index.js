@@ -108,6 +108,8 @@ module.exports = {
     sameWeek: sameWeek,
     toWeek: toWeek,
     weekdayOf: weekdayOf
+    days: n => n * 1000 * 60 * 60 * 24,
+    hours: n => n * 1000 * 60 * 60
   },
   model: {
     modifyRecords: modifyRecords,
