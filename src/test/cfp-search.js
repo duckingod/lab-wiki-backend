@@ -5,8 +5,8 @@ const {loginCookie} = require('./utils')
 
 describe('Test Call for Paper', function() {
   let server
-  beforeEach(function() {
-    server = require('../index')
+  beforeEach(async function() {
+    server = await require('../server')
   })
   it('responds to /api/conference/search', function testCfpSearch(done) {
     request(server)
