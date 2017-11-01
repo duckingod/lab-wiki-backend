@@ -96,8 +96,9 @@ module.exports = function (sequelize, DataTypes) {
     seminar.placeholder = seminar.placeholder === 'keep' ? undefined : false
   })
 
-  // Seminar.futureSeminars = () =>
-  //   Seminar.findAll({ where: { date: { $gte: new Date() } } })
+  Seminar.nextWeekSeminars = async () => Seminar.findAll({ where: {
+    date: { $gte: toWeek(new Date()), $lt: daysAfter(toWeek(new Date()), 7) }
+  }})
 
   Seminar.futureSeminars = async ({fromDate, weeks, all, asSchedule}) => {
     const {ContactList} = require('../models')
