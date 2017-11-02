@@ -1,60 +1,40 @@
 'use strict'
 
-const {System, Seminar} = require('../models')
-const {err} = require('../utils').render
-const {daysAfter} = require('../utils').date
-const {modifyRecords, updateRecords} = require('../utils').model
-
-const futureSeminars = () =>
-  Seminar.findAll({ where: { date: { $gte: new Date() } } })
+const {Seminar, ContactList} = require('../models')
+const {error, listify} = require('../utils')
+const takeOutGarbage = require('./take-out-garbage')
+// const {genesis} = require('../config')
 
 module.exports = {
   seminar: {
-    advance: (req, res) => {
-      Seminar.addNextSeminars()
-        .then(() => futureSeminars())
-        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, -7) }))
-        .then(updateRecords)
-        .then(() => System.change(config => { config.seminarIdOffset -= 2 }))
-        .then(() => Seminar.addNextSeminars())
-        .then(c => res.send('ok'))
-        .catch(err(res, 503))
-    },
     postpone: (req, res) =>
-      futureSeminars()
-        .then(modifyRecords(seminar => { seminar.date = daysAfter(seminar.date, 7) }))
-        .then(updateRecords)
-        .then(() => System.change(config => { config.seminarIdOffset += 2 }))
-        .then(c => res.send('ok'))
-        .catch(err(res, 503)),
+      Seminar.postpone(req.body.id)
+        .then(seminars => res.send(seminars))
+        .catch(error.send(res, 400)),
     weekday: (req, res) =>
-      Promise.all([
-        futureSeminars(),
-        System.load()
-      ])
-        .then(res =>
-          modifyRecords(seminar => {
-            seminar.date = daysAfter(seminar.date, req.body.weekday - res[1].seminarWeekday)
-          }
-          )(res[0])
-        )
-        .then(updateRecords)
-        .then(() => System.change(config => { config.seminarWeekday = req.body.weekday }))
-        .then(c => res.send('ok'))
-        .catch(err(res, 503)),
+      Seminar.setWeekday(req.body.date, req.body.weekday)
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
+    schedule: (req, res) =>
+      Seminar.reschedule(listify(req.body.idList, Number), new Date(req.body.date))
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
+    swap: (req, res) =>
+      Seminar.swap(req.body.id1, req.body.id2)
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
     next: (req, res) =>
-        Seminar.nextSeminars()
-          .then(s => res.send(s))
-          .catch(err(res, 503))
+      Seminar.futureSeminars(new Date())
+        .then(s => res.send(s))
+        .catch(error.send(res, 503)),
+    addFuture: (req, res) =>
+      Seminar.addFutureSeminars(new Date())
+        .then(s => res.send(s))
+        .catch(error.send(res, 503))
   },
   garbage: {
-    advance: (req, res) =>
-      System.change(config => { config.garbageIdOffset -= 1 })
-        .then(c => res.send('ok'))
-        .catch(err(res, 503)),
-    postpone: (req, res) =>
-      System.change(config => { config.garbageIdOffset += 1 })
-        .then(c => res.send('ok'))
-        .catch(err(res, 503))
+    schedule: (req, res) =>
+      ContactList.setScheduleId('garbage', listify(req.body.idList, Number), new Date(req.body.date), 1)
+        .then(() => takeOutGarbage(req, res))
   }
 }

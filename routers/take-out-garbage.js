@@ -1,11 +1,11 @@
 'use strict'
 
 const ContactList = require('../models').ContactList
-const {err} = require('../utils').render
-const {daysAfter} = require('../utils').date
+const {error} = require('../utils')
+const {daysAfter, toWeek} = require('../utils').date
 
 module.exports = (req, res) =>
-  ContactList.dutyWithDate('garbageId')
+  ContactList.dutyWithDate('garbage', { nPerWeek: 1, nRound: 2, fromDate: toWeek(new Date()) })
     .then(duties => {
       let out = []
       for (let duty of duties) {
@@ -17,4 +17,4 @@ module.exports = (req, res) =>
       }
       res.send(out)
     })
-    .catch(err(res, 503))
+    .catch(error.send(res, 503))

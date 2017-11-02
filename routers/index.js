@@ -8,7 +8,8 @@ const cfpSearch = require('./cfp-search')
 const manage = require('./manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
-const {staticWebApp} = require('../config')
+const {webAppUrl, prettyJson} = require('../config')
+const {error} = require('../utils')
 
 function apiRoute () {
   let api = express.Router()
@@ -29,16 +30,17 @@ function apiRoute () {
   api.get('/user', login.checkLogin, login.userInfo)
 
   let m = model()
-  for (let route of [['post', 'advance'], ['post', 'postpone'], ['post', 'weekday'], ['get', 'next']]) {
+  for (let route of [['post', 'postpone'], ['post', 'weekday'], ['post', 'schedule'], ['post', 'swap']]) {
     api[route[0]]('/seminar/' + route[1], emailLogin, m.admin, manage.seminar[route[1]])
   }
-  for (let route of [['post', 'advance'], ['post', 'postpone']]) {
+  for (let route of [['post', 'schedule']]) {
     api[route[0]]('/garbage/' + route[1], emailLogin, m.admin, manage.garbage[route[1]])
   }
 
-  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail]
+  let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail, models.Event]
   for (let m of _models) {
     let args = {}
+    console.log(m)
     if (m.name === 'EMail') args.route = 'emailSchedule'
 
     m = model(m, args)
@@ -55,14 +57,20 @@ module.exports = function (app) {
   // app.use(require('helmet'))
   app.use(require('./settings/session'))
 
-  if (staticWebApp) {
+  if (webAppUrl == null) {
     app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
     app.use(express.static('./static'))
   } else {
     app.use(require('./settings/cors'))
   }
+  if (prettyJson) {
+    app.use(require('./settings/pretty-json'))
+  }
 
   app.use('/api', apiRoute())
 
   app.use(login.unauthorizedError)
+  app.use(model().validationError)
+  app.use((err, req, res, next) => error.send(res, 999)(err))
+  app.use((req, res, next) => res.status(404).send('not found'))
 }

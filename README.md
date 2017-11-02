@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/duckingod/lab-wiki-backend.svg?token=BMv3FopsAyzypbivpLC3&branch=master)](https://travis-ci.com/duckingod/lab-wiki-backend)
+[![Build Status](https://travis-ci.org/duckingod/lab-wiki-backend.svg?branch=master)](https://travis-ci.org/duckingod/lab-wiki-backend)
 # Lab Wiki Backend
 NTU NLP lab wiki backend by [express](http://expressjs.com)
 
@@ -26,7 +26,7 @@ To depoly a production webserver in server:
 
 ```
 url = localhost:3000             (development)
-    = nlg17.csie.ntu.edu.tw:3000 (production)
+    = nlg17.csie.ntu.edu.tw      (production)
 ```
 
 View `http://url/api/` for example
@@ -59,15 +59,14 @@ It's same for all data (`seminar`, `news`, `contactList`, ...)
 
 Apis below by `POST` are all admin only.
 
-| Method | URL                              | Description                   | Parameter           |
-|:-------|:---------------------------------|:------------------------------|:-------------------:|
-| POST   | http://url/api/seminar/advance   | Advance the future seminars   |                     |
-| POST   | http://url/api/seminar/postpone  | Postpone the future seminars  |                     |
-| POST   | http://url/api/seminar/weekday   | Change future seminar weekday | `{weekday: 0~6}`    |
-| POST   | http://url/api/garbage/advance   | Advance the garbage schedule  |                     |
-| POST   | http://url/api/garbage/postpone  | Postpone the garbage schedule |                     |
-| GET    | http://url/api/seminar/next      | Get the coming seminar (test) |                     |
-| GET    | http://url/api/system            | Get the system variables      |                     |
+| Method | URL                              | Description                   | Parameter                  |
+|:-------|:---------------------------------|:------------------------------|:--------------------------:|
+| POST   | http://url/api/seminar/postpone  | Postpone the future seminars  | `{id: ...}`                |
+| POST   | http://url/api/seminar/weekday   | Change future seminars' weekday | `{weekday: 0~6}`         |
+| POST   | http://url/api/seminar/swap      | Swap two auto-gen seminars    | `{id1: ..., id2: ...}`     |
+| POST   | http://url/api/seminar/schedule  | Re-schedule future seminars   | `{idList: ..., date: ...}` |
+| POST   | http://url/api/garbage/schedule  | Schedule garbage order        | `{idList: ..., date: ...}` |
+| GET    | http://url/api/system            | Get the system variables      |                            |
 | POST   | http://url/api/system            | Set the system variables (not recommend) | `{seminarWeekday: ..., ...}` |
 
 ## Structure

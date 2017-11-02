@@ -1,14 +1,14 @@
 {
   "name": "lab-wiki-backend",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "NTU NLP lab wiki backend",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon backend.js",
-    "start": "cross-env NODE_ENV=production nodemon backend.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js --harmony",
+    "start": "cross-env NODE_ENV=production nodemon index.js --harmony",
     "data-init": "cross-env NODE_ENV=production node tools/data-parser.js ./data/",
     "data-init-dev": "cross-env NODE_ENV=development node tools/data-parser.js ./data/",
-    "test": "./node_modules/mocha/bin/mocha ./test"
+    "test": "cross-env NODE_ENV=test ./node_modules/mocha/bin/mocha ./test --timeout 15000"
   },
   "repository": {
     "type": "git",

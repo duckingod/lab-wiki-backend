@@ -144,6 +144,7 @@ var getAuth = function () {
     ) {
       if (err) {
         reject(new Error('Error loading client secret file: ' + err))
+        return
       }
       // Authorize a client with the loaded credentials, then call the
       // Gmail API.

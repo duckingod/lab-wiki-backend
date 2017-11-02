@@ -1,11 +1,11 @@
-let cors = require('cors')
-let appUrl = require('../../config').appUrl
+const cors = require('cors')
+const {webAppUrl} = require('../../config')
 
 let corsOptionDelegate = (req, callback) => {
   var corsOptions
-  if (appUrl.indexOf(req.header('Origin')) !== -1) {
+  if (webAppUrl.indexOf(req.header('Origin')) !== -1) {
     corsOptions = {
-      origin: appUrl,
+      origin: webAppUrl,
       allowedHeaders: [
         'X-Requested-With'
       ],
