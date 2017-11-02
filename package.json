@@ -1,6 +1,6 @@
 {
   "name": "lab-wiki-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "NTU NLP lab wiki backend",
   "main": "index.js",
   "scripts": {
