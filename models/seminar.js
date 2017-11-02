@@ -40,7 +40,8 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING
     },
     slides: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: ''
     },
     owner: {
       type: DataTypes.STRING,
