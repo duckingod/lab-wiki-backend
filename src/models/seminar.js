@@ -97,7 +97,7 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Seminar.nextWeekSeminars = async () => Seminar.findAll({ where: {
-    date: { $gte: toWeek(new Date()), $lt: daysAfter(toWeek(new Date()), 7) }
+    date: { $gte: daysAfter(toWeek(new Date()), 7), $lt: daysAfter(toWeek(new Date()), 14) }
   }})
 
   Seminar.futureSeminars = async ({fromDate, weeks, all, asSchedule}) => {

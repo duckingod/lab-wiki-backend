@@ -2,11 +2,12 @@ let config = {
   email: {
     sender: {
       name: 'Kanna',
-      email: 'labwiki@nlg.csie.ntu.edu.tw'
+      email: 'labwiki@nlg.csie.ntu.edu.tw',
+      site: 'nlg.csie.ntu.edu.tw/parrot'
     },
     mailto: {
       all: 'labs@nlg.csie.ntu.edu.tw',
-      developer: 'cwtsai@nlg.csie.ntu.edu'
+      developer: 'cwtsai@nlg.csie.ntu.edu.tw'
     }
   },
   seminar: {

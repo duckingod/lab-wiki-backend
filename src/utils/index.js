@@ -149,20 +149,6 @@ module.exports = {
     },
     Schedule: Schedule
   },
-  email: {
-    send: async (templateName, content, attachInfos) => {
-      const templateConfig = require('../../templates/config')
-      const template = require('../../templates/' + templateName)
-      const {EMail} = require('../models')
-      attachInfos.push('email')
-      console.log(attachInfos)
-      for (let k of attachInfos) content[k] = templateConfig[k]
-      console.log(content)
-      for (let k in template) template[k] = template[k](content)
-      console.log(template)
-      await EMail.create(template)
-    }
-  },
   listify: (p1, p2) => {
     let constructor = cb => ary => {
       let out = []

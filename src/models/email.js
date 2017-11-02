@@ -51,5 +51,16 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
+  EMail.send = async (templateName, content, attachInfos) => {
+    const templateConfig = require('../../templates/config')
+    const template = require('../../templates/' + templateName)
+    const {EMail} = require('../models')
+    attachInfos.push('email')
+    for (let k of attachInfos) content[k] = templateConfig[k]
+    for (let k in template) template[k] = template[k](content)
+    template.body = template.body.replace(/\n/g, '<br>\n')
+    await EMail.create(template)
+  }
+
   return EMail
 }
