@@ -1,6 +1,6 @@
 'use strict'
 
-const {_with} = require('../utils').models
+const {_with} = require('../utils').model
 
 module.exports = function (sequelize, DataTypes) {
   var Event = sequelize.define('Event', {

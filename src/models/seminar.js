@@ -3,7 +3,7 @@
 const config = require('../config')
 const utils = require('../utils')
 const {modifyRecords, modifyRecordsAsync, updateRecords} = utils.model
-const {_with} = utils.models
+const {_with} = utils.model
 const {listify, promise} = utils
 const {daysAfter, toWeek, weekdayOf} = utils.date
 // const {j} = utils.debug
