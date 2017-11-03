@@ -2,7 +2,6 @@ let crypto = require('crypto')
 module.exports = {
   development: {
     webAppUrl: 'http://localhost:12345',
-    prettyJson: false,
     port: 3000,
     googleOauthClientId:
       '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
@@ -37,7 +36,6 @@ module.exports = {
   },
   production: {
     webAppUrl: null,
-    prettyJson: false,
     port: 12345,
     seminarSchedule: {
       weeks: 24
@@ -57,7 +55,6 @@ module.exports = {
   test: {
     jwtKey: 'vicky_godlike',
     webAppUrl: null,
-    prettyJson: false,
     port: 5566
   }
 }

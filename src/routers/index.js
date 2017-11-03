@@ -8,7 +8,7 @@ const cfpSearch = require('./cfp-search')
 const manage = require('./manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
-const {webAppUrl, prettyJson} = require('../config')
+const {webAppUrl} = require('../config')
 const {error} = require('../utils')
 
 function apiRoute () {
@@ -62,9 +62,6 @@ module.exports = function (app) {
     app.use(express.static('./static'))
   } else {
     app.use(require('./settings/cors'))
-  }
-  if (prettyJson) {
-    app.use(require('./settings/pretty-json'))
   }
 
   app.use('/api', apiRoute())
