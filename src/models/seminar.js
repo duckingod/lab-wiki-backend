@@ -103,7 +103,7 @@ module.exports = function (sequelize, DataTypes) {
 
   Seminar.futureSeminars = async ({fromDate, weeks, all, asSchedule}) => {
     const {ContactList} = require('../models')
-    weeks = weeks || config.seminarSchedule.weeks
+    weeks = weeks || config.service.seminar.schedule.weeks
     let duties = await ContactList.dutyWithDate(
       'seminar',
       {
@@ -191,7 +191,7 @@ module.exports = function (sequelize, DataTypes) {
   Seminar.reschedule = async (idList, initialDate) => {
     const {swap, skip} = utils.const.event.seminar
     const {ContactList, Event, System} = require('../models')
-    const {perWeek} = config.seminarSchedule
+    const {perWeek} = config.service.seminar.schedule
     const contacts = await ContactList.all()
     const weekday = weekdayOf(initialDate)
     initialDate = toWeek(initialDate)
