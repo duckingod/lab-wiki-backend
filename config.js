@@ -1,63 +1,73 @@
 let crypto = require('crypto')
 module.exports = {
   development: {
-    webAppUrl: 'http://localhost:12345',
-    prettyJson: false,
     port: 3000,
-    googleOauthClientId:
-      '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
-    validEmailDomain: '@nlg.csie.ntu.edu.tw',
-    loginExpirePeriod: 24 * 30, // a month
-    admins: ['labwiki@nlg.csie.ntu.edu.tw'],
-    gpuUsage: {
-      url: 'http://nlg17.csie.ntu.edu.tw/monitor',
-      timeout: 30000
-    },
+    webAppUrl: 'http://localhost:12345',
     genesis: '2017/09/04',
-    gApiConfig: {
+    jwtKey: 'vicky_is_sooooo_god',
+    permission: {
+      emailDomain: '@nlg.csie.ntu.edu.tw',
+      expirePeriod: 24 * 30, // a month
+      admins: ['labwiki@nlg.csie.ntu.edu.tw']
+    },
+    google: {
+      oauthClientId:
+        '128291458390-1rjai5msiieuad8ofmeje5eonoplsmf5.apps.googleusercontent.com',
       clientSecret: 'client_secret.json',
       scope: ['https://mail.google.com/']
-    },
-    mailService: {
-      refreshTime: 30000
-    },
-    cfpService: {
-      refreshTime: 3000,
-      reupdateTime: 10000
-    },
-    seminarSchedule: {
-      weeks: 4,
-      perWeek: 2
     },
     database: {
       dialect: 'sqlite',
       storage: './db.development.sqlite'
     },
-    jwtKey: 'vicky_is_sooooo_god'
+    service: {
+      email: {
+        refreshTime: 30000
+      },
+      conference: {
+        refreshTime: 3000,
+        reupdateTime: 10000
+      },
+      seminar: {
+        schedule: {
+          weeks: 2,
+          perWeek: 2
+        }
+      },
+      workstation: {
+        url: 'http://nlg17.csie.ntu.edu.tw/monitor',
+        timeout: 30000
+      }
+    }
   },
   production: {
-    webAppUrl: null,
-    prettyJson: false,
     port: 12345,
-    seminarSchedule: {
-      weeks: 4
-    },
+    webAppUrl: null,
+    jwtKey: crypto.randomBytes(256).toString('hex') + 'vicky_godlike',
     database: {
       storage: './db.sqlite'
     },
-    mailService: {
-      refreshTime: 3000000
-    },
-    cfpService: {
-      refreshTime: 10000,
-      reupdateTime: 1000 * 60 * 60 * 24 * 10 // 10 days
-    },
-    jwtKey: crypto.randomBytes(256).toString('hex') + 'vicky_godlike'
+    service: {
+      email: {
+        refreshTime: 3000000
+      },
+      conference: {
+        refreshTime: 10000,
+        reupdateTime: 1000 * 60 * 60 * 24 * 10 // 10 days
+      },
+      seminar: {
+        schedule: {
+          weeks: 4
+        }
+      },
+      workstation: {
+        timeout: 5000
+      }
+    }
   },
   test: {
-    jwtKey: 'vicky_godlike',
+    port: 5566,
     webAppUrl: null,
-    prettyJson: false,
-    port: 5566
+    jwtKey: 'vicky_godlike'
   }
 }

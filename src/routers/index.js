@@ -3,13 +3,13 @@
 const login = require('./login')
 const model = require('./model')
 const models = require('../models')
-const gpuUsage = require('./gpu-usage')
+const workstation = require('./workstation')
 const cfpSearch = require('./cfp-search')
 const manage = require('./manage')
 const takeOutGarbage = require('./take-out-garbage')
 const express = require('express')
-const {webAppUrl, prettyJson} = require('../config')
 const {error} = require('../utils')
+const settings = require('./settings')
 
 function apiRoute () {
   let api = express.Router()
@@ -24,7 +24,7 @@ function apiRoute () {
   api.get(sys.route, emailLogin, sys.index)
   api.post(sys.idRoute, emailLogin, sys.record, sys.editable, sys.update)
 
-  api.get('/workstations', emailLogin, gpuUsage)
+  api.get('/workstations', emailLogin, workstation)
   api.get('/takeOutGarbage', emailLogin, takeOutGarbage)
   api.get('/conference/search', emailLogin, cfpSearch)
   api.get('/user', login.checkLogin, login.userInfo)
@@ -40,7 +40,6 @@ function apiRoute () {
   let _models = [models.Seminar, models.News, models.Slide, models.ContactList, models.Conference, models.EMail, models.Event]
   for (let m of _models) {
     let args = {}
-    console.log(m)
     if (m.name === 'EMail') args.route = 'emailSchedule'
 
     m = model(m, args)
@@ -53,24 +52,16 @@ function apiRoute () {
   return api
 }
 
-module.exports = function (app) {
-  // app.use(require('helmet'))
-  app.use(require('./settings/session'))
+module.exports = () => {
+  let router = express.Router()
 
-  if (webAppUrl == null) {
-    app.use(require('./settings/history')) // redirects all GET excepts /api to index.html
-    app.use(express.static('./static'))
-  } else {
-    app.use(require('./settings/cors'))
-  }
-  if (prettyJson) {
-    app.use(require('./settings/pretty-json'))
-  }
+  router.use(settings())
+  router.use('/api', apiRoute())
+  router.get('/QAQ', (req, res) => { res.send('QAQQ') })
 
-  app.use('/api', apiRoute())
-
-  app.use(login.unauthorizedError)
-  app.use(model().validationError)
-  app.use((err, req, res, next) => error.send(res, 999)(err))
-  app.use((req, res, next) => res.status(404).send('not found'))
+  router.use(login.unauthorizedError)
+  router.use(model().validationError)
+  router.use((err, req, res, next) => error.send(res, 999)(err))
+  router.use((req, res, next) => res.status(404).send('not found'))
+  return router
 }

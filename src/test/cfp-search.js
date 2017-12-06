@@ -2,11 +2,15 @@ const request = require('supertest')
 const should = require('chai').should()
 const expect = require('chai').expect
 const {loginCookie} = require('./utils')
+const startServer = require('../server')
 
 describe('Test Call for Paper', function() {
   let server
   beforeEach(async function() {
-    server = await require('../server')
+    server = await startServer()
+  })
+  afterEach(async function() {
+    server.close()
   })
   it('responds to /api/conference/search', function testCfpSearch(done) {
     request(server)

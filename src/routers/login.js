@@ -3,12 +3,11 @@
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const GoogleAuth = require('google-auth-library')
-const clientId = require('../config').googleOauthClientId
-const loginPeriod = require('../config').loginExpirePeriod
-const emailDomain = require('../config').validEmailDomain
+const {oauthClientId} = require('../config').google
+const {expirePeriod, emailDomain} = require('../config').permission
 const Model = require('../models').News
 const role = require('./model')(Model).role
-const jwtKey = require('../config').jwtKey
+const {jwtKey} = require('../config')
 const {error} = require('../utils')
 
 function cookieJwt (credential) {
@@ -20,7 +19,7 @@ function cookieJwt (credential) {
 }
 
 var auth = new GoogleAuth()
-var googleOauthClient = new auth.OAuth2(clientId, '', '')
+var googleOauthClient = new auth.OAuth2(oauthClientId, '', '')
 
 module.exports = {
   checkLogin: cookieJwt(false),
@@ -34,12 +33,12 @@ module.exports = {
       res.status(403).send('AuthenticationError: invalid email domain')
     }
   },
-  simpleLoginWeb: user => require('./fake-fe.js')(clientId, user),
+  simpleLoginWeb: user => require('./fake-fe.js')(oauthClientId, user),
   googleIdTokenLogin: function (req, res) {
     var token = req.body.id_token
     googleOauthClient.verifyIdToken(
         token,
-        clientId,
+        oauthClientId,
         function (e, login) {
           if (login != null) {
             var payload = login.getPayload()
@@ -47,7 +46,7 @@ module.exports = {
               name: payload.name,
               email: payload.email
             }
-            var clientToken = jwt.sign(userData, jwtKey, {expiresIn: 60 * 60 * loginPeriod})
+            var clientToken = jwt.sign(userData, jwtKey, {expiresIn: 60 * 60 * expirePeriod})
             res.cookie('token', clientToken).send('ok')
             console.log(payload.name + ' (' + payload.email + ') logined')
             return

@@ -1,6 +1,8 @@
-require('./cfp-service').start()
-console.log('CFP service running...')
-require('./mail-service')
-console.log('Mail service running...')
-// require('./seminar-service')
-// console.log('Seminar service running...')
+module.exports = () => {
+  require('./conference').start()
+  console.log('Conference service running...')
+  require('./email')
+  console.log('EMail service running...')
+  require('./seminar')
+  console.log('Seminar service running...')
+}

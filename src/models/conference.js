@@ -1,7 +1,7 @@
 'use strict'
 
 const xray = require('x-ray')()
-const pendingUpdate = require('../services/cfp-service.js').push
+const pendingUpdate = require('../services/conference.js').push
 const trimDate = x => {
   let date = new Date(x.trim())
   if (date == 'Invalid Date') return null // eslint-disable-line
