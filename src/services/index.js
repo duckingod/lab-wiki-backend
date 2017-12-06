@@ -1,8 +1,7 @@
+const {enable} = require('../config').service
 module.exports = () => {
-  require('./conference').start()
-  console.log('Conference service running...')
-  require('./email')
-  console.log('EMail service running...')
-  require('./seminar')
-  console.log('Seminar service running...')
+  for (let service of enable) {
+    require('./' + service).start()
+    console.log(service + ' service running...')
+  }
 }

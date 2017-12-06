@@ -21,6 +21,7 @@ module.exports = {
       storage: './db.development.sqlite'
     },
     service: {
+      enable: ['email', 'conference', 'seminar'],
       email: {
         refreshTime: 30000
       },
@@ -37,6 +38,9 @@ module.exports = {
       workstation: {
         url: 'http://nlg17.csie.ntu.edu.tw/monitor',
         timeout: 30000
+      },
+      database: {
+        alter: false
       }
     }
   },
@@ -62,12 +66,18 @@ module.exports = {
       },
       workstation: {
         timeout: 5000
+      },
+      database: {
+        alter: true
       }
     }
   },
   test: {
     port: 5566,
     webAppUrl: null,
-    jwtKey: 'vicky_godlike'
+    jwtKey: 'vicky_godlike',
+    database: {
+      storage: ':memory:'
+    }
   }
 }
