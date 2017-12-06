@@ -27,7 +27,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST 'cd lab-wiki-backend && git checkout '$TRAVIS_BRANCH' && git pull origin '$TRAVIS_BRANCH' && rm package-lock.json -f && npm install'
+      - ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST 'cd lab-wiki-backend && cp db.sqlite ../db.sqlite.`date +%Y%m%d`.'$TRAVIS_TAG' && git checkout '$TRAVIS_BRANCH' && git pull origin '$TRAVIS_BRANCH' && rm package-lock.json -f && npm install'
     on:
       branch:
         - master
