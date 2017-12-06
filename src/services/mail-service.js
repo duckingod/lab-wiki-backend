@@ -18,4 +18,5 @@ setInterval(() => {
       }
     })
   })
+    .catch(error => console.log(error))
 }, refreshTime)

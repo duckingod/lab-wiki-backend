@@ -1,6 +1,5 @@
 let crypto = require('crypto')
-let env = process.env.NODE_ENV || 'development'
-let config = {
+module.exports = {
   development: {
     webAppUrl: 'http://localhost:12345',
     prettyJson: false,
@@ -53,7 +52,7 @@ let config = {
       refreshTime: 10000,
       reupdateTime: 1000 * 60 * 60 * 24 * 10 // 10 days
     },
-    jwtKey: crypto.randomBytes(256).toString('hex')
+    jwtKey: crypto.randomBytes(256).toString('hex') + 'vicky_godlike'
   },
   test: {
     jwtKey: 'vicky_godlike',
@@ -62,25 +61,3 @@ let config = {
     port: 5566
   }
 }
-
-if (env === 'production') env = ['production']
-if (env === 'test') env = ['test']
-
-function completeConfig (env) {
-  let _config = config.development
-  function setDict (c, config, e) {
-    for (let k in c) {
-      if (config[k] === undefined) {
-        throw new Error('The ' + e + ' config sets more than original config: ' + k)
-      } else if (typeof c[k] === 'object' && !Array.isArray(c[k]) && c[k] !== null) {
-        setDict(c[k], config[k], e)
-      } else {
-        config[k] = c[k]
-      }
-    }
-  }
-  for (let e of env) setDict(config[e], _config, e)
-  return _config
-}
-
-module.exports = completeConfig(env)
