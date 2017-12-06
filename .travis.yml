@@ -32,6 +32,7 @@ deploy:
       branch:
         - master
         - feature/auto-deploy
+        - feature/db-backup
 
 # configure notifications (email, IRC, campfire etc)
 # please update this section to your needs!
