@@ -40,7 +40,7 @@ module.exports = {
     prettyJson: false,
     port: 12345,
     seminarSchedule: {
-      weeks: 24
+      weeks: 4
     },
     database: {
       storage: './db.sqlite'
@@ -52,7 +52,7 @@ module.exports = {
       refreshTime: 10000,
       reupdateTime: 1000 * 60 * 60 * 24 * 10 // 10 days
     },
-    jwtKey: crypto.randomBytes(256).toString('hex') + "vicky_godlike"
+    jwtKey: crypto.randomBytes(256).toString('hex') + 'vicky_godlike'
   },
   test: {
     jwtKey: 'vicky_godlike',
