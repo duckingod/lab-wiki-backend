@@ -40,7 +40,7 @@ module.exports = {
     prettyJson: false,
     port: 12345,
     seminarSchedule: {
-      weeks: 24
+      weeks: 4
     },
     database: {
       storage: './db.sqlite'

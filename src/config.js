@@ -10,9 +10,11 @@ function completeConfig (env) {
     for (let k in c) {
       if (config[k] === undefined) {
         throw new Error('The ' + e + ' config sets more than original config: ' + k)
-      } else if (typeof c[k] === 'object' && !Array.isArray(c[k])) {
+      } else if (typeof c[k] === 'object' && !Array.isArray(c[k]) && c[k] !== null) {
         setDict(c[k], config[k], e)
-      } else { config[k] = c[k] }
+      } else {
+        config[k] = c[k]
+      }
     }
   }
   for (let e of env) setDict(config[e], _config, e)
