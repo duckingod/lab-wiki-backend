@@ -52,7 +52,7 @@ module.exports = {
       refreshTime: 10000,
       reupdateTime: 1000 * 60 * 60 * 24 * 10 // 10 days
     },
-    jwtKey: crypto.randomBytes(256).toString('hex') + "vicky_godlike"
+    jwtKey: crypto.randomBytes(256).toString('hex') + 'vicky_godlike'
   },
   test: {
     jwtKey: 'vicky_godlike',
