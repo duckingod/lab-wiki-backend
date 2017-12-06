@@ -71,38 +71,46 @@ Apis below by `POST` are all admin only.
 
 ## Structure
 ```
-- backend.js      Main Code
+- index.js         Code entry
 - package.json
-- config.js       Backend config
+- config.js        Backend config
 - client_secret.json Client secret for google apis
-- models/         Models scheme
-    - contactList.js
-    - news.js
-    - seminar.js
-    - slide.js
-    - system.js
-    - conference.js
-    - email.js
-- routers/         Route defination
-    - index.js         Route defination
-    - settings/        Settings for express
-    - model.js         Function: DB/model relative things
-    - login.js         Function: login/user/google-login relative things
-    - gpu-usage.js     Function: get workstation gpu/cpu usage
-    - take-out-garbage.js ction: godlike auto take out the garbage by ContactList
-    - manage.js        Function: manage backend (scheduling ...)
-    - cfp-search.js    Function: search conference on www.wikicfp.com/ 
-    - fake-fe.js       Function: fake front-end for testing
-- services/
-    - index.js         Loads all service
-    - mail-service.js  Mail service
-    - gapi-test.js     Kanna tell you taking out the garbage
-    - google-api.js    Function: google api things, like getting token in backend
-- tools/           Tools
-    - data-parser.js   Parse json data into DB
 - data/            Old wiki data for database initialize
 - static/          Front end single page app
-- test/            Unit test
+- templates/       Templates for email ... etc
+- src/
+    - server.js       Start the server
+    - config.js       Config loader
+    - models/         Models scheme
+        - contactList.js
+        - news.js
+        - seminar.js
+        - slide.js
+        - system.js
+        - conference.js
+        - email.js
+    - routers/         Route defination
+        - index.js         Route defination
+        - settings/        Settings for express
+        - model.js         Function: DB/model relative things
+        - login.js         Function: login/user/google-login relative things
+        - gpu-usage.js     Function: get workstation gpu/cpu usage
+        - take-out-garbage.js ction: godlike auto take out the garbage by ContactList
+        - manage.js        Function: manage backend (scheduling ...)
+        - cfp-search.js    Function: search conference on www.wikicfp.com/ 
+        - fake-fe.js       Function: fake front-end for testing
+    - services/
+        - index.js         Loads all services
+        - mail.js          Mail service: Scan email in DB periodically to send
+        - seminar.js       Seminar service: Weekly add new seminar and send reminder email
+        - conference.js    Conference service: Update conference information periodically
+        - gapi-test.js     Kanna tell you taking out the garbage
+        - google-api.js    Function: google api things, like getting token in backend
+        - weekly.js        Function: Weekly run services
+    - utils/           Utilities for code
+    - tools/           Tools
+        - data-parser.js   Parse json data into DB
+    - test/            Unit test
 
 ```
 
@@ -116,7 +124,7 @@ Apis below by `POST` are all admin only.
   - [ ] Session: store session in mongo (production)
   - [x] Session: httpOnly
   - [ ] https
-  - [ ] random jwt key (in 'router/login.js')
+  - [x] random jwt key (in 'router/login.js')
 - Service
   - [x] Mail service
   - [x] Call for paper service
