@@ -4,7 +4,12 @@ const weekly = require('./weekly')
 
 const main = () => {
   const {exec} = require('child_process')
-  exec('src/tools/db-backup', (err, stdout, stderr) => { console.log(stdout) })
+  exec('src/tools/db-backup', (err, stdout, stderr) => {
+    if (err) {
+      console.log(err)
+    }
+    console.log(stdout)
+  })
 }
 
 module.exports = {
