@@ -27,11 +27,12 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST 'cd lab-wiki-backend && git checkout '$TRAVIS_BRANCH' && git pull origin '$TRAVIS_BRANCH' && rm package-lock.json -f && npm install'
+      - ssh -p $DEPLOY_PORT $DEPLOY_USER@$DEPLOY_HOST "cd lab-wiki-backend && src/tools/db-backup && git fetch && git checkout "$TRAVIS_BRANCH" && git pull origin "$TRAVIS_BRANCH" && rm package-lock.json -f && npm install"
     on:
       branch:
         - master
         - feature/auto-deploy
+        - feature/db-backup
 
 # configure notifications (email, IRC, campfire etc)
 # please update this section to your needs!
