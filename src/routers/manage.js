@@ -3,7 +3,6 @@
 const {Seminar, ContactList} = require('../models')
 const {error, listify} = require('../utils')
 const takeOutGarbage = require('./take-out-garbage')
-// const {genesis} = require('../config')
 
 module.exports = {
   seminar: {

@@ -1,4 +1,4 @@
-const {refreshTime, reupdateTime} = require('../config').cfpService
+const {refreshTime, reupdateTime} = require('../config').service.conference
 let queue = []
 module.exports = {
   start: () => {

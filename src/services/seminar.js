@@ -20,4 +20,6 @@ const main = async () => {
 
 let seminarWeekdayPlusOne = async () => days(await System.load().seminarWeekday + 1)
 
-module.exports = weekly(seminarWeekdayPlusOne, main)
+module.exports = {
+  start: () => weekly(seminarWeekdayPlusOne, main)
+}

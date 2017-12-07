@@ -1,6 +1,7 @@
-require('./cfp-service').start()
-console.log('CFP service running...')
-require('./mail-service')
-console.log('Mail service running...')
-// require('./seminar-service')
-// console.log('Seminar service running...')
+const {enable} = require('../config').service
+module.exports = () => {
+  for (let service of enable) {
+    require('./' + service).start()
+    console.log(service + ' service running...')
+  }
+}

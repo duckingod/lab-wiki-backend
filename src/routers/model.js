@@ -1,10 +1,9 @@
 'use strict'
 
-const admins = require('../config').admins
-const emailDomain = require('../config').validEmailDomain
+const {admins, emailDomain} = require('../config').permission
 const {error} = require('../utils')
 
-let json = JSON.stringify
+// let json = JSON.stringify
 
 const permission = {
   admin: user => admins && user && admins.includes(user.email),
@@ -59,7 +58,7 @@ module.exports = function (model, args = {}) {
         .then(objs => res.send(objs))
         .catch(next),
     get: (req, res) =>
-      res.send(json(req.record)),
+      res.send(req.record),
     new: (req, res, next) => {
       if (req.body.owner == null) { req.body.owner = req.user.email }
       model.create(req.body)

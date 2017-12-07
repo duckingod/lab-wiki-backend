@@ -1,28 +1,25 @@
 'use strict'
 
 const express = require('express')
-const app = express()
-const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
 const models = require('./models')
 const {port} = require('./config')
+const {alter} = require('./config').service.database
+const services = require('./services')
+const routers = require('./routers')
 
-require('./utils')
-require('./services')
+const startServer = async () => {
+  await models.sequelize.sync({ alter: alter })
+  await models.System.load()
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cookieParser())
+  let app = express()
 
-require('./routers')(app)
-var server
+  services()
+  app.use(routers())
 
-server = models.sequelize.sync({ alter: true })
-  .then(a => models.System.load())
-  .then(() => {
-    console.log('Express server listening on port ' + String(port))
-    server = app.listen(port)
-    return server
-  })
+  console.log('Express server listening on port ' + String(port))
+  var server = app.listen(port)
 
-module.exports = server
+  return server
+}
+
+module.exports = startServer
