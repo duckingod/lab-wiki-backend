@@ -1,0 +1,7 @@
+mkdir -p ../db-backup
+if [ "`uname`" == "Linux" ]; then
+    HASH=`sha1sum db.sqlite | awk '{ print $1 }'`
+elif [ "`uname`" == "Darwin" ]; then
+    HASH=`md5 db.sqlite | awk '{ print $4 }'`
+fi
+cp db.sqlite ../db-backup/db.sqlite.`date +%Y%m%d`.$HASH
