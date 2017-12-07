@@ -21,7 +21,7 @@ module.exports = {
       storage: './db.development.sqlite'
     },
     service: {
-      enable: ['email', 'conference', 'seminar'],
+      enable: ['email', 'conference', 'seminar', 'backup'],
       email: {
         refreshTime: 30000
       },
