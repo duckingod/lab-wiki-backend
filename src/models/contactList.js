@@ -9,7 +9,7 @@ const {daysAfter, weeksBetween, toWeek} = utils.date
 
 let {dutyProp, Schedule} = utils.schedule
 const {modifyRecords, updateRecords} = utils.model
-const {validEmailDomain} = config
+const validEmailDomain = config.permission.emailDomain
 
 module.exports = function (sequelize, DataTypes) {
   var ContactList = sequelize.define('ContactList', {
