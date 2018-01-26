@@ -2,7 +2,7 @@ const xray = require('x-ray')()
 
 module.exports = (req, res) => {
   xray(
-    `http://www.wikicfp.com/cfp/servlet/tool.search?q=${req.query.q}&year=n`,
+    `http://www.wikicfp.com/cfp/servlet/tool.search?q=${req.query.q}&year=f`,
     '.contsec table table td',
     [
       {
