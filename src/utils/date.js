@@ -3,7 +3,7 @@
 const EPS = 1e-9
 const msPerDay = 24 * 60 * 60 * 1000
 function weeksBetween (startDate, endDate) {
-  return parseInt((endDate.getTime() - startDate.getTime()) / msPerDay / 7)
+  return Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay / 7)
 }
 function daysAfter (date, n) {
   let d = new Date(date)
@@ -19,8 +19,7 @@ function toWeek (date) {
   return daysAfter(genesis, weeksBetween(genesis, date) * 7)
 }
 function weekdayOf (date) {
-  console.log((date.getTime() - toWeek(date).getTime()))
-  return parseInt((date.getTime() - toWeek(date).getTime()) / msPerDay + EPS)
+  return Math.floor((date.getTime() - toWeek(date).getTime()) / msPerDay + EPS)
 }
 
 module.exports = {
