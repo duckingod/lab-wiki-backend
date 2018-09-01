@@ -12,15 +12,23 @@ npm install
 
 ### Usage
 
-To open a development webserver in `localhost`:
+Open a development webserver in `localhost`:
 
     npm run data-init-dev
     npm run dev
 
-To depoly a production webserver in server:
+Depoly a production webserver in server:
 
     npm run data-init
     npm run start
+
+Open with arguments:
+
+    npm run {dev|start} -- [arguments] ...
+
+Open with specified port:
+
+    npm run {dev|start} -- --port 23456
 
 ## APIs
 
