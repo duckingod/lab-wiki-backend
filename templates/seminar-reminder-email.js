@@ -1,8 +1,12 @@
 // content.date is [momentjs](https://momentjs.com/) object
+const {briefName} = require('../src/utils').email
 
-let mailto = content => content.email.mailto.developer
+let mailto = content => content.email.mailto.all
 
-let subject = content => `Lab Seminar (${content.presenters.join(' & ')})`
+// Email title should be short. If it's too long, then Gmail will block the email.
+// Gmail: block >= 78 character.
+// Since chinese character is quite long in encoding of email, we limit it to 2 character.
+let subject = content => `Lab Seminar (${content.presenters.map(p => briefName(p)).join(' & ')})`
 
 let body = content => `
 This mail is just a reminder.

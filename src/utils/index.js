@@ -47,6 +47,7 @@ module.exports = {
   },
   date: require('./date'),
   model: require('./model'),
+  email: require('./email'),
   const: {
     event: {
       seminar: {

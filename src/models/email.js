@@ -1,5 +1,7 @@
 'use strict'
 
+const config = require('../config.js')
+
 module.exports = function (sequelize, DataTypes) {
   var EMail = sequelize.define('EMail', {
     mailto: {
@@ -51,6 +53,8 @@ module.exports = function (sequelize, DataTypes) {
     }
   })
 
+  // Send email, should be call by email service.
+  // In development mode, the mail will only send to the developer.
   EMail.send = async (templateName, content, attachInfos) => {
     const templateConfig = require('../../templates/config')
     const template = require('../../templates/' + templateName)
@@ -59,6 +63,9 @@ module.exports = function (sequelize, DataTypes) {
     for (let k of attachInfos) content[k] = templateConfig[k]
     for (let k in template) template[k] = template[k](content)
     template.body = template.body.replace(/\n/g, '<br>\n')
+    if (config.env.includes('development')) {
+      template.mailto = templateConfig.email.mailto.developer
+    }
     await EMail.create(template)
   }
 
