@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+if [ "`uname`" == "Linux" ]; then
+    HASH=`sha1sum "$1" | awk '{ print $1 }'`
+elif [ "`uname`" == "Darwin" ]; then
+    HASH=`md5 "$1" | awk '{ print $4 }'`
+fi
+echo ${HASH:0:8}
+

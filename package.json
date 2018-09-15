@@ -4,8 +4,9 @@
   "description": "NTU NLP lab wiki backend",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node index.js --start-nodemon-server",
-    "start": "cross-env NODE_ENV=production node index.js --start-nodemon-server",
+    "dev": "cross-env NODE_ENV=development node index.js start --start-nodemon-server",
+    "start": "cross-env NODE_ENV=production node index.js start --start-nodemon-server",
+    "setup": "node index.js setup",
     "data-init": "cross-env NODE_ENV=production node src/tools/data-parser.js ./data/",
     "data-init-dev": "cross-env NODE_ENV=development node src/tools/data-parser.js ./data/",
     "test": "cross-env NODE_ENV=test ./node_modules/mocha/bin/mocha ./src/test --timeout 15000"

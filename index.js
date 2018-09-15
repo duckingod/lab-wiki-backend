@@ -8,6 +8,6 @@ if (flagIndex > -1) {
     args: process.argv.slice(2)
   })
 } else {
-  const startServer = require('./src/server')
-  startServer()
+  const run = require('./src/server')
+  run()
 }

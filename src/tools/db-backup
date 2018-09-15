@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
-mkdir -p ../db-backup
-if [ "`uname`" == "Linux" ]; then
-    HASH=`sha1sum db.sqlite | awk '{ print $1 }'`
-elif [ "`uname`" == "Darwin" ]; then
-    HASH=`md5 db.sqlite | awk '{ print $4 }'`
-fi
-cp db.sqlite ../db-backup/db.sqlite.`date +%Y%m%d`.$HASH
+db=db.sqlite
+backup=../db-backup
+mkdir -p $backup
+cp $db $backup/$db.`date +%Y%m%d`.`src/tools/md5 $db`
 echo "Backup DB when `date +'%Y/%m/%d - %H:%M:%S'`"

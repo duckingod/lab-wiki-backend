@@ -8,6 +8,7 @@ NTU NLP lab wiki backend by [express](http://expressjs.com)
 Download/install nodejs from [nvm](https://nodejs.org/en/download/package-manager/#nvm), then execute
 ```
 npm install
+npm run setup
 ```
 
 ### Usage
@@ -29,6 +30,12 @@ Open with arguments:
 Open with specified port:
 
     npm run {dev|start} -- --port 23456
+
+Version changes that requires config re-setup:
+
+    npm run setup -- --backup
+
+    
 
 ## APIs
 

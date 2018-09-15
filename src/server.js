@@ -1,19 +1,14 @@
 'use strict'
 
-const express = require('express')
-const models = require('./models')
-let {port} = require('./config')
-const {alter} = require('./config').service.database
-const services = require('./services')
-const routers = require('./routers')
-
-var program = require('commander')
-
-const startServer = async () => {
-  program
-    .version(require('../package.json').version)
-    .option('-p, --port [port]', 'port of server [port]')
-    .parse(process.argv)
+var commander = require('commander')
+const setup = require('./setup')
+const startServer = async args => {
+  const express = require('express')
+  const models = require('./models')
+  let {port} = require('./config')
+  const {alter} = require('./config').service.database
+  const services = require('./services')
+  const routers = require('./routers')
 
   await models.sequelize.sync({ alter: alter })
   await models.System.load()
@@ -23,7 +18,7 @@ const startServer = async () => {
   services()
   app.use(routers())
 
-  port = program.port || port
+  port = args.port || port
 
   console.log('Express server listening on port ' + String(port))
   var server = app.listen(port)
@@ -31,4 +26,16 @@ const startServer = async () => {
   return server
 }
 
-module.exports = startServer
+const actions = { start: startServer, setup: setup }
+const main = () => {
+  commander
+    .version(require('../package.json').version)
+    .arguments('<cmd>')
+    .option('-p, --port [port]', 'port of server [port]')
+    .option('-b, --backup', 'backup old config when install')
+    .option('-o, --overwrite', 'overwrite old config when install')
+    .action(cmd => actions[cmd](commander))
+    .parse(process.argv)
+}
+
+module.exports = main
